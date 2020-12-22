@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Edit Fixture</title>
+    </head>
+    <body>
+        {% include 'navbar/logged_out.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-3 mt-2"></div>
+                <div class="col-9 mt-2">
+                    <h1>
+                        <strong>Edit [Team 3 (h) - Team 7 (a)]</strong>
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-9">
+                    <form id="editScore" action="" method="post">
+                        <div class="mb-3 col-3">
+                            <label for="homeTeamScore" class="form-label"
+                                ><strong>Team 3 score</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="homeTeamScore"
+                                value="3"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="awayTeamScore" class="form-label"
+                                ><strong>Team 7 score</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="awayTeamScore"
+                                value="2"
+                            />
+                        </div>
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-red"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
