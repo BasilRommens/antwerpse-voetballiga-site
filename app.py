@@ -28,5 +28,10 @@ def team():
     return render_template('team.html')
 
 
+@app.route('/edit_team')
+def edit_team():
+    return render_template('edit_team.html')
+
+
 if __name__ == '__main__':
     app.run()

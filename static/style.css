@@ -31,13 +31,13 @@ a {
 }
 
 .btn-custom-green {
-    background-color: #000000;
+    background-color: #008055;
     color: #ffffff;
     border: none;
 }
 
 .btn-custom-green:hover {
-    background-color: #200000;
+    background-color: #009B67;
     color: #ffffff;
     border: none;
 }
