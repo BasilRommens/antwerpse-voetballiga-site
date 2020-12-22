@@ -29,7 +29,7 @@ def team():
 
 
 @app.route('/viewClub')
-def edit_team():
+def view_club():
     return render_template('view_club.html')
 
 
@@ -43,8 +43,12 @@ def edit_club():
     return render_template('edit_club.html')
 
 @app.route('/editTeam')
-def edit_club():
+def edit_team():
     return render_template('edit_team.html')
+
+@app.route('/addTeam')
+def add_team():
+    return render_template('add_team.html')
 
 
 if __name__ == '__main__':
