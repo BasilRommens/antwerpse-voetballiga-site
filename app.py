@@ -23,5 +23,10 @@ def best_of_division():
     return render_template('best_of_division.html')
 
 
+@app.route('/team')
+def team():
+    return render_template('team.html')
+
+
 if __name__ == '__main__':
     app.run()
