@@ -38,5 +38,10 @@ def edit_fixture():
     return render_template('edit_fixture.html')
 
 
+@app.route('/editClub')
+def edit_club():
+    return render_template('edit_club.html')
+
+
 if __name__ == '__main__':
     app.run()
