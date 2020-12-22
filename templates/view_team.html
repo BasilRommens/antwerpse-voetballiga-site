@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Team 3 edit</title>
+    </head>
+    <body>
+        {% include 'navbar/logged_out.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-3 mt-2"></div>
+                <div class="col-3 mt-2">
+                    <h1>
+                        <strong>Team 3</strong>
+                    </h1>
+                </div>
+                <div class="col-3 mt-2 float-left">
+                    <a href="#"><strong>edit</strong></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-9">
+                    <h2>Home Matches</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Home Team</th>
+                                <th scope="col">Away Team</th>
+                                <th scope="col">Score</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>12/12</td>
+                                <td>Team 3</td>
+                                <td>Team 2</td>
+                                <td>3-2</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>12/12</td>
+                                <td>Team 3</td>
+                                <td>Team 2</td>
+                                <td>3-2</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>12/12</td>
+                                <td>Team 3</td>
+                                <td>Team 2</td>
+                                <td>3-2</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-9">
+                    <h2>Teams</h2>
+                    <button href="#" class="btn btn-primary btn-custom-green">Add Team</button>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Team name</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>A</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>B</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

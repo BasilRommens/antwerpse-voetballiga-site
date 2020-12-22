@@ -50,6 +50,10 @@ def edit_team():
 def add_team():
     return render_template('add_team.html')
 
+@app.route('/viewMatch')
+def view_match():
+    return render_template('view_match.html')
+
 
 if __name__ == '__main__':
     app.run()

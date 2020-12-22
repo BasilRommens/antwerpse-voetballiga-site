@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Match</title>
+        <link
+            href="{{ url_for('static', filename='calendar.css') }}"
+            rel="stylesheet"
+            type="text/css"
+        />
+    </head>
+    <body>
+        {% include 'navbar/logged_out.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-3 mt-3">
+                    <time datetime="2014-09-20" class="icon">
+                        <strong>Friday</strong>
+                        <span>20/9</span>
+                        <em>20:00</em>
+                    </time>
+                </div>
+                <div class="col mt-2">
+                    <h1>
+                        <strong>Team 1 (home) - Team 2 (away)</strong>
+                    </h1>
+                    <div class="row">
+                        <div class="col text-start">
+                            <i class="fas fa-user"></i>&nbsp;&nbsp;John Doe
+                        </div>
+                        <div
+                            class="col text-center"
+                            style="
+                                background-color: #008055;
+                                color: white;
+                                font-weight: bold;
+                            "
+                        >
+                            To be played
+                        </div>
+                        <div class="col text-end">
+                            <i class="fas fa-cloud-sun"></i> 12°C
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-9">
+                    <h2><strong>Stats</strong></h2>
+                    <h3><strong>Head-to-head</strong></h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Team 1</th>
+                                <th scope="col">Draw</th>
+                                <th scope="col">Team 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h3><strong>Current form</strong></h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Team 1</th>
+                                <th scope="col">Team 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WDLWW</td>
+                                <td>WDDLW</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h3><strong>Last 3</strong></h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Team 1</th>
+                                <th scope="col">Team 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
