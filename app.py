@@ -28,9 +28,9 @@ def team():
     return render_template('team.html')
 
 
-@app.route('/editTeam')
+@app.route('/viewClub')
 def edit_team():
-    return render_template('edit_team.html')
+    return render_template('view_club.html')
 
 
 @app.route('/editFixture')
@@ -41,6 +41,10 @@ def edit_fixture():
 @app.route('/editClub')
 def edit_club():
     return render_template('edit_club.html')
+
+@app.route('/editTeam')
+def edit_club():
+    return render_template('edit_team.html')
 
 
 if __name__ == '__main__':
