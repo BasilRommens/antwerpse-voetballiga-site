@@ -1,0 +1,43 @@
+* {
+    font-family: Montserrat;
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn-custom-red {
+    background-color: #800000;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-custom-red:hover {
+    background-color: #a00000;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-custom-black {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-custom-black:hover {
+    background-color: #200000;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-custom-green {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-custom-green:hover {
+    background-color: #200000;
+    color: #ffffff;
+    border: none;
+}

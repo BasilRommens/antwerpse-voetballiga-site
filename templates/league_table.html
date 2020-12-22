@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>League Table</title>
+    </head>
+    <body>
+        {% include 'navbar/logged_out.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-3 mt-2"></div>
+                <div class="col-9 mt-2">
+                    <h1>
+                        <strong>League Table (Season 1)</strong>
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                        <h2><strong>Divisions</strong></h2>
+                </div>
+                <div class="col-9">
+                    <h2>Div 2</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <a href="#">Div 1</a><br />
+                    <a href="#"><strong>Div 2</strong></a
+                    ><br />
+                    <a href="#">Div 3</a><br />
+                    <a href="#">Div 4</a><br />
+                    <a href="#">Div 5</a><br />
+                    <a href="#">Div 6</a><br />
+                </div>
+                <div class="col-9">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Team</th>
+                                <th scope="col">GP</th>
+                                <th scope="col">W</th>
+                                <th scope="col">D</th>
+                                <th scope="col">L</th>
+                                <th scope="col">F</th>
+                                <th scope="col">A</th>
+                                <th scope="col" class="right">P</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td><a href="#">Mark</a></td>
+                                <td>Otto</td>
+                                <td>@mdo</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td><a href="#">Mark</a></td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td><a href="#">Mark</a></td>
+                                <td>test</td>
+                                <td>@twitter</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

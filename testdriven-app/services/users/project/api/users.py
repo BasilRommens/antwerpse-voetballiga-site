@@ -6,14 +6,6 @@ from project import db
 
 users_blueprint = Blueprint('users', __name__)
 
-def to_json(self):
-    return {
-        'id': self.id,
-        'username': self.username,
-        'email': self.email,
-        'active': self.active
-    }
-
 
 @users_blueprint.route('/users/ping', methods=['GET'])
 def ping_pong():
