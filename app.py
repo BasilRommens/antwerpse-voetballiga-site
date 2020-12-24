@@ -82,13 +82,20 @@ def admin_view_users():
 def admin_edit_match():
     return render_template('admin/edit_match.html')
 
+
 @app.route('/admin/addMatch')
 def admin_add_match():
     return render_template('admin/add_match.html')
 
+
 @app.route('/admin/editClub')
 def admin_edit_club():
     return render_template('admin/edit_club.html')
+
+
+@app.route('/admin/addClub')
+def admin_add_club():
+    return render_template('admin/add_club.html')
 
 
 if __name__ == '__main__':
