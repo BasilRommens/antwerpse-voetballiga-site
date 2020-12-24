@@ -86,6 +86,10 @@ def admin_edit_match():
 def admin_add_match():
     return render_template('admin/add_match.html')
 
+@app.route('/admin/editClub')
+def admin_edit_club():
+    return render_template('admin/edit_club.html')
+
 
 if __name__ == '__main__':
     app.run()

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Edit Club [admin]</title>
+    </head>
+    <body>
+        {% include 'navbar/admin.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9 mt-2">
+                    <h1>
+                        <strong>Edit Club</strong>
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9">
+                    <form id="editClub" action="" method="post">
+                        <div class="mb-3 col-3">
+                            <label for="clubName" class="form-label"
+                                ><strong>Club Name</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="teamName"
+                                value="Team"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="stamNumber" class="form-label"
+                                ><strong>Stam Number</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="stamNumber"
+                                value="2"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="address" class="form-label"
+                                ><strong>address</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="address"
+                                value="chickenstreet"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="zipCode" class="form-label"
+                                ><strong>Zip Code</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="zipCode"
+                                value="2378"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="city" class="form-label"
+                                ><strong>City</strong></label
+                            >
+                            <input
+                                type="city"
+                                class="form-control"
+                                id="city"
+                                value="Chickentown"
+                            />
+                        </div>
+
+                        <div class="mb-3 col-3">
+                            <label for="phoneNumber" class="form-label"
+                                ><strong>Phone Number</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="phoneNumber"
+                                value="7123489741"
+                            />
+                        </div>
+
+                        <div class="mb-3 col-3">
+                            <label for="website" class="form-label"
+                                ><strong>website</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="website"
+                                value="http://yeet.com/"
+                            />
+                        </div>
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                            >
+                                Save
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-red"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
