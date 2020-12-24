@@ -82,6 +82,10 @@ def admin_view_users():
 def admin_edit_match():
     return render_template('admin/edit_match.html')
 
+@app.route('/admin/addMatch')
+def admin_add_match():
+    return render_template('admin/add_match.html')
+
 
 if __name__ == '__main__':
     app.run()
