@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Edit Club</title>
+    </head>
+    <body>
+        {% include 'navbar/logged_out.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                    <h1>
+                        <strong>Edit match</strong>
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9">
+                    <form id="editClub" action="" method="post">
+                        <div class="row">
+                            <div class="mb-3 col-3">
+                                <label for="homeTeam" class="form-label"
+                                    ><strong>Home Team</strong></label
+                                >
+                                <select
+                                    class="form-select"
+                                    id="homeTeam"
+                                    aria-label="Default select example"
+                                >
+                                    <option selected>
+                                        Open this select menu
+                                    </option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-3">
+                                <label for="awayTeam" class="form-label"
+                                    ><strong>Away Team</strong></label
+                                >
+                                <select
+                                    class="form-select"
+                                    id="awayTeam"
+                                    aria-label="Default select example"
+                                >
+                                    <option selected>
+                                        Open this select menu
+                                    </option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-3">
+                                <label for="homeGoals" class="form-label"
+                                    ><strong>Home Goals</strong></label
+                                >
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="homeGoals"
+                                    value="2"
+                                />
+                            </div>
+                            <div class="mb-3 col-3">
+                                <label for="awayGoals" class="form-label"
+                                    ><strong>Away Goals</strong></label
+                                >
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    id="awayGoals"
+                                    value="2"
+                                />
+                            </div>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="status" class="form-label"
+                                ><strong>Status</strong></label
+                            >
+                            <select
+                                class="form-select"
+                                id="status"
+                                aria-label="Default select example"
+                            >
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="season" class="form-label"
+                                ><strong>Season</strong></label
+                            >
+                            <select
+                                class="form-select"
+                                id="season"
+                                aria-label="Default select example"
+                            >
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="division" class="form-label"
+                                ><strong>Division</strong></label
+                            >
+                            <select
+                                class="form-select"
+                                id="division"
+                                aria-label="Default select example"
+                            >
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3 col-3">
+                            <label for="referee" class="form-label"
+                                ><strong>Referee</strong></label
+                            >
+                            <select
+                                class="form-select"
+                                id="referee"
+                                aria-label="Default select example"
+                            >
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                            >
+                                Save
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-red"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

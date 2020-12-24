@@ -42,33 +42,46 @@ def edit_fixture():
 def edit_club():
     return render_template('edit_club.html')
 
+
 @app.route('/editTeam')
 def edit_team():
     return render_template('edit_team.html')
+
 
 @app.route('/addTeam')
 def add_team():
     return render_template('add_team.html')
 
+
 @app.route('/viewMatch')
 def view_match():
     return render_template('view_match.html')
+
 
 @app.route('/admin/viewMatches')
 def admin_view_matches():
     return render_template('admin/view_matches.html')
 
+
 @app.route('/admin/viewClubs')
 def admin_view_clubs():
     return render_template('admin/view_clubs.html')
+
 
 @app.route('/admin/viewReferees')
 def admin_view_referees():
     return render_template('admin/view_referees.html')
 
+
 @app.route('/admin/viewUsers')
 def admin_view_users():
     return render_template('admin/view_users.html')
+
+
+@app.route('/admin/editMatch')
+def admin_edit_match():
+    return render_template('admin/edit_match.html')
+
 
 if __name__ == '__main__':
     app.run()
