@@ -53,3 +53,7 @@ a {
     color: #ffffff;
     border: none;
 }
+
+.bg-custom-red {
+        background-color: #800000;
+}

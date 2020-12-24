@@ -66,5 +66,9 @@ def admin_view_clubs():
 def admin_view_referees():
     return render_template('admin/view_referees.html')
 
+@app.route('/admin/viewUsers')
+def admin_view_users():
+    return render_template('admin/view_users.html')
+
 if __name__ == '__main__':
     app.run()
