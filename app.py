@@ -58,5 +58,9 @@ def view_match():
 def admin_view_matches():
     return render_template('admin/view_matches.html')
 
+@app.route('/admin/viewClubs')
+def admin_view_clubs():
+    return render_template('admin/view_clubs.html')
+
 if __name__ == '__main__':
     app.run()
