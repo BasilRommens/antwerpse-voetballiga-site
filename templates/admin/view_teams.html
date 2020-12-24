@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>yeet</title>
+    </head>
+    <body>
+        {% include 'navbar/admin.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                    <h1>
+                        <strong>View Teams (Club 1)</strong>
+                    </h1>
+                    <button href="#" class="btn btn-primary btn-custom-green">
+                        Add Team
+                    </button>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Team name</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>A</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>B</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
