@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Assign referee [admin]</title>
+    </head>
+    <body>
+        {% include 'navbar/admin.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                    <h1>
+                        <strong>Assign Referee</strong>
+                    </h1>
+                    <form id="editClub" action="" method="post">
+                        <div class="mb-3 col-3">
+                            <label for="week" class="form-label"
+                                ><strong>Week</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="week"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="match" class="form-label"
+                                ><strong>Match</strong></label
+                            >
+                            <select
+                                class="form-select"
+                                id="match"
+                                aria-label="Default select example"
+                            >
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                            >
+                                Assign
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
