@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Matches [admin]</title>
+    </head>
+    <body>
+        {% include 'navbar/admin.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                        <h1><strong>Matches</strong></h1>
+                    <button href="#" class="btn btn-primary btn-custom-green">
+                        Add Match
+                    </button>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Home team - Away team</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>22/11</td>
+                                <td>Team 1 (h) - Team 2 (a)</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>23/12</td>
+                                <td>Team 1 (h) - Team 2 (a)</td>
+                                <td><a href="#">edit ></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

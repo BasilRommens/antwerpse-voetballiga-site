@@ -54,6 +54,9 @@ def add_team():
 def view_match():
     return render_template('view_match.html')
 
+@app.route('/admin/viewMatches')
+def admin_view_matches():
+    return render_template('admin/view_matches.html')
 
 if __name__ == '__main__':
     app.run()
