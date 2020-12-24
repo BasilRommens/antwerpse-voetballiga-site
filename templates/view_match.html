@@ -13,14 +13,14 @@
         {% include 'navbar/logged_out.html' %}
         <div class="container">
             <div class="row mt-5">
-                <div class="col-3 mt-3">
+                <div class="col-1 mt-3">
                     <time datetime="2014-09-20" class="icon">
                         <strong>Friday</strong>
                         <span>20/9</span>
                         <em>20:00</em>
                     </time>
                 </div>
-                <div class="col mt-2">
+                <div class="col-9 mt-1">
                     <h1>
                         <strong>Team 1 (home) - Team 2 (away)</strong>
                     </h1>
@@ -38,14 +38,17 @@
                         >
                             To be played
                         </div>
-                        <div class="col text-end">
-                            <i class="fas fa-cloud-sun"></i> 12°C
+                        <div
+                            class="col text-end"
+                            style="font-family: Weather, Montserrat"
+                        >
+                            {{ data.weather }}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-3"></div>
+                <div class="col-1"></div>
                 <div class="col-9">
                     <h2><strong>Stats</strong></h2>
                     <h3><strong>Head-to-head</strong></h3>
