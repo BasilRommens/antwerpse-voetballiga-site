@@ -101,6 +101,10 @@ def admin_add_club():
 def admin_view_teams():
     return render_template('admin/view_teams.html')
 
+@app.route('/admin/editTeam')
+def admin_edit_team():
+    return render_template('admin/edit_team.html')
+
 
 if __name__ == '__main__':
     app.run()

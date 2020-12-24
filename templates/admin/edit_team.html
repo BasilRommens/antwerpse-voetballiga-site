@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Edit Team</title>
+    </head>
+    <body>
+        {% include 'navbar/admin.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                    <h1><strong>Edit team A</strong></h1>
+                    <form id="editClub" action="" method="post">
+                        <div class="mb-3 col-3">
+                            <label for="teamSuffix" class="form-label"
+                                ><strong>Team Suffix</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="teamSuffix"
+                                value="A"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="homeOutfitColor" class="form-label"
+                                ><strong>Outfit Color (Home)</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="homeOutfitColor"
+                                value="red"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="awayOutfitColor" class="form-label"
+                                ><strong>Outfit Color (Away)</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="awayOutfitColor"
+                                value="white"
+                            />
+                        </div>
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-red"
+                            >
+                                Save
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
