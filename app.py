@@ -112,10 +112,14 @@ def admin_edit_team():
 def admin_add_team():
     return render_template('admin/add_team.html')
 
+
 @app.route('/admin/assignReferee')
 def admin_assign_referee():
     return render_template('admin/assign_referee.html')
 
+@app.route('/admin/editUser')
+def admin_edit_user():
+    return render_template('admin/edit_user.html')
 
 if __name__ == '__main__':
     app.run()

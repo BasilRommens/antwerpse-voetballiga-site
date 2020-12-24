@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Edit User [admin]</title>
+    </head>
+    <body>
+        {% include 'navbar/admin.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                    <h1>
+                        <strong>Edit User</strong>
+                    </h1>
+                    <form id="editClub" action="" method="post">
+                        <div class="mb-3 col-3">
+                            <label for="username" class="form-label"
+                                ><strong>Username</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="username"
+                            />
+                        </div>
+
+                        <div class="mb-3 col-3">
+                            <label for="password" class="form-label"
+                                ><strong>Password</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="password"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="email" class="form-label"
+                                ><strong>E-mail</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="email"
+                            />
+                        </div>
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                            >
+                                Save
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-red"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
