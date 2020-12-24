@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
+import subprocess, requests, weather
 
 app = Flask(__name__)
-
 
 @app.route('/')
 def login():
@@ -55,7 +55,10 @@ def add_team():
 
 @app.route('/viewMatch')
 def view_match():
-    return render_template('view_match.html')
+    data = dict()
+    day = 0
+    data['weather'] = weather.get_weather(day)
+    return render_template('view_match.html', data=data)
 
 
 @app.route('/admin/viewMatches')
@@ -117,13 +120,16 @@ def admin_add_team():
 def admin_assign_referee():
     return render_template('admin/assign_referee.html')
 
+
 @app.route('/admin/editUser')
 def admin_edit_user():
     return render_template('admin/edit_user.html')
 
+
 @app.route('/admin/addUser')
 def admin_add_user():
     return render_template('admin/add_user.html')
+
 
 if __name__ == '__main__':
     app.run()

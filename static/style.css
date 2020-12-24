@@ -1,17 +1,22 @@
+@font-face {
+    font-family: 'Weather';
+    src: url(weather.woff), url(weather.ttf);
+}
+
 * {
-    font-family: Montserrat;
+    font-family: Montserrat, sans-serif;
 }
 
 h1 {
-        font-size: 50px;
+    font-size: 50px;
 }
 
 h2 {
-        font-size: 30px;
+    font-size: 30px;
 }
 
 h3 {
-        font-size: 20px;
+    font-size: 20px;
 }
 
 a {
@@ -49,11 +54,11 @@ a {
 }
 
 .btn-custom-green:hover {
-    background-color: #009B67;
+    background-color: #009b67;
     color: #ffffff;
     border: none;
 }
 
 .bg-custom-red {
-        background-color: #800000;
+    background-color: #800000;
 }
