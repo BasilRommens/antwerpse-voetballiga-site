@@ -121,5 +121,9 @@ def admin_assign_referee():
 def admin_edit_user():
     return render_template('admin/edit_user.html')
 
+@app.route('/admin/addUser')
+def admin_add_user():
+    return render_template('admin/add_user.html')
+
 if __name__ == '__main__':
     app.run()
