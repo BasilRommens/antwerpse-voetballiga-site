@@ -14,7 +14,9 @@
                     </h1>
                 </div>
                 <div class="col-3 float-left">
-                        <a href="/editClub/{{ data.club_id }}"><strong>edit</strong></a>
+                    <a href="/editClub/{{ data.club_id }}"
+                        ><strong>edit</strong></a
+                    >
                 </div>
             </div>
             <div class="row">
@@ -51,7 +53,10 @@
             <div class="row">
                 <div class="col-9">
                     <h2>Teams</h2>
-                    <button onclick="window.location.href='/addTeam/{{ data.club_id }}'" class="btn btn-primary btn-custom-green">
+                    <button
+                        onclick="window.location.href='/addTeam/{{ data.club_id }}'"
+                        class="btn btn-primary btn-custom-green"
+                    >
                         Add Team
                     </button>
                     <table class="table table-striped">
