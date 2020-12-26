@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
-import subprocess, requests, weather
+import subprocess
+import requests
+import weather
 
 app = Flask(__name__)
 
@@ -122,7 +124,7 @@ def edit_club(club_id=0):
     data['stam_number'] = 32
     data['address'] = 'chickenstreet'
     data['zip_code'] = 33892
-    data['city']  = 'Antwerpen'
+    data['city'] = 'Antwerpen'
     data['phone_number'] = 783498745923
     data['website'] = 'http://yeet.com'
     return render_template('edit_club.html', data=data)
@@ -143,11 +145,28 @@ def add_team():
     return render_template('add_team.html')
 
 
+@app.route('/viewMatch/<match_id>')
 @app.route('/viewMatch')
-def view_match():
+def view_match(match_id=0):
     data = dict()
     day = 0
     data['weather'] = weather.get_weather(day)
+    data['date'] = {'day': 'friday', 'slash': '12/12', 'time': '20:00'}
+    data['referee'] = 'John Doe'
+    fg_color = 'white'
+    bg_color = '#008055'
+    data['status'] = {
+        'text':
+        'To be played',
+        'style':
+        f'background-color: {bg_color}; color: {fg_color}; font-weight: bold;'
+    }
+    data['teams'] = "Team 1 (home) - Team 2 (away)"
+    data['home_team'] = 'Team 1'
+    data['away_team'] = 'Team 2'
+    data['current_form'] = {'home_team': 'WWDLWW', 'away_team': 'LLDWW'}
+    data['head_to_head'] = {'home_team': 3, 'away_team': 1, 'draw': 4}
+    data['last_3'] = {'home_team': [2, 3, 0], 'away_team': [2, 4, 0]}
     return render_template('view_match.html', data=data)
 
 

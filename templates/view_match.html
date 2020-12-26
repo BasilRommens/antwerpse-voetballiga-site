@@ -15,9 +15,9 @@
             <div class="row mt-5">
                 <div class="col-1 mt-3">
                     <time datetime="2014-09-20" class="icon">
-                        <strong>Friday</strong>
-                        <span>20/9</span>
-                        <em>20:00</em>
+                        <strong>{{ data.date.day }}</strong>
+                        <span>{{ data.date.slash }}</span>
+                        <em>{{ data.date.time }}</em>
                     </time>
                 </div>
                 <div class="col-9 mt-1">
@@ -30,13 +30,9 @@
                         </div>
                         <div
                             class="col text-center"
-                            style="
-                                background-color: #008055;
-                                color: white;
-                                font-weight: bold;
-                            "
+                            style="{{ data.status.style }}"
                         >
-                            To be played
+                            {{ data.status.text }}
                         </div>
                         <div
                             class="col text-end"
@@ -55,16 +51,16 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Team 1</th>
+                                <th scope="col">{{ data.home_team }}</th>
                                 <th scope="col">Draw</th>
-                                <th scope="col">Team 2</th>
+                                <th scope="col">{{ data.away_team }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>1</td>
+                                <td>{{ data.head_to_head.home_team }}</td>
+                                <td>{{ data.head_to_head.draw }}</td>
+                                <td>{{ data.head_to_head.away_team }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -72,14 +68,14 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Team 1</th>
-                                <th scope="col">Team 2</th>
+                                <th scope="col">{{ data.home_team }}</th>
+                                <th scope="col">{{ data.away_team }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>WDLWW</td>
-                                <td>WDDLW</td>
+                                <td>{{ data.current_form.home_team }}</td>
+                                <td>{{ data.current_form.away_team }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -87,23 +83,17 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Team 1</th>
-                                <th scope="col">Team 2</th>
+                                <th scope="col">{{ data.home_team }}</th>
+                                <th scope="col">{{ data.away_team }}</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for match_idx in range(3) %}
                             <tr>
-                                <td>2</td>
-                                <td>1</td>
+                                <td>{{ data.last_3.home_team[match_idx] }}</td>
+                                <td>{{ data.last_3.away_team[match_idx] }}</td>
                             </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>0</td>
-                                <td>1</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
