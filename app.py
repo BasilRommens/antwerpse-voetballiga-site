@@ -9,28 +9,49 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/leagueTable/<season>/<division_id>')
 @app.route('/leagueTable')
-def league_table():
+def league_table(season=0, division_id=0):
     data = dict()
-    data['season'] = 2
+    data['season'] = season
     data['divisions'] = [{"link": "/link", "name": "test"}]
-    data['ranking'] = {"length": 1, "teams": [{
-        "TeamName": "Team",
-        "TeamLink": "/link",
-        "GP": 0,
-        "W": 0,
-        "D": 0,
-        "L": 0,
-        "F": 0,
-        "A": 0,
-        "P": 0
-    }]}
+    data['ranking'] = {
+        "length":
+        1,
+        "teams": [{
+            "TeamName": "Team",
+            "TeamLink": "/link",
+            "GP": 0,
+            "W": 0,
+            "D": 0,
+            "L": 0,
+            "F": 0,
+            "A": 0,
+            "P": 0
+        }]
+    }
     return render_template('league_table.html', data=data)
 
 
+@app.route('/fixtures/<division_id>/<team_id>/<week>')
+@app.route('/fixtures/<division_id>/<week>')
 @app.route('/fixtures')
-def fixtures():
-    return render_template('fixtures.html')
+def fixtures(week=1, division_id=0, team_id=0):
+    data = dict()
+    data['week'] = week
+    data['division_id'] = division_id
+    data['team_id'] = team_id
+
+    data['matches'] = [{
+        "id": 0,
+        "date": "20/12/2020",
+        "teams": "team 1 (h) - team 2 (a)",
+        "link": "/match"
+    }]
+
+    data['divisions'] = [{"link": "/link", "name": "test"}]
+    data['teams'] = [{"link": "/link", "name": "Team"}]
+    return render_template('fixtures.html', data=data)
 
 
 @app.route('/bestOfDivision')

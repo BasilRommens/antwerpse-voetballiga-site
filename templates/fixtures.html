@@ -11,62 +11,42 @@
                 <div class="col-2"></div>
                 <div class="col-9">
                     <h1>
-                        <strong>Week 24</strong>
+                        <strong>Week {{ data.week }}</strong>
                     </h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-2">
-                    <h2><strong>Divisions</strong></h2>
-                </div>
                 <div class="col-9">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
+                    <nav aria-label="Weeks">
+                        <ul
+                            class="pagination pagination-sm justify-content-center"
+                        >
+                            {% for i in range(52) %} {% if i == data.week %}
+                            <li class="page-item active">{% else %}</li>
+
                             <li class="page-item">
+                                {% endif %}
                                 <a
                                     class="page-link"
-                                    href="#"
-                                    tabindex="-1"
-                                    aria-disabled="true"
-                                    >Previous</a
+                                    href="/fixtures/{{ data.division_id }}/{{ data.team_id }}/{{ i }}"
+                                    >{{ i }}</a
                                 >
                             </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </nav>
                 </div>
             </div>
             <div class="row">
                 <div class="col-2">
-                    <a href="#">Div 1</a><br />
-                    <a href="#"><strong>Div 2</strong></a
-                    ><br />
-                    <a href="#">Div 2</a><br />
-                    <a href="#">Div 4</a><br />
-                    <a href="#">Div 5</a><br />
-                    <a href="#">Div 6</a><br />
+                    <h2><strong>Divisions</strong></h2>
+                    {% for division in data.divisions %}
+                    <a href="{{ division.link }}">{{ division.name }}</a><br />
+                    {% endfor %}
                     <h2 class="mt-2 mb-2"><strong>Team</strong></h2>
-                    <a href="#">Team 1</a><br />
-                    <a href="#">Team 2</a><br />
-                    <a href="#">Team 2</a><br />
-                    <a href="#">Team 4</a><br />
-                    <a href="#">Team 5</a><br />
-                    <a href="#">Team 6</a><br />
-                    <a href="#">Team 7</a><br />
-                    <a href="#">Team 8</a><br />
-                    <a href="#">Team 9</a><br />
-                    <a href="#">Team 10</a><br />
+                    {% for team in data.teams %}
+                    <a href="{{ team.link }}">{{ team.name }}</a><br />
+                    {% endfor %}
                 </div>
                 <div class="col-9">
                     <table class="table table-striped">
@@ -79,51 +59,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td><a href="#">Mark</a></td>
-                                <td>Otto</td>
-                                <td><a href="#">more ></a></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td><a href="#">Mark</a></td>
-                                <td>Thornton</td>
-                                <td><a href="#">more ></a></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td><a href="#">Mark</a></td>
-                                <td>test</td>
-                                <td><a href="#">more ></a></td>
-                            </tr>
+                                {% for match in data.matches %}
+                                <tr>
+                                        <th scope="row">{{ match.id }}</th>
+                                                        <td>{{ match.date }}</td>
+                                                        <td>{{ match.teams }}</td>
+                                                        <td><a href="{{ match.link }}">more ></a></td>
+                                </tr>
+                                {% endfor %}
                         </tbody>
                     </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item">
-                                <a
-                                    class="page-link"
-                                    href="#"
-                                    tabindex="-1"
-                                    aria-disabled="true"
-                                    >Previous</a
-                                >
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>
