@@ -102,9 +102,16 @@ def view_club(club_id=0):
     return render_template('view_club.html', data=data)
 
 
+@app.route('/editFixture/<match_id>')
 @app.route('/editFixture')
-def edit_fixture():
-    return render_template('edit_fixture.html')
+def edit_fixture(match_id=0):
+    data = dict()
+    data['teams'] = "team 1 (h) - team 2 (a)"
+    data['home_team'] = "team 1"
+    data['away_team'] = "team 7"
+    data['home_score'] = 0
+    data['away_score'] = 2
+    return render_template('edit_fixture.html', data=data)
 
 
 @app.route('/editClub')

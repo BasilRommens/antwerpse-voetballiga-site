@@ -10,7 +10,7 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
-                        <strong>Edit [Team 3 (h) - Team 7 (a)]</strong>
+                        <strong>Edit {{ data.teams }}</strong>
                     </h1>
                 </div>
             </div>
@@ -19,24 +19,28 @@
                     <form id="editScore" action="" method="post">
                         <div class="mb-3 col-3">
                             <label for="homeTeamScore" class="form-label"
-                                ><strong>Team 3 score</strong></label
+                                ><strong
+                                    >{{ data.home_team }} score</strong
+                                ></label
                             >
                             <input
                                 type="number"
                                 class="form-control"
                                 id="homeTeamScore"
-                                value="3"
+                                value="{{ data.home_score }}"
                             />
                         </div>
                         <div class="mb-3 col-3">
                             <label for="awayTeamScore" class="form-label"
-                                ><strong>Team 7 score</strong></label
+                                ><strong
+                                    >{{ data.away_team }} score</strong
+                                ></label
                             >
                             <input
                                 type="number"
                                 class="form-control"
                                 id="awayTeamScore"
-                                value="2"
+                                value="{{ data.away_score }}"
                             />
                         </div>
                         <div class="col-12">
