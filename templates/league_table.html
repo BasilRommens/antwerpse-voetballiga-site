@@ -11,13 +11,13 @@
                 <div class="col-2"></div>
                 <div class="col-9">
                     <h1>
-                        <strong>League Table (Season 1)</strong>
+                            <strong>League Table (Season {{ data.season }})</strong>
                     </h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-2">
-                        <h2><strong>Divisions</strong></h2>
+                    <h2><strong>Divisions</strong></h2>
                 </div>
                 <div class="col-9">
                     <h2>Div 2</h2>
@@ -25,13 +25,9 @@
             </div>
             <div class="row">
                 <div class="col-2">
-                    <a href="#">Div 1</a><br />
-                    <a href="#"><strong>Div 2</strong></a
-                    ><br />
-                    <a href="#">Div 3</a><br />
-                    <a href="#">Div 4</a><br />
-                    <a href="#">Div 5</a><br />
-                    <a href="#">Div 6</a><br />
+                    {% for division in data.divisions %}
+                    <a href="{{ division.link }}">{{division.name}}</a><br />
+                    {% endfor %}
                 </div>
                 <div class="col-9">
                     <table class="table table-striped">
@@ -49,24 +45,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for i in range(data.ranking.length) %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td><a href="#">Mark</a></td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                                    <th scope="row">{{ i + 1 }}</th>
+                                <!--<th scope="row">{{i}}</th>-->
+                                <td>
+                                    <a href="{{ data.ranking.teams[i].TeamLink }}"
+                                        >{{ data.ranking.teams[i].TeamName }}</a
+                                    >
+                                </td>
+                                <td>{{ data.ranking.teams[i].GP }}</td>
+                                <td>{{ data.ranking.teams[i].W }}</td>
+                                <td>{{ data.ranking.teams[i].D }}</td>
+                                <td>{{ data.ranking.teams[i].L }}</td>
+                                <td>{{ data.ranking.teams[i].F }}</td>
+                                <td>{{ data.ranking.teams[i].A }}</td>
+                                <td>{{ data.ranking.teams[i].P }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td><a href="#">Mark</a></td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td><a href="#">Mark</a></td>
-                                <td>test</td>
-                                <td>@twitter</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

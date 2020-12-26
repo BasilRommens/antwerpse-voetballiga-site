@@ -3,6 +3,7 @@ import subprocess, requests, weather
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def login():
     return render_template('login.html')
@@ -10,7 +11,21 @@ def login():
 
 @app.route('/leagueTable')
 def league_table():
-    return render_template('league_table.html')
+    data = dict()
+    data['season'] = 2
+    data['divisions'] = [{"link": "/link", "name": "test"}]
+    data['ranking'] = {"length": 1, "teams": [{
+        "TeamName": "Team",
+        "TeamLink": "/link",
+        "GP": 0,
+        "W": 0,
+        "D": 0,
+        "L": 0,
+        "F": 0,
+        "A": 0,
+        "P": 0
+    }]}
+    return render_template('league_table.html', data=data)
 
 
 @app.route('/fixtures')
