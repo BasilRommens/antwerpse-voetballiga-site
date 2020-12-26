@@ -2,7 +2,7 @@
 <html>
     {% include 'header.html' %}
     <head>
-        <title>Team 3 edit</title>
+        <title>{{ data.club_name }}</title>
     </head>
     <body>
         {% include 'navbar/logged_out.html' %}
@@ -10,11 +10,11 @@
             <div class="row mt-5">
                 <div class="col-3">
                     <h1>
-                        <strong>Team 3</strong>
+                        <strong>{{ data.club_name }}</strong>
                     </h1>
                 </div>
                 <div class="col-3 float-left">
-                    <a href="#"><strong>edit</strong></a>
+                        <a href="/editClub/{{ data.club_id }}"><strong>edit</strong></a>
                 </div>
             </div>
             <div class="row">
@@ -25,37 +25,25 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Date</th>
-                                <th scope="col">Home Team</th>
-                                <th scope="col">Away Team</th>
+                                <th scope="col">Home - Away</th>
                                 <th scope="col">Score</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for match in data.home_matches %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>12/12</td>
-                                <td>Team 3</td>
-                                <td>Team 2</td>
-                                <td>3-2</td>
-                                <td><a href="#">edit ></a></td>
+                                <th scope="row">{{ match.id }}</th>
+                                <td>{{ match.date }}</td>
+                                <td>{{ match.teams }}</td>
+                                <td>{{ match.score }}</td>
+                                <td>
+                                    <a href="/editFixture/{{ match.id }}"
+                                        >edit ></a
+                                    >
+                                </td>
                             </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>12/12</td>
-                                <td>Team 3</td>
-                                <td>Team 2</td>
-                                <td>3-2</td>
-                                <td><a href="#">edit ></a></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>12/12</td>
-                                <td>Team 3</td>
-                                <td>Team 2</td>
-                                <td>3-2</td>
-                                <td><a href="#">edit ></a></td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -63,7 +51,7 @@
             <div class="row">
                 <div class="col-9">
                     <h2>Teams</h2>
-                    <button href="#" class="btn btn-primary btn-custom-green">
+                    <button onclick="window.location.href='/addTeam/{{ data.club_id }}'" class="btn btn-primary btn-custom-green">
                         Add Team
                     </button>
                     <table class="table table-striped">
@@ -75,16 +63,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for team in data.teams %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>A</td>
-                                <td><a href="#">edit ></a></td>
+                                <th scope="row">{{ team.id }}</th>
+                                <td>{{ team.name }}</td>
+                                <td>
+                                    <a href="/editTeam/{{ team.id }}">
+                                        edit ></a
+                                    >
+                                </td>
                             </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>B</td>
-                                <td><a href="#">edit ></a></td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

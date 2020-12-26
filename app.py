@@ -86,9 +86,20 @@ def team(team_id=0):
     return render_template('team.html', data=data)
 
 
+@app.route('/viewClub/<club_id>')
 @app.route('/viewClub')
-def view_club():
-    return render_template('view_club.html')
+def view_club(club_id=0):
+    data = dict()
+    data['club_name'] = club_id
+    data['club_id'] = club_id
+    data['home_matches'] = [{
+        "id": 0,
+        "date": "20/12/2020",
+        "teams": "team 1 (h) - team 2 (a)",
+        "score": "2 - 2"
+    }]
+    data['teams'] = [{"id": 0, "name": "A"}]
+    return render_template('view_club.html', data=data)
 
 
 @app.route('/editFixture')
