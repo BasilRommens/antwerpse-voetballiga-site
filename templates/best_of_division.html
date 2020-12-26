@@ -11,33 +11,35 @@
                 <div class="col-2"></div>
                 <div class="col-9">
                     <h1>
-                        <strong>Best of Div 2</strong>
+                            <strong>Best of {{ data.division }}</strong>
                     </h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-2">
                     <h2><strong>Divisions</strong></h2>
-                    <a href="#">Div 1</a><br />
-                    <a href="#"><strong>Div 2</strong></a
-                    ><br />
-                    <a href="#">Div 2</a><br />
-                    <a href="#">Div 4</a><br />
-                    <a href="#">Div 5</a><br />
-                    <a href="#">Div 6</a><br />
+                    {% for division in data.divisions %}
+                    <a href="{{ division.link }}">{{ division.name }}</a><br />
+                    {% endfor %}
                 </div>
                 <div class="col-9">
                     <div>
                         <h2><strong>Best Attack</strong></h2>
-                        <a href="#">Team 2</a><br />
+                        <a href="{{ data.bestattack.link }}"
+                            >{{ data.bestattack.name }}</a
+                        ><br />
                     </div>
                     <div class="mt-5">
                         <h2><strong>Best Defense</strong></h2>
-                        <a href="#">Team 7</a><br />
+                        <a href="{{ data.bestdefense.link }}"
+                            >{{ data.bestdefense.name }}</a
+                        ><br />
                     </div>
                     <div class="mt-5">
                         <h2><strong>Most Clean Sheets</strong></h2>
-                        <a href="#">Team 2</a><br />
+                        <a href="{{ data.mostcleansheets.link }}"
+                            >{{ data.mostcleansheets.name }}</a
+                        ><br />
                     </div>
                 </div>
             </div>

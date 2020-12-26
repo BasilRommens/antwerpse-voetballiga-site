@@ -59,14 +59,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                                {% for match in data.matches %}
-                                <tr>
-                                        <th scope="row">{{ match.id }}</th>
-                                                        <td>{{ match.date }}</td>
-                                                        <td>{{ match.teams }}</td>
-                                                        <td><a href="{{ match.link }}">more ></a></td>
-                                </tr>
-                                {% endfor %}
+                            {% for match in data.matches %}
+                            <tr>
+                                <th scope="row">{{ match.id }}</th>
+                                <td>{{ match.date }}</td>
+                                <td>{{ match.teams }}</td>
+                                <td><a href="{{ match.link }}">more ></a></td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

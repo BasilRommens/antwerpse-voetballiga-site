@@ -54,9 +54,16 @@ def fixtures(week=1, division_id=0, team_id=0):
     return render_template('fixtures.html', data=data)
 
 
+@app.route('/bestOfDivision/<division_id>')
 @app.route('/bestOfDivision')
-def best_of_division():
-    return render_template('best_of_division.html')
+def best_of_division(division_id=0):
+    data = dict()
+    data['division'] = division_id
+    data['divisions'] = [{"link": "/link", "name": "name"}]
+    data['bestattack'] = {"link": "/link", "name": "name"}
+    data['bestdefense'] = {"link": "/link", "name": "name"}
+    data['mostcleansheets'] = {"link": "/link", "name": "name"}
+    return render_template('best_of_division.html', data=data)
 
 
 @app.route('/team')
