@@ -10,37 +10,25 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
-                        <strong>Team 8</strong>
+                        <strong>{{ data.team }}</strong>
                     </h1>
                     <h2>Last 3 encounters</h2>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Home Team</th>
-                                <th scope="col">Away Team</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Home - Away</th>
                                 <th scope="col">Score</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Team 2</td>
-                                <td>Team 3</td>
-                                <td>3-2</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Team 2</td>
-                                <td>Team 3</td>
-                                <td>3-2</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Team 2</td>
-                                <td>Team 3</td>
-                                <td>3-2</td>
-                            </tr>
+                            {% for match in data.previous_matches %}
+                            <th scope="row">{{ match.id }}</th>
+                            <td>{{ match.date }}</td>
+                            <td>{{ match.teams }}</td>
+                            <td>{{ match.score }}</td>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -51,31 +39,21 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Home Team</th>
-                                <th scope="col">Away Team</th>
+                                <th scope="col">ID</th>
                                 <th scope="col">Date</th>
+                                <th scope="col">Home - Away</th>
+                                <th scope="col">Score</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for match in data.previous_matches %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Team 2</td>
-                                <td>Team 3</td>
-                                <td>22/12</td>
+                                <th scope="row">{{ match.id }}</th>
+                                <td>{{ match.date }}</td>
+                                <td>{{ match.teams }}</td>
+                                <td>{{ match.score }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Team 2</td>
-                                <td>Team 3</td>
-                                <td>22/12</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Team 2</td>
-                                <td>Team 3</td>
-                                <td>22/12</td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

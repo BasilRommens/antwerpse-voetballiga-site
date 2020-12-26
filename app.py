@@ -66,9 +66,24 @@ def best_of_division(division_id=0):
     return render_template('best_of_division.html', data=data)
 
 
+@app.route('/team/<team_id>')
 @app.route('/team')
-def team():
-    return render_template('team.html')
+def team(team_id=0):
+    data = dict()
+    data['team'] = team_id
+    data['previous_matches'] = [{
+        "id": 0,
+        "date": "20/12/2020",
+        "teams": "team 1 (h) - team 2 (a)",
+        "score": "2 - 2"
+    }]
+    data['future_matches'] = [{
+        "id": 0,
+        "date": "20/12/2020",
+        "teams": "team 1 (h) - team 2 (a)",
+        "score": "2 - 2"
+    }]
+    return render_template('team.html', data=data)
 
 
 @app.route('/viewClub')
