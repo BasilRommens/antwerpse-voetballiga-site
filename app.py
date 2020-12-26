@@ -128,9 +128,14 @@ def edit_club(club_id=0):
     return render_template('edit_club.html', data=data)
 
 
+@app.route('/editTeam/<team_id>')
 @app.route('/editTeam')
-def edit_team():
-    return render_template('edit_team.html')
+def edit_team(team_id=0):
+    data = dict()
+    data['suffix'] = "A"
+    data['home_color'] = "red"
+    data['away_color'] = "green"
+    return render_template('edit_team.html', data=data)
 
 
 @app.route('/addTeam')
