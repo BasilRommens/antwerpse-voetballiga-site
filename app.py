@@ -114,9 +114,18 @@ def edit_fixture(match_id=0):
     return render_template('edit_fixture.html', data=data)
 
 
+@app.route('/editClub/<club_id>')
 @app.route('/editClub')
-def edit_club():
-    return render_template('edit_club.html')
+def edit_club(club_id=0):
+    data = dict()
+    data['name'] = "fc twente"
+    data['stam_number'] = 32
+    data['address'] = 'chickenstreet'
+    data['zip_code'] = 33892
+    data['city']  = 'Antwerpen'
+    data['phone_number'] = 783498745923
+    data['website'] = 'http://yeet.com'
+    return render_template('edit_club.html', data=data)
 
 
 @app.route('/editTeam')
