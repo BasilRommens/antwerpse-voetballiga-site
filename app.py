@@ -172,7 +172,9 @@ def view_match(match_id=0):
 
 @app.route('/admin/viewMatches')
 def admin_view_matches():
-    return render_template('admin/view_matches.html')
+    data = dict()
+    data['matches'] = [{'ID': 1, 'teams': 'team 1 (h) - team 2 (a)', 'date': '22/12'}]
+    return render_template('admin/view_matches.html', data=data)
 
 
 @app.route('/admin/viewClubs')

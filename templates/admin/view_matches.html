@@ -10,7 +10,7 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1><strong>Matches</strong></h1>
-                    <button href="#" class="btn btn-primary btn-custom-green">
+                    <button href="/admin/addMatch" class="btn btn-primary btn-custom-green">
                         Add Match
                     </button>
                     <table class="table table-striped">
@@ -23,18 +23,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for match in data.matches %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>22/11</td>
-                                <td>Team 1 (h) - Team 2 (a)</td>
-                                <td><a href="#">edit ></a></td>
+                                <th scope="row">{{ match.ID }}</th>
+                                <td>{{ match.date }}</td>
+                                <td>{{ match.teams }}</td>
+                                <td>
+                                    <a href="/editFixture/{{ match.ID }}"
+                                        >edit ></a
+                                    >
+                                </td>
                             </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>23/12</td>
-                                <td>Team 1 (h) - Team 2 (a)</td>
-                                <td><a href="#">edit ></a></td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
