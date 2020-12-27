@@ -233,8 +233,9 @@ def admin_add_team():
     return render_template('admin/add_team.html')
 
 
+@app.route('/admin/assignReferee/<referee_id>')
 @app.route('/admin/assignReferee')
-def admin_assign_referee():
+def admin_assign_referee(referee_id=0):
     return render_template('admin/assign_referee.html')
 
 

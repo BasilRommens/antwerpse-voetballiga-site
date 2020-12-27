@@ -19,16 +19,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for referee in data.referees %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Charles Michel</td>
-                                <td><a href="#">assign ></a></td>
+                                <th scope="row">{{ referee.ID }}</th>
+                                <td>{{ referee.name }}</td>
+                                <td>
+                                    <a
+                                        href="/admin/assignReferee/{{ referee.ID }}"
+                                        >assign ></a
+                                    >
+                                </td>
                             </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Charles Mau</td>
-                                <td><a href="#">assign ></a></td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
