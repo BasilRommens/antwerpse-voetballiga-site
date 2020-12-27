@@ -16,29 +16,27 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">ID</th>
                                 <th scope="col">Club name</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for club in data.clubs %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Club charles</td>
+                                <th scope="row">{{ club.ID }}</th>
+                                <td>{{ club.name }}</td>
                                 <td>
-                                    <a href="#"><strong>edit teams</strong></a>
+                                    <a href="/admin/viewTeams/{{ club.ID }}"
+                                        ><strong>edit teams</strong></a
+                                    >
                                 </td>
-                                <td><a href="#">edit ></a></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Club FS</td>
                                 <td>
-                                    <a href="#"><strong>edit teams</strong></a>
+                                    <a href="/editClub/{{ club.ID }}">edit ></a>
                                 </td>
-                                <td><a href="#">edit ></a></td>
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

@@ -173,18 +173,23 @@ def view_match(match_id=0):
 @app.route('/admin/viewMatches')
 def admin_view_matches():
     data = dict()
-    data['matches'] = [{'ID': 1, 'teams': 'team 1 (h) - team 2 (a)', 'date': '22/12'}]
+    data['matches'] = [
+        {'ID': 1, 'teams': 'team 1 (h) - team 2 (a)', 'date': '22/12'}]
     return render_template('admin/view_matches.html', data=data)
 
 
 @app.route('/admin/viewClubs')
 def admin_view_clubs():
-    return render_template('admin/view_clubs.html')
+    data = dict()
+    data['clubs'] = [{'name': 'John', 'ID': 0}]
+    return render_template('admin/view_clubs.html', data=data)
 
 
 @app.route('/admin/viewReferees')
 def admin_view_referees():
-    return render_template('admin/view_referees.html')
+    data = dict()
+    data['referees'] = [{'name': 'John Doe', 'ID': 0}]
+    return render_template('admin/view_referees.html', data=data)
 
 
 @app.route('/admin/viewUsers')
@@ -212,8 +217,9 @@ def admin_add_club():
     return render_template('admin/add_club.html')
 
 
+@app.route('/admin/viewTeams/<club_id>')
 @app.route('/admin/viewTeams')
-def admin_view_teams():
+def admin_view_teams(club_id=0):
     return render_template('admin/view_teams.html')
 
 
