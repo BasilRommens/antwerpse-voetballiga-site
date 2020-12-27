@@ -32,7 +32,7 @@ def league_table(season=0, division_id=0):
             "P": 0
         }]
     }
-    return render_template('league_table.html', data=data)
+    return render_template('league_table.html', data=data, admin=0)
 
 
 @app.route('/fixtures/<division_id>/<team_id>/<week>')
@@ -53,7 +53,7 @@ def fixtures(week=1, division_id=0, team_id=0):
 
     data['divisions'] = [{"link": "/link", "name": "test"}]
     data['teams'] = [{"link": "/link", "name": "Team"}]
-    return render_template('fixtures.html', data=data)
+    return render_template('fixtures.html', data=data, admin=0)
 
 
 @app.route('/bestOfDivision/<division_id>')
@@ -65,7 +65,7 @@ def best_of_division(division_id=0):
     data['bestattack'] = {"link": "/link", "name": "name"}
     data['bestdefense'] = {"link": "/link", "name": "name"}
     data['mostcleansheets'] = {"link": "/link", "name": "name"}
-    return render_template('best_of_division.html', data=data)
+    return render_template('best_of_division.html', data=data, admin=0)
 
 
 @app.route('/team/<team_id>')
@@ -85,7 +85,7 @@ def team(team_id=0):
         "teams": "team 1 (h) - team 2 (a)",
         "score": "2 - 2"
     }]
-    return render_template('team.html', data=data)
+    return render_template('team.html', data=data, admin=0)
 
 
 @app.route('/viewClub/<club_id>')
@@ -101,7 +101,7 @@ def view_club(club_id=0):
         "score": "2 - 2"
     }]
     data['teams'] = [{"id": 0, "name": "A"}]
-    return render_template('view_club.html', data=data)
+    return render_template('view_club.html', data=data, admin=0)
 
 
 @app.route('/editFixture/<match_id>')
@@ -113,7 +113,7 @@ def edit_fixture(match_id=0):
     data['away_team'] = "team 7"
     data['home_score'] = 0
     data['away_score'] = 2
-    return render_template('edit_fixture.html', data=data)
+    return render_template('edit_fixture.html', data=data, admin=0)
 
 
 @app.route('/editClub/<club_id>')
@@ -127,7 +127,7 @@ def edit_club(club_id=0):
     data['city'] = 'Antwerpen'
     data['phone_number'] = 783498745923
     data['website'] = 'http://yeet.com'
-    return render_template('edit_club.html', data=data)
+    return render_template('edit_club.html', data=data, admin=0)
 
 
 @app.route('/editTeam/<team_id>')
@@ -137,12 +137,12 @@ def edit_team(team_id=0):
     data['suffix'] = "A"
     data['home_color'] = "red"
     data['away_color'] = "green"
-    return render_template('edit_team.html', data=data)
+    return render_template('edit_team.html', data=data, admin=0)
 
 
 @app.route('/addTeam')
 def add_team():
-    return render_template('add_team.html')
+    return render_template('add_team.html', admin=0)
 
 
 @app.route('/viewMatch/<match_id>')
@@ -167,7 +167,7 @@ def view_match(match_id=0):
     data['current_form'] = {'home_team': 'WWDLWW', 'away_team': 'LLDWW'}
     data['head_to_head'] = {'home_team': 3, 'away_team': 1, 'draw': 4}
     data['last_3'] = {'home_team': [2, 3, 0], 'away_team': [2, 4, 0]}
-    return render_template('view_match.html', data=data)
+    return render_template('view_match.html', data=data, admin=0)
 
 
 @app.route('/admin/viewMatches')
@@ -175,21 +175,21 @@ def admin_view_matches():
     data = dict()
     data['matches'] = [
         {'ID': 1, 'teams': 'team 1 (h) - team 2 (a)', 'date': '22/12'}]
-    return render_template('admin/view_matches.html', data=data)
+    return render_template('admin/view_matches.html', data=data, admin=1)
 
 
 @app.route('/admin/viewClubs')
 def admin_view_clubs():
     data = dict()
     data['clubs'] = [{'name': 'John', 'ID': 0}]
-    return render_template('admin/view_clubs.html', data=data)
+    return render_template('admin/view_clubs.html', data=data, admin=1)
 
 
 @app.route('/admin/viewReferees')
 def admin_view_referees():
     data = dict()
     data['referees'] = [{'name': 'John Doe', 'ID': 0}]
-    return render_template('admin/view_referees.html', data=data)
+    return render_template('admin/view_referees.html', data=data, admin=1)
 
 
 @app.route('/admin/viewUsers')
@@ -197,60 +197,55 @@ def admin_view_users():
     data = dict()
     data['users'] = [{'username': 'John Doe', 'email': 'yeet@yeet', 'ID': 0,
                       'tags': [{'class': 'badge bg-custom-red', 'text': 'Club'}]}]
-    return render_template('admin/view_users.html', data=data)
-
-
-@app.route('/admin/editMatch')
-def admin_edit_match():
-    return render_template('admin/edit_match.html')
+    return render_template('admin/view_users.html', data=data, admin=1)
 
 
 @app.route('/admin/addMatch')
 def admin_add_match():
-    return render_template('admin/add_match.html')
+    return render_template('admin/add_match.html', admin=1)
 
 
 @app.route('/admin/editClub')
 def admin_edit_club():
-    return render_template('admin/edit_club.html')
+    return render_template('admin/edit_club.html', admin=1)
 
 
 @app.route('/admin/addClub')
 def admin_add_club():
-    return render_template('admin/add_club.html')
+    return render_template('admin/add_club.html', admin=1)
 
 
 @app.route('/admin/viewTeams/<club_id>')
 @app.route('/admin/viewTeams')
 def admin_view_teams(club_id=0):
-    return render_template('admin/view_teams.html')
+    return render_template('admin/view_teams.html', admin=1)
 
 
 @app.route('/admin/editTeam')
 def admin_edit_team():
-    return render_template('admin/edit_team.html')
+    return render_template('admin/edit_team.html', admin=1)
 
 
 @app.route('/admin/addTeam')
 def admin_add_team():
-    return render_template('admin/add_team.html')
+    return render_template('admin/add_team.html', admin=1)
 
 
 @app.route('/admin/assignReferee/<referee_id>')
 @app.route('/admin/assignReferee')
 def admin_assign_referee(referee_id=0):
-    return render_template('admin/assign_referee.html')
+    return render_template('admin/assign_referee.html', admin=1)
 
 
 @app.route('/admin/editUser/<user_id>')
 @app.route('/admin/editUser')
 def admin_edit_user(user_id=0):
-    return render_template('admin/edit_user.html')
+    return render_template('admin/edit_user.html', admin=1)
 
 
 @app.route('/admin/addUser')
 def admin_add_user():
-    return render_template('admin/add_user.html')
+    return render_template('admin/add_user.html', admin=1)
 
 
 if __name__ == '__main__':
