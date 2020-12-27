@@ -10,13 +10,13 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1><strong>Users</strong></h1>
-                    <button href="#" class="btn btn-primary btn-custom-green">
+                    <button href="/admin/addUser" class="btn btn-primary btn-custom-green">
                         Add User
                     </button>
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">ID</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">E-mail</th>
                                 <th scope="col">Linked</th>
@@ -24,20 +24,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for user in data.users %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Joe</td>
-                                <td>joe@joe.com</td>
-                                <td><span class="badge bg-custom-red">Club</span>&nbsp;<span class="badge bg-dark">admin</span></td>
-                                <td><a href="#">edit ></a></td>
+                                <th scope="row">{{ user.ID }}</th>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% for tag in user.tags %}
+                                    <span class="{{ tag.class }}"
+                                        >{{ tag.text }}</span
+                                    >&nbsp; {% endfor %}
+                                </td>
+                                <td>
+                                    <a href="/admin/editUser/{{ user.ID }}"
+                                        >edit ></a
+                                    >
+                                </td>
                             </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Joe</td>
-                                <td>joe@joe.com</td>
-                                <td></td>
-                                <td><a href="#">edit ></a></td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

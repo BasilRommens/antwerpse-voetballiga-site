@@ -194,7 +194,10 @@ def admin_view_referees():
 
 @app.route('/admin/viewUsers')
 def admin_view_users():
-    return render_template('admin/view_users.html')
+    data = dict()
+    data['users'] = [{'username': 'John Doe', 'email': 'yeet@yeet', 'ID': 0,
+                      'tags': [{'class': 'badge bg-custom-red', 'text': 'Club'}]}]
+    return render_template('admin/view_users.html', data=data)
 
 
 @app.route('/admin/editMatch')
@@ -239,8 +242,9 @@ def admin_assign_referee(referee_id=0):
     return render_template('admin/assign_referee.html')
 
 
+@app.route('/admin/editUser/<user_id>')
 @app.route('/admin/editUser')
-def admin_edit_user():
+def admin_edit_user(user_id=0):
     return render_template('admin/edit_user.html')
 
 
