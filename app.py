@@ -231,7 +231,9 @@ def admin_view_teams(club_id=0):
 @app.route('/admin/assignReferee/<referee_id>')
 @app.route('/admin/assignReferee')
 def admin_assign_referee(referee_id=0):
-    return render_template('admin/assign_referee.html', admin=1)
+    data = dict()
+    data['matches'] = [{'ID': 0, 'teams': 'Team 1 (h) - Team 2 (a)'}]
+    return render_template('admin/assign_referee.html', data=data, admin=1)
 
 
 @app.route('/admin/editUser/<user_id>')
