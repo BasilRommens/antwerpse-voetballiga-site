@@ -10,11 +10,18 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1><strong>Referees</strong></h1>
+                    <button
+                        href="/addReferee"
+                        class="btn btn-primary btn-custom-green"
+                    >
+                        Add Referee
+                    </button>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Referee name</th>
+                                <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -26,7 +33,13 @@
                                 <td>
                                     <a
                                         href="/admin/assignReferee/{{ referee.ID }}"
-                                        >assign ></a
+                                        ><strong>assign</strong></a
+                                    >
+                                </td>
+                                <td>
+                                    <a
+                                        href="/admin/editReferee/{{ referee.ID }}"
+                                        >edit ></a
                                     >
                                 </td>
                             </tr>
