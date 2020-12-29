@@ -272,5 +272,11 @@ def admin_view_season():
     seasons = [1, 2, 3]
     return render_template('admin/view_seasons.html', seasons=seasons, admin=1)
 
+@app.route('/admin/viewDivisions')
+def admin_view_division():
+    data = dict()
+    data['divisions'] = [{'name': 'Division A', 'ID': 0}]
+    return render_template('admin/view_divisions.html', data=data, admin=1)
+
 if __name__ == '__main__':
     app.run()
