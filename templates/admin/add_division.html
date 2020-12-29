@@ -2,7 +2,7 @@
 <html>
     {% include 'header.html' %}
     <head>
-        <title>Edit Division</title>
+        <title>Add Division</title>
     </head>
     <body>
         {% include 'navbar.html' %}
@@ -10,22 +10,21 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
-                        <strong>Edit Division</strong>
+                        <strong>Add Division</strong>
                     </h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-9">
-                        <form id="editDivision" action="/editDivision/{{ data.division.ID }}" method="post">
+                        <form id="addDivision" action="/addDivision" method="post">
                         <div class="mb-3 col-3">
-                            <label for="editDivision" class="form-label"
+                            <label for="name" class="form-label"
                                 ><strong>Name</strong></label
                             >
                             <input
                                 type="text"
                                 class="form-control"
-                                id="editDivision"
-                                value="{{ data.division.name }}"
+                                id="name"
                             />
                         </div>
                         <div class="col-12">
@@ -33,13 +32,7 @@
                                 type="submit"
                                 class="btn btn-primary btn-custom-red"
                             >
-                                Save
-                            </button>
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-black"
-                            >
-                                Delete
+                            Add
                             </button>
                         </div>
                     </form>
