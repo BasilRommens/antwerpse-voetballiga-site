@@ -5,7 +5,7 @@
         <title>Add Club [admin]</title>
     </head>
     <body>
-        {% include 'navbar/admin.html' %}
+        {% include 'navbar.html' %}
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9 mt-2">
@@ -16,7 +16,7 @@
             </div>
             <div class="row">
                 <div class="col-9">
-                    <form id="editClub" action="" method="post">
+                    <form id="editClub" action="/admin/addClub" method="post">
                         <div class="mb-3 col-3">
                             <label for="clubName" class="form-label"
                                 ><strong>Club Name</strong></label
