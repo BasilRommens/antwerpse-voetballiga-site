@@ -140,9 +140,12 @@ def edit_team(team_id=0):
     return render_template('edit_team.html', data=data, admin=0)
 
 
+@app.route('/addTeam/<club_id>')
 @app.route('/addTeam')
-def add_team():
-    return render_template('add_team.html', admin=0)
+def add_team(club_id=0):
+    data = dict()
+    data['club_id'] = club_id
+    return render_template('add_team.html', data=data, admin=0)
 
 
 @app.route('/viewMatch/<match_id>')
@@ -223,16 +226,6 @@ def admin_view_teams(club_id=0):
     data['teams'] = [{'name': 'A', 'ID': 0}]
     data['club'] = {'name': 'club 1', 'ID': club_id}
     return render_template('admin/view_teams.html', data=data, admin=1)
-
-
-@app.route('/admin/editTeam')
-def admin_edit_team():
-    return render_template('admin/edit_team.html', admin=1)
-
-
-@app.route('/admin/addTeam')
-def admin_add_team():
-    return render_template('admin/add_team.html', admin=1)
 
 
 @app.route('/admin/assignReferee/<referee_id>')
