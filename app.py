@@ -200,9 +200,15 @@ def admin_view_users():
     return render_template('admin/view_users.html', data=data, admin=1)
 
 
-@app.route('/admin/addMatch')
+@app.route('/admin/addFixture')
 def admin_add_match():
-    return render_template('admin/add_match.html', admin=1)
+    data = dict()
+    data['teams'] = [{'name': 'test', 'ID': 0}]
+    data['status'] = ['status']
+    data['seasons'] = ['season 1', 'season 2']
+    data['divsions'] = ['division 1']
+    data['referees'] = ['John Doe']
+    return render_template('admin/add_match.html', data=data, admin=1)
 
 
 @app.route('/admin/editClub')

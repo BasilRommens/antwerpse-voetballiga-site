@@ -5,7 +5,7 @@
         <title>Add Match [admin]</title>
     </head>
     <body>
-        {% include 'navbar/admin.html' %}
+        {% include 'navbar.html' %}
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9">
@@ -28,11 +28,11 @@
                                     aria-label="Default select example"
                                 >
                                     <option selected>
-                                        Open this select menu
+                                    Select Home Team
                                     </option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                        {% for team in data.teams %}
+                                        <option value="{{ team.ID }}">{{ team.name }}</option>
+                                        {% endfor %}
                                 </select>
                             </div>
                             <div class="mb-3 col-3">
@@ -44,12 +44,10 @@
                                     id="awayTeam"
                                     aria-label="Default select example"
                                 >
-                                    <option selected>
-                                        Open this select menu
-                                    </option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option selected>Select Away Team</option>
+                                        {% for team in data.teams %}
+                                        <option value="{{ team.ID }}">{{ team.name }}</option>
+                                        {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -62,7 +60,6 @@
                                     type="number"
                                     class="form-control"
                                     id="homeGoals"
-                                    value="2"
                                 />
                             </div>
                             <div class="mb-3 col-3">
@@ -73,7 +70,6 @@
                                     type="number"
                                     class="form-control"
                                     id="awayGoals"
-                                    value="2"
                                 />
                             </div>
                         </div>
@@ -86,10 +82,10 @@
                                 id="status"
                                 aria-label="Default select example"
                             >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option selected>Select Status</option>
+                                {% for status in data.status %}
+                                <option value="{{ status }}">{{ status }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="mb-3 col-3">
@@ -101,10 +97,10 @@
                                 id="season"
                                 aria-label="Default select example"
                             >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option selected>Select Season</option>
+                                {% for season in data.seasons %}
+                                <option value="{{ season }}">{{ season }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="mb-3 col-3">
@@ -116,10 +112,10 @@
                                 id="division"
                                 aria-label="Default select example"
                             >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option selected>Select division</option>
+                                {% for division in data.divisions %}
+                                <option value="{{ division }}">{{ division }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -132,10 +128,10 @@
                                 id="referee"
                                 aria-label="Default select example"
                             >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option selected>Select Referee</option>
+                                {% for referee in data.referees %}
+                                <option value="{{ referee }}">referee</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="row">

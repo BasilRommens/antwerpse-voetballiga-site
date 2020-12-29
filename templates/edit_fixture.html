@@ -5,7 +5,7 @@
         <title>Edit Fixture</title>
     </head>
     <body>
-        {% include 'navbar/logged_out.html' %}
+        {% include 'navbar.html' %}
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9">
@@ -50,14 +50,14 @@
                             >
                                 Save
                             </button>
-                                    {% if admin %}
+                            {% if admin %}
                             <button
                                 type="submit"
                                 class="btn btn-primary btn-custom-black"
                             >
                                 Delete
                             </button>
-                                    {% endif %}
+                            {% endif %}
                         </div>
                     </form>
                 </div>
