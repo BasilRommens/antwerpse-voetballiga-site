@@ -194,6 +194,22 @@ def admin_view_referees():
     data['referees'] = [{'name': 'John Doe', 'ID': 0}]
     return render_template('admin/view_referees.html', data=data, admin=1)
 
+@app.route('/admin/addReferee')
+def admin_add_referee():
+    data = dict()
+    return render_template('admin/add_referee.html', data=data, admin=1)
+
+@app.route('/admin/editReferee')
+def admin_edit_referee():
+    data = dict()
+    data['first_name'] = "george"
+    data['last_name'] = "george"
+    data['address'] = 'chickenstreet'
+    data['zip_code'] = 33892
+    data['city'] = 'Antwerpen'
+    data['phone_number'] = 783498745923
+    data['birthday'] = '22/2/2000'
+    return render_template('admin/edit_referee.html', data=data, admin=1)
 
 @app.route('/admin/viewUsers')
 def admin_view_users():
