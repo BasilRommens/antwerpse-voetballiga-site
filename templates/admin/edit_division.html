@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Edit Division</title>
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                    <h1>
+                        <strong>Edit Division</strong>
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9">
+                        <form id="editClub" action="/editDivision/{{ data.division.ID }}" method="post">
+                        <div class="mb-3 col-3">
+                            <label for="teamSuffix" class="form-label"
+                                ><strong>Name</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="teamSuffix"
+                                value="{{ data.division.name }}"
+                            />
+                        </div>
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-red"
+                            >
+                                Save
+                            </button>
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

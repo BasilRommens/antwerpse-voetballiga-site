@@ -194,9 +194,11 @@ def admin_view_referees():
     data['referees'] = [{'name': 'John Doe', 'ID': 0}]
     return render_template('admin/view_referees.html', data=data, admin=1)
 
+
 @app.route('/admin/addReferee')
 def admin_add_referee():
     return render_template('admin/add_referee.html', admin=1)
+
 
 @app.route('/admin/editReferee/<referee_id>')
 @app.route('/admin/editReferee')
@@ -210,6 +212,7 @@ def admin_edit_referee(referee_id=0):
     data['phone_number'] = 783498745923
     data['birthday'] = '22/2/2000'
     return render_template('admin/edit_referee.html', data=data, admin=1)
+
 
 @app.route('/admin/viewUsers')
 def admin_view_users():
@@ -267,16 +270,30 @@ def admin_edit_user(user_id=0):
 def admin_add_user():
     return render_template('admin/add_user.html', admin=1)
 
+
 @app.route('/admin/viewSeasons')
 def admin_view_season():
     seasons = [1, 2, 3]
     return render_template('admin/view_seasons.html', seasons=seasons, admin=1)
+
 
 @app.route('/admin/viewDivisions')
 def admin_view_division():
     data = dict()
     data['divisions'] = [{'name': 'Division A', 'ID': 0}]
     return render_template('admin/view_divisions.html', data=data, admin=1)
+
+
+@app.route('/admin/addDivision')
+def admin_add_division():
+    return render_template('admin/add_division.html', admin=1)
+
+@app.route('/admin/editDivision/<division_id>')
+@app.route('/admin/editDivision')
+def admin_edit_division(division_id=0):
+    data = dict()
+    data['division'] = {'name': 'Division A', 'ID': 0}
+    return render_template('admin/edit_division.html', data=data, admin=1)
 
 if __name__ == '__main__':
     app.run()
