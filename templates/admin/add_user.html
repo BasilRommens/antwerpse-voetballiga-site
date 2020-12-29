@@ -5,14 +5,14 @@
         <title>Add User [admin]</title>
     </head>
     <body>
-        {% include 'navbar/admin.html' %}
+        {% include 'navbar.html' %}
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
                         <strong>Add User</strong>
                     </h1>
-                    <form id="editClub" action="" method="post">
+                    <form id="editClub" action="/addUser" method="post">
                         <div class="mb-3 col-3">
                             <label for="username" class="form-label"
                                 ><strong>Username</strong></label
