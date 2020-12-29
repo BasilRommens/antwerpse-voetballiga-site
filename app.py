@@ -219,7 +219,10 @@ def admin_add_club():
 @app.route('/admin/viewTeams/<club_id>')
 @app.route('/admin/viewTeams')
 def admin_view_teams(club_id=0):
-    return render_template('admin/view_teams.html', admin=1)
+    data = dict()
+    data['teams'] = [{'name': 'A', 'ID': 0}]
+    data['club'] = {'name': 'club 1', 'ID': club_id}
+    return render_template('admin/view_teams.html', data=data, admin=1)
 
 
 @app.route('/admin/editTeam')

@@ -5,12 +5,12 @@
         <title>View Teams [admin]</title>
     </head>
     <body>
-        {% include 'navbar/admin.html' %}
+        {% include 'navbar.html' %}
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
-                        <strong>View Teams (Club 1)</strong>
+                        <strong>View Teams ({{ data.club.name }})</strong>
                     </h1>
                     <button href="#" class="btn btn-primary btn-custom-green">
                         Add Team
@@ -18,22 +18,21 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">ID</th>
                                 <th scope="col">Team name</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for team in data.teams %}
                             <tr>
-                                <th scope="row">1</th>
-                                <td>A</td>
-                                <td><a href="#">edit ></a></td>
+                                <th scope="row">{{ team.ID }}</th>
+                                <td>{{ team.name }}</td>
+                                <td>
+                                    <a href="/editTeam/{{ team.ID }}">edit ></a>
+                                </td>
                             </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>B</td>
-                                <td><a href="#">edit ></a></td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
