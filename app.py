@@ -267,6 +267,10 @@ def admin_edit_user(user_id=0):
 def admin_add_user():
     return render_template('admin/add_user.html', admin=1)
 
+@app.route('/admin/viewSeasons')
+def admin_view_season():
+    seasons = [1, 2, 3]
+    return render_template('admin/view_seasons.html', seasons=seasons, admin=1)
 
 if __name__ == '__main__':
     app.run()
