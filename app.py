@@ -196,11 +196,11 @@ def admin_view_referees():
 
 @app.route('/admin/addReferee')
 def admin_add_referee():
-    data = dict()
-    return render_template('admin/add_referee.html', data=data, admin=1)
+    return render_template('admin/add_referee.html', admin=1)
 
+@app.route('/admin/editReferee/<referee_id>')
 @app.route('/admin/editReferee')
-def admin_edit_referee():
+def admin_edit_referee(referee_id=0):
     data = dict()
     data['first_name'] = "george"
     data['last_name'] = "george"

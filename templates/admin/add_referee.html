@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %}
+    <head>
+        <title>Add Referee [admin]</title>
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-9">
+                    <h1>
+                        <strong>Add Referee</strong>
+                    </h1>
+                    <form
+                        id="editClub"
+                        action="/admin/addReferee"
+                        method="post"
+                    >
+                        <div class="mb-3 col-3">
+                            <label for="first_name" class="form-label"
+                                ><strong>First Name</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="first_name"
+                            />
+                        </div>
+
+                        <div class="mb-3 col-3">
+                            <label for="last_name" class="form-label"
+                                ><strong>Last Name</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="last_name"
+                            />
+                        </div>
+
+                        <div class="mb-3 col-3">
+                            <label for="email" class="form-label"
+                                ><strong>E-mail</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="email"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="address" class="form-label"
+                                ><strong>address</strong></label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="address"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="zipCode" class="form-label"
+                                ><strong>Zip Code</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="zipCode"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="city" class="form-label"
+                                ><strong>City</strong></label
+                            >
+                            <input
+                                type="city"
+                                class="form-control"
+                                id="city"
+                            />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="phoneNumber" class="form-label"
+                                ><strong>Phone Number</strong></label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="phoneNumber"
+                            />
+                        </div>
+
+                        <div class="mb-3 col-3">
+                            <label for="birthday" class="form-label"
+                                ><strong>Birthday</strong></label
+                            >
+                            <input
+                                type="date"
+                                class="form-control"
+                                id="birthday"
+                            />
+                        </div>
+
+                        <div class="col-12">
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                            >
+                            Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
