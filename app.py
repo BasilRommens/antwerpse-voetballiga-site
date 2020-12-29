@@ -127,7 +127,7 @@ def edit_club(club_id=0):
     data['city'] = 'Antwerpen'
     data['phone_number'] = 783498745923
     data['website'] = 'http://yeet.com'
-    return render_template('edit_club.html', data=data, admin=0)
+    return render_template('edit_club.html', data=data, admin=1)
 
 
 @app.route('/editTeam/<team_id>')
@@ -209,11 +209,6 @@ def admin_add_match():
     data['divsions'] = ['division 1']
     data['referees'] = ['John Doe']
     return render_template('admin/add_match.html', data=data, admin=1)
-
-
-@app.route('/admin/editClub')
-def admin_edit_club():
-    return render_template('admin/edit_club.html', admin=1)
 
 
 @app.route('/admin/addClub')
