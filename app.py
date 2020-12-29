@@ -239,7 +239,12 @@ def admin_assign_referee(referee_id=0):
 @app.route('/admin/editUser/<user_id>')
 @app.route('/admin/editUser')
 def admin_edit_user(user_id=0):
-    return render_template('admin/edit_user.html', admin=1)
+    data = dict()
+    data['ID'] = 'ID'
+    data['username'] = 'John Doe'
+    data['password'] = 'password'
+    data['email'] = 'email'
+    return render_template('admin/edit_user.html', data=data, admin=1)
 
 
 @app.route('/admin/addUser')

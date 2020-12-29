@@ -5,14 +5,18 @@
         <title>Edit User [admin]</title>
     </head>
     <body>
-        {% include 'navbar/admin.html' %}
+        {% include 'navbar.html' %}
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
                         <strong>Edit User</strong>
                     </h1>
-                    <form id="editClub" action="" method="post">
+                    <form
+                        id="editClub"
+                        action="/admin/editUser/{{ data.ID }}"
+                        method="post"
+                    >
                         <div class="mb-3 col-3">
                             <label for="username" class="form-label"
                                 ><strong>Username</strong></label
@@ -21,6 +25,7 @@
                                 type="text"
                                 class="form-control"
                                 id="username"
+                                value="{{ data.username }}"
                             />
                         </div>
 
@@ -32,6 +37,7 @@
                                 type="text"
                                 class="form-control"
                                 id="password"
+                                value="{{ data.password }}"
                             />
                         </div>
                         <div class="mb-3 col-3">
@@ -42,6 +48,7 @@
                                 type="text"
                                 class="form-control"
                                 id="email"
+                                value="{{ data.email }}"
                             />
                         </div>
                         <div class="col-12">
