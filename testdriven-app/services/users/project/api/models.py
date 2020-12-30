@@ -94,5 +94,47 @@ class Referee(db.Model):
 class Match(db.Model):
     __tablename__ = 'match'
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    goalsHome = db.Column(db.Integer, autoincrement=True)
-    goalsAway = db.Column(db.Integer, autoincrement=True)
+    goalsHome = db.Column(db.Integer, nullable=True)
+    goalsAway = db.Column(db.Integer, nullable=True)
+    matchStatus = db.Column(enum.Enum(Status))
+    mDate = db.Column(db.Date, nullable=False)
+    mTime = db.Column(db.Time, nullable=False)
+    week = db.Column(db.Integer, nullable=False)
+    teamHomeID = db.Column(db.Integer, ForeignKey('Team.ID'), nullable=False)
+    teamAwayID = db.Column(db.Integer, ForeignKey('Team.ID'), nullable=False)
+    divisionID = db.Column(db.Integer,
+                           ForeignKey('Division.ID'),
+                           nullable=False)
+    seasonID = db.Column(db.Integer, ForeignKey('Season.ID'), nullable=False)
+    refID = db.Column(db.Integer, ForeignKey('Referee.ID'), nullable=False)
+
+    def __init__(self, goalsHome, goalsAway, matchStatus, mDate, mTime, week,
+                 teamHomeID, teamAwayID, divisionID, seasonID, refID):
+        self.goalsHome = goalsHome
+        self.goalsAway = goalsAway
+        self.matchStatus = matchStatus
+        self.mDate = mDate
+        self.mTime = mTime
+        self.teamHomeID = teamHomeID
+        self.teamAwayID = teamAwayID
+        self.divisionID = divisionID
+        self.seasonID = seasonID
+        self.refID = refID
+
+    def to_json(self):
+        return {
+                'goals_home': self.goalsHome,
+                'goals_away': self.goalsAway,
+                'match_status': self.matchStatus,
+                'date': self.mDate,
+                'time': self.mTime,
+                'team_home_ID': self.teamHomeID,
+                'team_away_ID': self.teamAwayID,
+                'division_ID': self.divisionID,
+                'season_ID': self.seasonID,
+                'ref_ID': self.refID
+        }
+
+
+class Team(db.Model):
+    pass
