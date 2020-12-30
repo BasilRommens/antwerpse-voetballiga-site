@@ -123,18 +123,39 @@ class Match(db.Model):
 
     def to_json(self):
         return {
-                'goals_home': self.goalsHome,
-                'goals_away': self.goalsAway,
-                'match_status': self.matchStatus,
-                'date': self.mDate,
-                'time': self.mTime,
-                'team_home_ID': self.teamHomeID,
-                'team_away_ID': self.teamAwayID,
-                'division_ID': self.divisionID,
-                'season_ID': self.seasonID,
-                'ref_ID': self.refID
+            'ID': self.ID,
+            'goals_home': self.goalsHome,
+            'goals_away': self.goalsAway,
+            'match_status': self.matchStatus,
+            'date': self.mDate,
+            'time': self.mTime,
+            'team_home_ID': self.teamHomeID,
+            'team_away_ID': self.teamAwayID,
+            'division_ID': self.divisionID,
+            'season_ID': self.seasonID,
+            'ref_ID': self.refID
         }
 
 
 class Team(db.Model):
-    pass
+    __tablename__ = 'team'
+    ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    suffix = db.Column(db.String(128), nullable=False)
+    awayColor = db.Column(db.String(128), nullable=False)
+    homeColor = db.Column(db.String(128), nullable=False)
+    clubID = db.Column(db.Integer, ForeignKey('Club.ID'), nullable=False)
+
+    def __init__(self, suffix, awayColor, homeColor, clubID):
+        self.suffix = suffix
+        self.awayColor = awayColor
+        self.homeColor = homeColor
+        self.clubID = clubID
+
+    def to_json(self):
+        return {
+            'ID': self.ID,
+            'suffix': self.suffix,
+            'away_color': self.awayColor,
+            'home_color': self.homeColor,
+            'clubID': self.clubID
+        }
