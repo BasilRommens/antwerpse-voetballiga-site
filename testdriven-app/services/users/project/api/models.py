@@ -80,6 +80,7 @@ class Referee(db.Model):
 
     def to_json(self):
         return {
+            'ID': self.ID,
             'first_name': self.firstName,
             'last_name': self.lastName,
             'address': self.address,
@@ -158,4 +159,34 @@ class Team(db.Model):
             'away_color': self.awayColor,
             'home_color': self.homeColor,
             'clubID': self.clubID
+        }
+
+
+class Club(db.Model):
+    __tablename__ = 'club'
+    ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(128), nullable=False)
+    address = db.Column(db.String(256), nullable=False)
+    zipCode = db.Column(db.Integer, nullable=False)
+    city = db.Column(db.String(128), nullable=False)
+    stamNumber = db.Column(db.Integer, nullable=False)
+    website = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, name, address, zipCode, city, stamNumber, website):
+        self.name = name
+        self.address = address
+        self.zipCode = zipCode
+        self.city = city
+        self.stamNumber = stamNumber
+        self.website = website
+
+    def to_json(self):
+        return {
+            'ID': self.ID,
+            'name': self.name,
+            'address': self.address,
+            'zipCode': self.zipCode,
+            'city': self.city,
+            'stam_number': self.stamNumber,
+            'website': self.website,
         }
