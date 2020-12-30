@@ -190,3 +190,15 @@ class Club(db.Model):
             'stam_number': self.stamNumber,
             'website': self.website,
         }
+
+
+class Division(db.Model):
+    __tablename__ = 'division'
+    ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    def to_json(self):
+        return {'ID': self.ID, 'name': self.name}
