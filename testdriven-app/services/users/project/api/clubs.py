@@ -1,10 +1,10 @@
 from project.api.config import *
 
-users_blueprint = Blueprint('users', __name__)
+clubs_blueprint = Blueprint('clubs', __name__)
 
 
-@users_blueprint.route('/users', methods=['POST'])
-def add_user():
+@clubs_blueprint.route('/clubs', methods=['POST'])
+def add_club():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
@@ -27,8 +27,8 @@ def add_user():
         return jsonify(response_object), 400
 
 
-@users_blueprint.route('/users/<user_id>', methods=['GET'])
-def get_single_user(user_id):
+@clubs_blueprint.route('/clubs/<club_id>', methods=['GET'])
+def get_single_club(club_id):
     """Get single user details"""
     response_object = {
         'status': 'fail',
@@ -53,13 +53,13 @@ def get_single_user(user_id):
         return jsonify(response_object), 404
 
 
-@users_blueprint.route('/db/all_users', methods=['GET'])
-def get_all_users():
-    """Get all users"""
+@clubs_blueprint.route('/db/all_clubs', methods=['GET'])
+def get_all_clubs():
+    """Get all clubs"""
     response_object = {
         'status': 'success',
         'data': {
-            'users': [user.to_json() for user in User.query.all()]
+            'clubs': [club.to_json() for club in Club.query.all()]
         }
     }
     return jsonify(response_object), 200
