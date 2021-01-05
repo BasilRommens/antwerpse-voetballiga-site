@@ -9,10 +9,10 @@ def add_team():
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    suffix = post_date.get('suffix')
-    awayColor = post_date.get('awayColor')
-    homeColor = post_date.get('homeColor')
-    clubID = post_date.get('clubID')
+    suffix = post_data.get('suffix')
+    awayColor = post_data.get('awayColor')
+    homeColor = post_data.get('homeColor')
+    clubID = post_data.get('clubID')
     try:
         team = Team.query.filter_by(suffix=suffix).first()
         if not team:
@@ -55,11 +55,11 @@ def update_team():
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    team_id = post_date.get('ID')
-    suffix = post_date.get('suffix')
-    awayColor = post_date.get('awayColor')
-    homeColor = post_date.get('homeColor')
-    clubID = post_date.get('clubID')
+    team_id = post_data.get('ID')
+    suffix = post_data.get('suffix')
+    awayColor = post_data.get('awayColor')
+    homeColor = post_data.get('homeColor')
+    clubID = post_data.get('clubID')
     try:
         # Check for team existence
         team = Team.query.filter_by(ID=team_id).first()
