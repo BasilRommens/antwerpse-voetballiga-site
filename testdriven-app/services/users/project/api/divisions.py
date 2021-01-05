@@ -3,49 +3,41 @@ from project.api.config import *
 division_blueprint = Blueprint('divisions', __name__)
 
 
-@division_blueprint.route('/seasons', methods=['POST'])
+@division_blueprint.route('/db/divisions', methods=['POST'])
 def add_division():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    username = post_data.get('username')
-    email = post_data.get('email')
+    name = post_date.get('name')
     try:
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            db.session.add(User(username=username, email=email))
-            db.session.commit()
-            response_object['status'] = 'success'
-            response_object['message'] = f'{email} was added!'
-            return jsonify(response_object), 201
-        else:
-            response_object['message'] = 'Sorry. That email already exists.'
-            return jsonify(response_object), 400
+        db.session.add(Division(name=name))
+        db.session.commit()
+        response_object['status'] = 'success'
+        response_object['message'] = f'{email} was added!'
+        return jsonify(response_object), 201
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@division_blueprint.route('/clubs/<club_id>', methods=['GET'])
-def get_single_division(club_id):
-    """Get single user details"""
+@division_blueprint.route('/divisions/<division_id>', methods=['GET'])
+def get_single_division(division_id):
+    """Get single division details"""
     response_object = {
         'status': 'fail',
-        'message': 'User does not exist'
+        'message': 'Division does not exist'
     }
     try:
-        user = User.query.filter_by(id=int(user_id)).first()
-        if not user:
+        division = User.query.filter_by(id=int(division_id)).first()
+        if not division:
             return jsonify(response_object), 404
         else:
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'active': user.active
+                    'id': division.id,
+                    'name': division.name
                 }
             }
             return jsonify(response_object), 200

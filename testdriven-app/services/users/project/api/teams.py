@@ -30,6 +30,54 @@ def add_team():
         return jsonify(response_object), 400
 
 
+@team_blueprint.route('/db/delete_team/<team_id>', methods=['DELETE'])
+def delete_team(team_id):
+    post_data = request.get_json()
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    try:
+        # Check for team existence
+        team = Team.query.filter_by(ID=team_id).first()
+        if not team:
+            response_object['message'] = 'Sorry. Can\'t delete team'
+            return jsonify(response_object), 400
+        else:
+            team.delete()
+            db.session.commit()
+            return jsonify(response_object), 400
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
+@team_blueprint.route('/db/update_team', methods=['UPDATE'])
+def update_team():
+    post_data = request.get_json()
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    if not post_data:
+        return jsonify(response_object), 400
+    team_id = post_date.get('ID')
+    suffix = post_date.get('suffix')
+    awayColor = post_date.get('awayColor')
+    homeColor = post_date.get('homeColor')
+    clubID = post_date.get('clubID')
+    try:
+        # Check for team existence
+        team = Team.query.filter_by(ID=team_id).first()
+        if not team:
+            response_object['message'] = 'Sorry. Can\'t update team'
+            return jsonify(response_object), 400
+        else:
+            team.update({Team.suffix: suffix, Team.awayColor: awayColor,
+                         Team.homeColor: homeColor, Team.clubID: clubID})
+
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Updated team {team_id}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError as e:
+        db.session.rollback()
+
+
 @team_blueprint.route('/teams/<team_id>', methods=['GET'])
 def get_single_team(team_id):
     """Get single team details"""
