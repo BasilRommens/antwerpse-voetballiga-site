@@ -57,6 +57,7 @@ def update_match():
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
+    match_id = post_data.get('ID')
     goalsHome = post_data.get('goalsHome')
     goalsAway = post_date.get('goalsAway')
     matchStatus = post_date.get('matchStatus')
@@ -78,7 +79,7 @@ def update_match():
                           Match.teamHomeID: teamHomeID, Match.teamAwayID: teamAwayID, Match.divisionID: divisionID, Match.seasonID: seasonID, Match.refID: refID})
             db.session.commit()
             response_object['status'] = 'success'
-            response_object['message'] = f'Updated match {firstName} {lastName}'
+            response_object['message'] = f'Updated match {match_id}'
             return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()

@@ -3,49 +3,53 @@ from project.api.config import *
 team_blueprint = Blueprint('teams', __name__)
 
 
-@team_blueprint.route('/seasons', methods=['POST'])
+@team_blueprint.route('/db/teams', methods=['POST'])
 def add_team():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    username = post_data.get('username')
-    email = post_data.get('email')
+    suffix = post_date.get('suffix')
+    awayColor = post_date.get('awayColor')
+    homeColor = post_date.get('homeColor')
+    clubID = post_date.get('clubID')
     try:
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            db.session.add(User(username=username, email=email))
+        team = Team.query.filter_by(suffix=suffix).first()
+        if not team:
+            db.session.add(Team(suffix=suffix, awayColor=awayColor,
+                                homeColor=homeColor, clubID=clubID))
             db.session.commit()
             response_object['status'] = 'success'
-            response_object['message'] = f'{email} was added!'
+            response_object['message'] = f'Team was added!'
             return jsonify(response_object), 201
         else:
-            response_object['message'] = 'Sorry. That email already exists.'
+            response_object['message'] = 'Sorry. That team already exists.'
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@team_blueprint.route('/clubs/<club_id>', methods=['GET'])
-def get_single_team(club_id):
-    """Get single user details"""
+@team_blueprint.route('/teams/<team_id>', methods=['GET'])
+def get_single_team(team_id):
+    """Get single team details"""
     response_object = {
         'status': 'fail',
         'message': 'User does not exist'
     }
     try:
-        user = User.query.filter_by(id=int(user_id)).first()
-        if not user:
+        team = Team.query.filter_by(ID=int(team_id)).first()
+        if not team:
             return jsonify(response_object), 404
         else:
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'active': user.active
+                    'id': team.ID,
+                    'suffix': team.suffix,
+                    'awayColor': team.awayColor,
+                    'homeColor': team.homeColor,
+                    'clubID': team.clubID
                 }
             }
             return jsonify(response_object), 200
