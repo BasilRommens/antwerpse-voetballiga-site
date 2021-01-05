@@ -3,49 +3,53 @@ from project.api.config import *
 season_blueprint = Blueprint('seasons', __name__)
 
 
-@season_blueprint.route('/seasons', methods=['POST'])
+@season_blueprint.route('/db/seasons', methods=['POST'])
 def add_season():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
-    if not post_data:
-        return jsonify(response_object), 400
-    username = post_data.get('username')
-    email = post_data.get('email')
     try:
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            db.session.add(User(username=username, email=email))
-            db.session.commit()
-            response_object['status'] = 'success'
-            response_object['message'] = f'{email} was added!'
-            return jsonify(response_object), 201
+        db.session.add(Season())
+        db.session.commit()
+        response_object['status'] = 'success'
+        response_object['message'] = 'Season was added!'
+        return jsonify(response_object), 201
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
+@season_blueprint.route('/db/delete_season/<season_id>', methods=['DELETE'])
+def delete_season(season_id):
+    post_data = request.get_json()
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    try:
+        # Check for season existence
+        season = User.query.filter_by(season=season_id).first()
+        if not season:
+            response_object['message'] = 'Sorry. Can\'t delete season'
+            return jsonify(response_object), 400
         else:
-            response_object['message'] = 'Sorry. That email already exists.'
+            season.delete()
+            db.session.commit()
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@season_blueprint.route('/clubs/<club_id>', methods=['GET'])
-def get_single_season(club_id):
+@season_blueprint.route('/seasons/<season_id>', methods=['GET'])
+def get_single_season(season_id):
     """Get single user details"""
-    response_object = {
-        'status': 'fail',
-        'message': 'User does not exist'
-    }
+    response_object = {'status': 'fail', 'message': 'User does not exist'}
     try:
-        user = User.query.filter_by(id=int(user_id)).first()
-        if not user:
+        season = Season.query.filter_by(season=int(season)).first()
+        if not season:
             return jsonify(response_object), 404
         else:
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'active': user.active
+                    'season': season.season
                 }
             }
             return jsonify(response_object), 200
