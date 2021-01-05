@@ -48,9 +48,11 @@ class User(db.Model):
     email = db.Column(db.String(128), nullable=False)
     clubID = db.Column(db.Integer, ForeignKey('club.ID'), nullable=True)
 
-    def __init__(self, username, email):
+    def __init__(self, username, email, password, clubID=None):
         self.username = username
         self.email = email
+        self.password = password
+        self.clubID = clubID
 
     def to_json(self):
         return {

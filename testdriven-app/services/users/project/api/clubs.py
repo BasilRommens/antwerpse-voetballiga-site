@@ -27,6 +27,56 @@ def add_club():
         return jsonify(response_object), 400
 
 
+@club_blueprint.route('/db/delete_club/<club_id>', methods=['DELETE'])
+def delete_club(club_id):
+    post_data = request.get_json()
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    try:
+        # Check for user existence
+        club_user = Club.query.filter_by(ID=club_id).first()
+        if not club_user:
+            response_object['message'] = 'Sorry. Can\'t delete club'
+            return jsonify(response_object), 400
+        else:
+            Club.query.filter_by(ID=club_id).delete()
+            db.session.commit()
+            return jsonify(response_object), 400
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
+@club_blueprint.route('/db/update_club', methods=['UPDATE'])
+def update_club():
+    post_data = request.get_json()
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    if not post_data:
+        return jsonify(response_object), 400
+    club_id = post_data.get('ID')
+    name = post_data.get('name')
+    address = post_data.get('address')
+    zipCode = post_data.get('zipCode')
+    city = post_data.get('city')
+    stamNumber = post_data.get('stamNumber')
+    website = post_data.get('website')
+    try:
+        # Check for user existence
+        club = Club.query.filter_by(ID=club_id).first()
+        if not club:
+            response_object['message'] = 'Sorry. Can\'t update club'
+            return jsonify(response_object), 400
+        else:
+            club.update({Club.name: name, Club.address: address, Club.city: city,
+                         Club.zipCode: zipCode, Club.stamNumber: stamNumber, Club.website: website})
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Updated club {name}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
 @clubs_blueprint.route('/db/clubs/<club_id>', methods=['GET'])
 def get_single_club(club_id):
     """Get single user details"""

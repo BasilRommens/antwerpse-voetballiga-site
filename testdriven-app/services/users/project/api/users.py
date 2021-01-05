@@ -3,7 +3,7 @@ from project.api.config import *
 users_blueprint = Blueprint('users', __name__)
 
 
-@users_blueprint.route('/users', methods=['POST'])
+@users_blueprint.route('/db/users', methods=['POST'])
 def add_user():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -11,8 +11,10 @@ def add_user():
         return jsonify(response_object), 400
     username = post_data.get('username')
     email = post_data.get('email')
+    password = post_data.get('password')
+    clubID = post_data.get('clubID')
     try:
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=username).first()
         if not user:
             db.session.add(User(username=username, email=email))
             db.session.commit()

@@ -50,20 +50,27 @@ def delete_admin(admin_id):
         db.session.rollback()
         return jsonify(response_object), 400
 
+
 @admin_blueprint.route('/db/update_admin', methods=['UPDATE'])
-def update_admin(admin_id):
+def update_admin():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    if not post_data:
+        return jsonify(response_object), 400
+    admin_id = post_data.get('userID')
+    isSuper = post_data.get('isSuper')
     try:
         # Check for user existence
         admin_user = Admin.query.filter_by(userID=admin_id).first()
         if not admin_user:
-            response_object['message'] = 'Sorry. Can\'t delete admin'
+            response_object['message'] = 'Sorry. Can\'t update admin'
             return jsonify(response_object), 400
         else:
-            Admin.query.filter_by(userID=admin_id).delete()
+            admin_user.update({Admin.isSuper: isSuper})
             db.session.commit()
-            return jsonify(response_object), 400
+            response_object['status'] = 'success'
+            response_object['message'] = f'Updated admin {admin_id}'
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
