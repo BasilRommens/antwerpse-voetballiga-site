@@ -3,49 +3,114 @@ from project.api.config import *
 match_blueprint = Blueprint('matches', __name__)
 
 
-@match_blueprint.route('/seasons', methods=['POST'])
+@match_blueprint.route('/db/matches', methods=['POST'])
 def add_match():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    username = post_data.get('username')
-    email = post_data.get('email')
+    goalsHome = post_data.get('goalsHome')
+    goalsAway = post_date.get('goalsAway')
+    matchStatus = post_date.get('matchStatus')
+    mDate = post_date.get('mDate')
+    mTime = post_date.get('mTime')
+    teamHomeID = post_date.get('teamHomeID')
+    teamAwayID = post_date.get('teamAwayID')
+    divisionID = post_date.get('divisionID')
+    seasonID = post_date.get('seasonID')
+    refID = post_date.get('refID')
     try:
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            db.session.add(User(username=username, email=email))
-            db.session.commit()
-            response_object['status'] = 'success'
-            response_object['message'] = f'{email} was added!'
-            return jsonify(response_object), 201
+        db.session.add(Match(goalsHome=goalsHome, goalsAway=goalsAway, matchStatus=matchStatus, mDate=mDate, mTime=mTime,
+                             teamHomeID=teamHomeID, teamAwayID=teamAwayID, divisionID=divisionID, seasonID=seasonID, refID=refID))
+
+        db.session.commit()
+        response_object['status'] = 'success'
+        response_object['message'] = f'Match was added!'
+        return jsonify(response_object), 201
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
+@match_blueprint.route('/db/delete_match/<match_id>', methods=['DELETE'])
+def delete_match(match_id):
+    post_data = request.get_json()
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    try:
+        # Check for match existence
+        match = Match.query.filter_by(ID=match_id).first()
+        if not match_match:
+            response_object['message'] = 'Sorry. Can\'t delete match'
+            return jsonify(response_object), 400
         else:
-            response_object['message'] = 'Sorry. That email already exists.'
+            match.delete()
+            db.session.commit()
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@match_blueprint.route('/clubs/<club_id>', methods=['GET'])
-def get_single_match(club_id):
-    """Get single user details"""
+@match_blueprint.route('/db/update_match', methods=['UPDATE'])
+def update_match():
+    post_data = request.get_json()
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    if not post_data:
+        return jsonify(response_object), 400
+    goalsHome = post_data.get('goalsHome')
+    goalsAway = post_date.get('goalsAway')
+    matchStatus = post_date.get('matchStatus')
+    mDate = post_date.get('mDate')
+    mTime = post_date.get('mTime')
+    teamHomeID = post_date.get('teamHomeID')
+    teamAwayID = post_date.get('teamAwayID')
+    divisionID = post_date.get('divisionID')
+    seasonID = post_date.get('seasonID')
+    refID = post_date.get('refID')
+    try:
+        # Check for match existence
+        match = Match.query.filter_by(ID=match_id).first()
+        if not match:
+            response_object['message'] = 'Sorry. Can\'t update match'
+            return jsonify(response_object), 400
+        else:
+            match.update({Match.goalsHome: goalsHome, Match.goalsAway: goalsAway, Match.matchStatus: matchStatus, Match.mDate: mDate, Match.mTime: mTime,
+                          Match.teamHomeID: teamHomeID, Match.teamAwayID: teamAwayID, Match.divisionID: divisionID, Match.seasonID: seasonID, Match.refID: refID})
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Updated match {firstName} {lastName}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
+@match_blueprint.route('/db/matches/<match_id>', methods=['GET'])
+def get_single_match(match_id):
+    """Get single match details"""
     response_object = {
         'status': 'fail',
-        'message': 'User does not exist'
+        'message': 'Match does not exist'
     }
     try:
-        user = User.query.filter_by(id=int(user_id)).first()
-        if not user:
+        match = Match.query.filter_by(ID=int(match_id)).first()
+        if not match:
             return jsonify(response_object), 404
         else:
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'active': user.active
+                    'ID': match.ID,
+                    'goalsHome': match.goalsHome,
+                    'goalsAway': match.goalsAway,
+                    'matchStatus': match.matchStatus,
+                    'mDate': match.mDate,
+                    'mTime': match.mTime,
+                    'teamHomeID': match.teamHomeID,
+                    'teamAwayID': match.teamAwayID,
+                    'divisionID': match.divisionID,
+                    'seasonID': match.seasonID,
+                    'refID': match.refID
                 }
             }
             return jsonify(response_object), 200
