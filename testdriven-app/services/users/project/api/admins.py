@@ -33,7 +33,7 @@ def add_admin():
 
 
 @admin_blueprint.route('/db/delete_admin/<admin_id>', methods=['DELETE'])
-def add_admin(admin_id):
+def delete_admin(admin_id):
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -51,7 +51,7 @@ def add_admin(admin_id):
         return jsonify(response_object), 400
 
 @admin_blueprint.route('/db/update_admin', methods=['UPDATE'])
-def add_admin(admin_id):
+def update_admin(admin_id):
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
