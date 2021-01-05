@@ -3,7 +3,7 @@ from project.api.config import *
 admin_blueprint = Blueprint('admins', __name__)
 
 
-@admin_blueprint.route('/admins', methods=['POST'])
+@admin_blueprint.route('/db/new_admin', methods=['POST'])
 def add_admin():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}

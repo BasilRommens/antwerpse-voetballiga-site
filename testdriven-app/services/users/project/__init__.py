@@ -32,11 +32,8 @@ def create_app(script_info=None):
     from project.api.matches import match_blueprint
     app.register_blueprint(match_blueprint)
 
-    from project.api.models import model_blueprint
-    app.register_blueprint(model_blueprint)
-
-    from project.api.models import model_blueprint
-    app.register_blueprint(model_blueprint)
+    from project.api.referees import referee_blueprint
+    app.register_blueprint(referee_blueprint)
 
     from project.api.seasons import season_blueprint
     app.register_blueprint(season_blueprint)
