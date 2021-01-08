@@ -10,14 +10,13 @@ def add_team():
     if not post_data:
         return jsonify(response_object), 400
     suffix = post_data.get('suffix')
-    awayColor = post_data.get('awayColor')
-    homeColor = post_data.get('homeColor')
-    clubID = post_data.get('clubID')
+    colors = post_data.get('colors')
+    stamNumber = post_data.get('stamNumber')
     try:
         team = Team.query.filter_by(suffix=suffix).first()
         if not team:
-            db.session.add(Team(suffix=suffix, awayColor=awayColor,
-                                homeColor=homeColor, clubID=clubID))
+            db.session.add(Team(suffix=suffix, colors=colors,
+                                stamNumber=stamNumber))
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Team was added!'
@@ -57,9 +56,8 @@ def update_team():
         return jsonify(response_object), 400
     team_id = post_data.get('ID')
     suffix = post_data.get('suffix')
-    awayColor = post_data.get('awayColor')
-    homeColor = post_data.get('homeColor')
-    clubID = post_data.get('clubID')
+    colors = post_data.get('colors')
+    stamNumber = post_data.get('stamNumber')
     try:
         # Check for team existence
         team = Team.query.filter_by(ID=team_id).first()
@@ -67,8 +65,8 @@ def update_team():
             response_object['message'] = 'Sorry. Can\'t update team'
             return jsonify(response_object), 400
         else:
-            team.update({Team.suffix: suffix, Team.awayColor: awayColor,
-                         Team.homeColor: homeColor, Team.clubID: clubID})
+            team.update({Team.suffix: suffix, Team.colors: colors,
+                Team.stamNumber: stamNumber})
 
             db.session.commit()
             response_object['status'] = 'success'
@@ -95,9 +93,8 @@ def get_single_team(team_id):
                 'data': {
                     'id': team.ID,
                     'suffix': team.suffix,
-                    'awayColor': team.awayColor,
-                    'homeColor': team.homeColor,
-                    'clubID': team.clubID
+                    'colors': team.colors,
+                    'stamNumber': team.stamNumber
                 }
             }
             return jsonify(response_object), 200

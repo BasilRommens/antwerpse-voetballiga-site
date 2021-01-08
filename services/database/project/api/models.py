@@ -4,20 +4,25 @@ from project import db
 import enum
 
 
-class Status(enum.Enum):
-    POSTPONED = 'postponed'
-    CANCELED = 'canceled'
-    FORFAIT = 'forfait'
+class Status(db.Model):
+    __tablename__ = 'state'
+    ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    def to_json(self):
+        return {'name': self.name, 'ID': self.ID}
 
 
 class Club(db.Model):
     __tablename__ = 'club'
-    ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False)
     address = db.Column(db.String(256), nullable=False)
     zipCode = db.Column(db.Integer, nullable=False)
     city = db.Column(db.String(128), nullable=False)
-    stamNumber = db.Column(db.Integer, nullable=False)
+    stamNumber = db.Column(db.Integer, primary_key=True, nullable=False)
     website = db.Column(db.String(128), nullable=False)
 
     def __init__(self, name, address, zipCode, city, stamNumber, website):
@@ -46,7 +51,7 @@ class User(db.Model):
     username = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
-    clubID = db.Column(db.Integer, ForeignKey('club.ID'), nullable=True)
+    clubID = db.Column(db.Integer, ForeignKey('club.stamNumber'), nullable=True)
 
     def __init__(self, username, email, password, clubID=None):
         self.username = username
@@ -129,10 +134,10 @@ class Match(db.Model):
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     goalsHome = db.Column(db.Integer, nullable=True)
     goalsAway = db.Column(db.Integer, nullable=True)
-    matchStatus = db.Column(db.Enum(Status))
+    matchStatus = db.Column(db.Integer, ForeignKey('state.ID'), nullable=True)
     mDate = db.Column(db.Date, nullable=False)
     mTime = db.Column(db.Time, nullable=False)
-    week = db.Column(db.Integer, nullable=False)
+    week = db.Column(db.Integer, nullable=True)
     teamHomeID = db.Column(db.Integer, ForeignKey('team.ID'), nullable=False)
     teamAwayID = db.Column(db.Integer, ForeignKey('team.ID'), nullable=False)
     divisionID = db.Column(db.Integer,
@@ -141,7 +146,7 @@ class Match(db.Model):
     seasonID = db.Column(db.Integer,
                          ForeignKey('season.season'),
                          nullable=False)
-    refID = db.Column(db.Integer, ForeignKey('referee.ID'), nullable=False)
+    refID = db.Column(db.Integer, ForeignKey('referee.ID'), nullable=True)
 
     def __init__(self, goalsHome, goalsAway, matchStatus, mDate, mTime, week,
                  teamHomeID, teamAwayID, divisionID, seasonID, refID):
@@ -176,23 +181,22 @@ class Team(db.Model):
     __tablename__ = 'team'
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     suffix = db.Column(db.String(128), nullable=False)
-    awayColor = db.Column(db.String(128), nullable=False)
-    homeColor = db.Column(db.String(128), nullable=False)
-    clubID = db.Column(db.Integer, ForeignKey('club.ID'), nullable=False)
+    colors = db.Column(db.String(128), nullable=False)
+    stamNumber = db.Column(db.Integer,
+                           ForeignKey('club.stamNumber'),
+                           nullable=False)
 
-    def __init__(self, suffix, awayColor, homeColor, clubID):
+    def __init__(self, suffix, colors, stamNumber):
         self.suffix = suffix
-        self.awayColor = awayColor
-        self.homeColor = homeColor
-        self.clubID = clubID
+        self.colors = colors
+        self.stamNumber = stamNumber
 
     def to_json(self):
         return {
             'ID': self.ID,
             'suffix': self.suffix,
-            'away_color': self.awayColor,
-            'home_color': self.homeColor,
-            'clubID': self.clubID
+            'colors': self.colors,
+            'stamNumber': self.stamNumber
         }
 
 

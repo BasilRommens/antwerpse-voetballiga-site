@@ -1,19 +1,21 @@
-# services/users/manage.py
 import unittest
+import csv
 
 from flask.cli import FlaskGroup
 
 from project import create_app, db
-from project.api.models import User
+from project import seed
 
 app = create_app()
 cli = FlaskGroup(app)
+
 
 @cli.command()
 def recreate_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
+
 
 @cli.command()
 def test():
@@ -27,9 +29,13 @@ def test():
 @cli.command()
 def seed_db():
     """Seeds the database."""
-    db.session.add(User(username='michael', email="hermanmu@gmail.com"))
-    db.session.add(User(username='michaelherman', email="michael@mherman.org"))
-    db.session.commit()
+    seed.seed_referees(db)
+    seed.seed_status(db)
+    seed.seed_division(db)
+    seed.seed_club(db)
+    seed.seed_team(db)
+    seed.seed_matches(db)
+
 
 if __name__ == '__main__':
     cli()
