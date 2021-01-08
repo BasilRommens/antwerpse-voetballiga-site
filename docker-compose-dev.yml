@@ -3,10 +3,10 @@ version: '3.5'
 services:
     users:
         build:
-            context: ./services/users
+            context: ./services/database
             dockerfile: Dockerfile-dev
         volumes:
-            - './services/users:/usr/src/app'
+            - './services/database:/usr/src/app'
         ports:
             - 5003:5000
         environment:
@@ -19,7 +19,7 @@ services:
             - users-db
     users-db:
         build:
-            context: ./services/users/project/db
+            context: ./services/database/project/db
             dockerfile: Dockerfile
         ports:
             - 5436:5432
