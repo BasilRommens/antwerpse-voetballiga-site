@@ -1,9 +1,9 @@
 from project.api.config import *
 
-users_blueprint = Blueprint('users', __name__)
+user_blueprint = Blueprint('users', __name__)
 
 
-@users_blueprint.route('/db/users', methods=['POST'])
+@user_blueprint.route('/db/users', methods=['POST'])
 def add_user():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -78,7 +78,7 @@ def update_user():
         return jsonify(response_object), 400
 
 
-@users_blueprint.route('/db/users/<user_id>', methods=['GET'])
+@user_blueprint.route('/db/users/<user_id>', methods=['GET'])
 def get_single_user(user_id):
     """Get single user details"""
     response_object = {
@@ -105,7 +105,7 @@ def get_single_user(user_id):
         return jsonify(response_object), 404
 
 
-@users_blueprint.route('/db/all_users', methods=['GET'])
+@user_blueprint.route('/db/all_users', methods=['GET'])
 def get_all_users():
     """Get all users"""
     response_object = {

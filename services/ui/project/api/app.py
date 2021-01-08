@@ -1,18 +1,17 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Blueprint, jsonify
 import subprocess
-import requests
-import weather
-
-app = Flask(__name__)
+import project.api.weather
 
 
-@app.route('/')
+ui_blueprint = Blueprint('ui', __name__)
+
+@ui_blueprint.route('/')
 def login():
     return render_template('login.html')
 
 
-@app.route('/leagueTable/<season>/<division_id>')
-@app.route('/leagueTable')
+@ui_blueprint.route('/leagueTable/<season>/<division_id>')
+@ui_blueprint.route('/leagueTable')
 def league_table(season=0, division_id=0):
     data = dict()
     data['season'] = season
@@ -35,9 +34,9 @@ def league_table(season=0, division_id=0):
     return render_template('league_table.html', data=data, admin=0)
 
 
-@app.route('/fixtures/<division_id>/<team_id>/<week>')
-@app.route('/fixtures/<division_id>/<week>')
-@app.route('/fixtures')
+@ui_blueprint.route('/fixtures/<division_id>/<team_id>/<week>')
+@ui_blueprint.route('/fixtures/<division_id>/<week>')
+@ui_blueprint.route('/fixtures')
 def fixtures(week=1, division_id=0, team_id=0):
     data = dict()
     data['week'] = week
@@ -56,8 +55,8 @@ def fixtures(week=1, division_id=0, team_id=0):
     return render_template('fixtures.html', data=data, admin=0)
 
 
-@app.route('/bestOfDivision/<division_id>')
-@app.route('/bestOfDivision')
+@ui_blueprint.route('/bestOfDivision/<division_id>')
+@ui_blueprint.route('/bestOfDivision')
 def best_of_division(division_id=0):
     data = dict()
     data['division'] = division_id
@@ -68,8 +67,8 @@ def best_of_division(division_id=0):
     return render_template('best_of_division.html', data=data, admin=0)
 
 
-@app.route('/team/<team_id>')
-@app.route('/team')
+@ui_blueprint.route('/team/<team_id>')
+@ui_blueprint.route('/team')
 def team(team_id=0):
     data = dict()
     data['team'] = team_id
@@ -88,8 +87,8 @@ def team(team_id=0):
     return render_template('team.html', data=data, admin=0)
 
 
-@app.route('/viewClub/<club_id>')
-@app.route('/viewClub')
+@ui_blueprint.route('/viewClub/<club_id>')
+@ui_blueprint.route('/viewClub')
 def view_club(club_id=0):
     data = dict()
     data['club_name'] = club_id
@@ -104,8 +103,8 @@ def view_club(club_id=0):
     return render_template('view_club.html', data=data, admin=0)
 
 
-@app.route('/editFixture/<match_id>')
-@app.route('/editFixture')
+@ui_blueprint.route('/editFixture/<match_id>')
+@ui_blueprint.route('/editFixture')
 def edit_fixture(match_id=0):
     data = dict()
     data['teams'] = "team 1 (h) - team 2 (a)"
@@ -116,8 +115,8 @@ def edit_fixture(match_id=0):
     return render_template('edit_fixture.html', data=data, admin=0)
 
 
-@app.route('/editClub/<club_id>')
-@app.route('/editClub')
+@ui_blueprint.route('/editClub/<club_id>')
+@ui_blueprint.route('/editClub')
 def edit_club(club_id=0):
     data = dict()
     data['name'] = "fc twente"
@@ -130,8 +129,8 @@ def edit_club(club_id=0):
     return render_template('edit_club.html', data=data, admin=1)
 
 
-@app.route('/editTeam/<team_id>')
-@app.route('/editTeam')
+@ui_blueprint.route('/editTeam/<team_id>')
+@ui_blueprint.route('/editTeam')
 def edit_team(team_id=0):
     data = dict()
     data['suffix'] = "A"
@@ -140,16 +139,16 @@ def edit_team(team_id=0):
     return render_template('edit_team.html', data=data, admin=0)
 
 
-@app.route('/addTeam/<club_id>')
-@app.route('/addTeam')
+@ui_blueprint.route('/addTeam/<club_id>')
+@ui_blueprint.route('/addTeam')
 def add_team(club_id=0):
     data = dict()
     data['club_id'] = club_id
     return render_template('add_team.html', data=data, admin=0)
 
 
-@app.route('/viewMatch/<match_id>')
-@app.route('/viewMatch')
+@ui_blueprint.route('/viewMatch/<match_id>')
+@ui_blueprint.route('/viewMatch')
 def view_match(match_id=0):
     data = dict()
     day = 0
@@ -173,7 +172,7 @@ def view_match(match_id=0):
     return render_template('view_match.html', data=data, admin=0)
 
 
-@app.route('/admin/viewMatches')
+@ui_blueprint.route('/admin/viewMatches')
 def admin_view_matches():
     data = dict()
     data['matches'] = [
@@ -181,27 +180,27 @@ def admin_view_matches():
     return render_template('admin/view_matches.html', data=data, admin=1)
 
 
-@app.route('/admin/viewClubs')
+@ui_blueprint.route('/admin/viewClubs')
 def admin_view_clubs():
     data = dict()
     data['clubs'] = [{'name': 'John', 'ID': 0}]
     return render_template('admin/view_clubs.html', data=data, admin=1)
 
 
-@app.route('/admin/viewReferees')
+@ui_blueprint.route('/admin/viewReferees')
 def admin_view_referees():
     data = dict()
     data['referees'] = [{'name': 'John Doe', 'ID': 0}]
     return render_template('admin/view_referees.html', data=data, admin=1)
 
 
-@app.route('/admin/addReferee')
+@ui_blueprint.route('/admin/addReferee')
 def admin_add_referee():
     return render_template('admin/add_referee.html', admin=1)
 
 
-@app.route('/admin/editReferee/<referee_id>')
-@app.route('/admin/editReferee')
+@ui_blueprint.route('/admin/editReferee/<referee_id>')
+@ui_blueprint.route('/admin/editReferee')
 def admin_edit_referee(referee_id=0):
     data = dict()
     data['first_name'] = "george"
@@ -214,7 +213,7 @@ def admin_edit_referee(referee_id=0):
     return render_template('admin/edit_referee.html', data=data, admin=1)
 
 
-@app.route('/admin/viewUsers')
+@ui_blueprint.route('/admin/viewUsers')
 def admin_view_users():
     data = dict()
     data['users'] = [{'username': 'John Doe', 'email': 'yeet@yeet', 'ID': 0,
@@ -222,7 +221,7 @@ def admin_view_users():
     return render_template('admin/view_users.html', data=data, admin=1)
 
 
-@app.route('/admin/addFixture')
+@ui_blueprint.route('/admin/addFixture')
 def admin_add_match():
     data = dict()
     data['teams'] = [{'name': 'test', 'ID': 0}]
@@ -233,13 +232,13 @@ def admin_add_match():
     return render_template('admin/add_match.html', data=data, admin=1)
 
 
-@app.route('/admin/addClub')
+@ui_blueprint.route('/admin/addClub')
 def admin_add_club():
     return render_template('admin/add_club.html', admin=1)
 
 
-@app.route('/admin/viewTeams/<club_id>')
-@app.route('/admin/viewTeams')
+@ui_blueprint.route('/admin/viewTeams/<club_id>')
+@ui_blueprint.route('/admin/viewTeams')
 def admin_view_teams(club_id=0):
     data = dict()
     data['teams'] = [{'name': 'A', 'ID': 0}]
@@ -247,16 +246,16 @@ def admin_view_teams(club_id=0):
     return render_template('admin/view_teams.html', data=data, admin=1)
 
 
-@app.route('/admin/assignReferee/<referee_id>')
-@app.route('/admin/assignReferee')
+@ui_blueprint.route('/admin/assignReferee/<referee_id>')
+@ui_blueprint.route('/admin/assignReferee')
 def admin_assign_referee(referee_id=0):
     data = dict()
     data['matches'] = [{'ID': 0, 'teams': 'Team 1 (h) - Team 2 (a)'}]
     return render_template('admin/assign_referee.html', data=data, admin=1)
 
 
-@app.route('/admin/editUser/<user_id>')
-@app.route('/admin/editUser')
+@ui_blueprint.route('/admin/editUser/<user_id>')
+@ui_blueprint.route('/admin/editUser')
 def admin_edit_user(user_id=0):
     data = dict()
     data['ID'] = 'ID'
@@ -266,30 +265,30 @@ def admin_edit_user(user_id=0):
     return render_template('admin/edit_user.html', data=data, admin=1)
 
 
-@app.route('/admin/addUser')
+@ui_blueprint.route('/admin/addUser')
 def admin_add_user():
     return render_template('admin/add_user.html', admin=1)
 
 
-@app.route('/admin/viewSeasons')
+@ui_blueprint.route('/admin/viewSeasons')
 def admin_view_season():
     seasons = [1, 2, 3]
     return render_template('admin/view_seasons.html', seasons=seasons, admin=1)
 
 
-@app.route('/admin/viewDivisions')
+@ui_blueprint.route('/admin/viewDivisions')
 def admin_view_division():
     data = dict()
     data['divisions'] = [{'name': 'Division A', 'ID': 0}]
     return render_template('admin/view_divisions.html', data=data, admin=1)
 
 
-@app.route('/admin/addDivision')
+@ui_blueprint.route('/admin/addDivision')
 def admin_add_division():
     return render_template('admin/add_division.html', admin=1)
 
-@app.route('/admin/editDivision/<division_id>')
-@app.route('/admin/editDivision')
+@ui_blueprint.route('/admin/editDivision/<division_id>')
+@ui_blueprint.route('/admin/editDivision')
 def admin_edit_division(division_id=0):
     data = dict()
     data['division'] = {'name': 'Division A', 'ID': 0}

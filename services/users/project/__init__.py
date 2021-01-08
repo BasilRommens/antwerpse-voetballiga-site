@@ -41,8 +41,8 @@ def create_app(script_info=None):
     from project.api.teams import team_blueprint
     app.register_blueprint(team_blueprint)
 
-    from project.api.users import users_blueprint
-    app.register_blueprint(users_blueprint)
+    from project.api.users import user_blueprint
+    app.register_blueprint(user_blueprint)
 
     # shell context for flask cli
     @app.shell_context_processor

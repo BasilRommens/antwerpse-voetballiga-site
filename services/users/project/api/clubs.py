@@ -1,9 +1,9 @@
 from project.api.config import *
 
-clubs_blueprint = Blueprint('clubs', __name__)
+club_blueprint = Blueprint('clubs', __name__)
 
 
-@clubs_blueprint.route('/db/add_club', methods=['POST'])
+@club_blueprint.route('/db/add_club', methods=['POST'])
 def add_club():
     post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -77,7 +77,7 @@ def update_club():
         return jsonify(response_object), 400
 
 
-@clubs_blueprint.route('/db/clubs/<club_id>', methods=['GET'])
+@club_blueprint.route('/db/clubs/<club_id>', methods=['GET'])
 def get_single_club(club_id):
     """Get single user details"""
     response_object = {
@@ -106,7 +106,7 @@ def get_single_club(club_id):
         return jsonify(response_object), 404
 
 
-@clubs_blueprint.route('/db/all_clubs', methods=['GET'])
+@club_blueprint.route('/db/all_clubs', methods=['GET'])
 def get_all_clubs():
     """Get all clubs"""
     response_object = {
