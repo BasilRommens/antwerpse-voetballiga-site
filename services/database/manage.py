@@ -35,6 +35,7 @@ def seed_db():
     seed.seed_club(db)
     seed.seed_team(db)
     seed.seed_matches(db)
+    seed.seed_users(db)
 
 
 if __name__ == '__main__':

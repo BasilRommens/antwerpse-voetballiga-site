@@ -1,4 +1,4 @@
-from project.api.models import Club, Division, Match, Referee, Status, Team, Season
+from project.api.models import Club, Division, Match, Referee, Status, Team, Season, User, Admin
 import csv
 
 
@@ -104,4 +104,18 @@ def seed_team(db):
                 continue
             db.session.add(
                 Team(suffix=row[2], colors=row[3], stamNumber=row[1]))
+    db.session.commit()
+
+
+def seed_users(db):
+    # Club user
+    db.session.add(User(username='a', email='a', password='a', clubID=13))
+    # Super admin user
+    db.session.add(User(username='b', email='b', password='b'))
+    db.session.add(Admin(userID=2, isSuper=True))
+    # Admin user
+    db.session.add(User(username='c', email='c', password='c'))
+    db.session.add(Admin(userID=3, isSuper=False))
+    # Normal user
+    db.session.add(User(username='d', email='d', password='d'))
     db.session.commit()

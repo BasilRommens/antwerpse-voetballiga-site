@@ -1,17 +1,59 @@
-from flask import Flask, render_template, request, Blueprint, jsonify
+from flask import Flask, render_template, request, Blueprint, jsonify, redirect
+from flask_jwt_extended import *
 import subprocess
 import project.api.weather
 
 
 ui_blueprint = Blueprint('ui', __name__)
 
-@ui_blueprint.route('/')
+
+@ui_blueprint.route('/secure')
+@jwt_required
+def safe():
+    return "success"
+
+
+@ui_blueprint.route('/', methods=['GET'])
+@jwt_optional
+def render_login():
+    return render_template('login.html', admin=0)
+
+
+@ui_blueprint.route('/', methods=['POST'])
 def login():
-    return render_template('login.html')
+    email = str(request.form.get('Username')).lower()
+    password = request.form.get('Password')
+    # Check login over network
+    login_response = login_access.check_login(email, password)
+
+    # de user heeft zijn email fout
+    if case == 0:
+        return render_template('login.html', admin=0)
+
+    # de user heeft zijn password fout
+    elif case == 1:
+        return render_template('login.html', admin=0)
+
+    # de user is een admin of heeft zijn inlog gegevens juist
+    else:
+        # Create the tokens we will be sending back to the user
+        access_token = create_access_token(
+            identity=login_access.getUserID(email))
+        refresh_token = create_refresh_token(
+            identity=login_access.getUserID(email))
+
+        # redirect the user to home
+        resp = make_response(redirect('login.html', admin=0))
+        # Set the JWT cookies in the response
+        resp.set_cookie('next_page', value=json.dumps([""]), max_age=0)
+        set_access_cookies(resp, access_token)
+        set_refresh_cookies(resp, refresh_token)
+        return resp
 
 
 @ui_blueprint.route('/leagueTable/<season>/<division_id>')
 @ui_blueprint.route('/leagueTable')
+@jwt_optional
 def league_table(season=0, division_id=0):
     data = dict()
     data['season'] = season
@@ -37,6 +79,7 @@ def league_table(season=0, division_id=0):
 @ui_blueprint.route('/fixtures/<division_id>/<team_id>/<week>')
 @ui_blueprint.route('/fixtures/<division_id>/<week>')
 @ui_blueprint.route('/fixtures')
+@jwt_optional
 def fixtures(week=1, division_id=0, team_id=0):
     data = dict()
     data['week'] = week
@@ -57,6 +100,7 @@ def fixtures(week=1, division_id=0, team_id=0):
 
 @ui_blueprint.route('/bestOfDivision/<division_id>')
 @ui_blueprint.route('/bestOfDivision')
+@jwt_optional
 def best_of_division(division_id=0):
     data = dict()
     data['division'] = division_id
@@ -69,6 +113,7 @@ def best_of_division(division_id=0):
 
 @ui_blueprint.route('/team/<team_id>')
 @ui_blueprint.route('/team')
+@jwt_optional
 def team(team_id=0):
     data = dict()
     data['team'] = team_id
@@ -89,6 +134,7 @@ def team(team_id=0):
 
 @ui_blueprint.route('/viewClub/<club_id>')
 @ui_blueprint.route('/viewClub')
+@jwt_optional
 def view_club(club_id=0):
     data = dict()
     data['club_name'] = club_id
@@ -105,6 +151,7 @@ def view_club(club_id=0):
 
 @ui_blueprint.route('/editFixture/<match_id>')
 @ui_blueprint.route('/editFixture')
+@jwt_optional
 def edit_fixture(match_id=0):
     data = dict()
     data['teams'] = "team 1 (h) - team 2 (a)"
@@ -117,6 +164,7 @@ def edit_fixture(match_id=0):
 
 @ui_blueprint.route('/editClub/<club_id>')
 @ui_blueprint.route('/editClub')
+@jwt_optional
 def edit_club(club_id=0):
     data = dict()
     data['name'] = "fc twente"
@@ -131,6 +179,7 @@ def edit_club(club_id=0):
 
 @ui_blueprint.route('/editTeam/<team_id>')
 @ui_blueprint.route('/editTeam')
+@jwt_required
 def edit_team(team_id=0):
     data = dict()
     data['suffix'] = "A"
@@ -141,6 +190,7 @@ def edit_team(team_id=0):
 
 @ui_blueprint.route('/addTeam/<club_id>')
 @ui_blueprint.route('/addTeam')
+@jwt_required
 def add_team(club_id=0):
     data = dict()
     data['club_id'] = club_id
@@ -287,12 +337,14 @@ def admin_view_division():
 def admin_add_division():
     return render_template('admin/add_division.html', admin=1)
 
+
 @ui_blueprint.route('/admin/editDivision/<division_id>')
 @ui_blueprint.route('/admin/editDivision')
 def admin_edit_division(division_id=0):
     data = dict()
     data['division'] = {'name': 'Division A', 'ID': 0}
     return render_template('admin/edit_division.html', data=data, admin=1)
+
 
 if __name__ == '__main__':
     app.run()
