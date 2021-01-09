@@ -20,6 +20,12 @@ def render_login():
     return render_template('login.html', admin=0)
 
 
+@ui_blueprint.route('/logout')
+def logout():
+    resp = make_response(redirect("/"))
+    unset_jwt_cookies(resp)
+    return resp
+
 @ui_blueprint.route('/', methods=['POST'])
 def login():
     username = str(request.form.get('Username'))
@@ -50,7 +56,9 @@ def login():
 @ui_blueprint.route('/leagueTable')
 @jwt_optional
 def league_table(season=0, division_id=0):
-    if
+    logged_in=get_jwt_identity()
+    admin=0
+    user_club=0
     data = dict()
     data['season'] = season
     data['divisions'] = [{"link": "/link", "name": "test"}]
@@ -69,7 +77,7 @@ def league_table(season=0, division_id=0):
             "P": 0
         }]
     }
-    return render_template('league_table.html', data=data, admin=0)
+    return render_template('league_table.html', data=data, admin=admin, logged=logged_in, user_club=user_club)
 
 
 @ui_blueprint.route('/fixtures/<division_id>/<team_id>/<week>')

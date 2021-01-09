@@ -16,3 +16,11 @@ def log_in():
                 return jsonify(user)
             return jsonify(False)
     return jsonify(False)
+
+@user_blueprint.route('/srv/user/<user_id>', methods=['GET'])
+def get_user(user_id=1):
+    user = requests.get(f'http://database:5000/db/users/{user_id}')
+    user = user.json()
+    if user['status'] == 'fail':
+        return jsonify(user), 404
+    return jsonify(user['data'])

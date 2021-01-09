@@ -1,4 +1,8 @@
 {% if admin %}
-{% include 'navbar/admin.html' %}
+    {% include 'navbar/admin.html' %}
 {% endif %}
-{% include 'navbar/logged_out.html' %}
+{% if logged %}
+    {% include 'navbar/logged_in.html' %}
+{% else %}
+    {% include 'navbar/logged_out.html' %}
+{% endif %}
