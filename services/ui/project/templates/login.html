@@ -1,48 +1,50 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Login</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container mt-5 col-8">
-            <h1>
-                <strong>Login</strong>
-            </h1>
-            <form id="LoginForm" action="/" method="post">
-                <div class="mb-3 col-3">
-                    <label for="Username" class="form-label"
-                        ><strong>Username</strong></label
-                    >
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="Username"
-                        placeholder="Username"
-                    />
-                </div>
-                <div class="mb-3 col-3">
-                    <label for="Password" class="form-label"
-                        ><strong>Password</strong></label
-                    >
-                    <input
-                        type="password"
-                        class="form-control"
-                        id="Password"
-                        placeholder="Password"
-                    />
-                </div>
-                <div class="col-3"></div>
-                <div class="col-3">
-                    <button
-                        type="submit"
-                        class="btn btn-primary btn-custom-red"
-                    >
-                        Log in
-                    </button>
-                </div>
-            </form>
+{% include 'header.html' %}
+<head>
+    <title>Login</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container mt-5 col-8">
+    <h1>
+        <strong>Login</strong>
+    </h1>
+    <form id="LoginForm" action="/" method="post">
+        <div class="mb-3 col-3">
+            <label for="Username" class="form-label"
+            ><strong>Username</strong></label
+            >
+            <input
+                    type="text"
+                    class="form-control"
+                    id="Username"
+                    placeholder="Username"
+                    name="Username"
+            />
         </div>
-    </body>
+        <div class="mb-3 col-3">
+            <label for="Password" class="form-label"
+            ><strong>Password</strong></label
+            >
+            <input
+                    type="password"
+                    class="form-control"
+                    id="Password"
+                    placeholder="Password"
+                    name="Password"
+            />
+        </div>
+        <div class="col-3"></div>
+        <div class="col-3">
+            <button
+                    type="submit"
+                    class="btn btn-primary btn-custom-red"
+            >
+                Log in
+            </button>
+        </div>
+    </form>
+</div>
+</body>
 </html>

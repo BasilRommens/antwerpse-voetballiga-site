@@ -1,53 +1,57 @@
 version: '3.5'
 
 services:
-    database:
-        build:
-            context: ./services/database
-            dockerfile: Dockerfile-dev
-        volumes:
-            - './services/database:/usr/src/app'
-        ports:
-            - 5003:5000
-        environment:
-            - FLASK_APP=project/__init__.py
-            - FLASK_ENV=development
-            - APP_SETTINGS=project.config.DevelopmentConfig
-            - DATABASE_URL=postgres://postgres:postgres@users-db:5432/football_dev
-            - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/football_test
-        depends_on:
-            - users-db
-    users-db:
-        build:
-            context: ./services/database/project/db
-            dockerfile: Dockerfile
-        ports:
-            - 5436:5432
-        environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-    ui:
-        build:
-            context: ./services/ui
-            dockerfile: Dockerfile-dev
-        volumes:
-            - './services/ui:/usr/src/app'
-        ports:
-            - 5004:5000
-        environment:
-            - FLASK_APP=project/__init__.py
-            - FLASK_ENV=development
-            - APP_SETTINGS=project.config.DevelopmentConfig
-    users:
-        build:
-            context: ./services/users
-            dockerfile: Dockerfile-dev
-        volumes:
-            - './services/users:/usr/src/app'
-        ports:
-            - 5004:5000
-        environment:
-            - FLASK_APP=project/__init__.py
-            - FLASK_ENV=development
-            - APP_SETTINGS=project.config.DevelopmentConfig
+  database:
+    build:
+      context: ./services/database
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/database:/usr/src/app'
+    ports:
+      - 5003:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/football_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/football_test
+    depends_on:
+      - users-db
+  users-db:
+    build:
+      context: ./services/database/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  ui:
+    build:
+      context: ./services/ui
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/ui:/usr/src/app'
+    ports:
+      - 5004:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+    depends_on:
+      - users
+  users:
+    build:
+      context: ./services/users
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/users:/usr/src/app'
+    ports:
+      - 5014:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+    depends_on:
+      - database
 

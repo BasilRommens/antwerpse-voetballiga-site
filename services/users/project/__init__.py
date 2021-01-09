@@ -12,8 +12,8 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     # register blueprints
-    from project.api.tests import users_blueprint
-    app.register_blueprint(users_blueprint)
+    from project.api.tests import user_blueprint
+    app.register_blueprint(user_blueprint)
 
     # shell context for flask cli
     @app.shell_context_processor

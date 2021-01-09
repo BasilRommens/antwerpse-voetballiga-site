@@ -93,7 +93,7 @@ def get_single_user(user_id):
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': user.id,
+                    'id': user.ID,
                     'username': user.username,
                     'email': user.email,
                     'password': user.password,

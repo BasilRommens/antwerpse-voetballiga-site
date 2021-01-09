@@ -61,9 +61,10 @@ class User(db.Model):
 
     def to_json(self):
         return {
-            'ID': self.id,
+            'ID': self.ID,
             'username': self.username,
             'email': self.email,
+            'password': self.password,
             'clubID': self.clubID
         }
 

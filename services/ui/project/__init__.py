@@ -2,7 +2,6 @@ import os
 import sys
 from flask import Flask, jsonify, redirect, url_for
 from flask_jwt_extended import *
-from project.api.secure import *
 
 
 def create_app(script_info=None):

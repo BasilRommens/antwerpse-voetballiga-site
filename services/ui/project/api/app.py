@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, Blueprint, jsonify, redirect
+from flask import Flask, render_template, request, Blueprint, jsonify, redirect, make_response, url_for
 from flask_jwt_extended import *
-import subprocess
+import requests
+import subprocess, socket
 import project.api.weather
 
 
@@ -21,31 +22,25 @@ def render_login():
 
 @ui_blueprint.route('/', methods=['POST'])
 def login():
-    email = str(request.form.get('Username')).lower()
-    password = request.form.get('Password')
+    username = str(request.form.get('Username'))
+    password = str(request.form.get('Password'))
     # Check login over network
-    login_response = login_access.check_login(email, password)
-
+    data = {'username': username, 'password': password}
+    login_response = requests.post('http://users:5000/srv/user/log_in', json=data)
+    login_response = login_response.json()
     # de user heeft zijn email fout
-    if case == 0:
+    if not login_response:
         return render_template('login.html', admin=0)
-
-    # de user heeft zijn password fout
-    elif case == 1:
-        return render_template('login.html', admin=0)
-
-    # de user is een admin of heeft zijn inlog gegevens juist
     else:
         # Create the tokens we will be sending back to the user
         access_token = create_access_token(
-            identity=login_access.getUserID(email))
+            identity=login_response['ID'])
         refresh_token = create_refresh_token(
-            identity=login_access.getUserID(email))
+            identity=login_response['ID'])
 
         # redirect the user to home
-        resp = make_response(redirect('login.html', admin=0))
+        resp = make_response(redirect(url_for('ui.league_table')))
         # Set the JWT cookies in the response
-        resp.set_cookie('next_page', value=json.dumps([""]), max_age=0)
         set_access_cookies(resp, access_token)
         set_refresh_cookies(resp, refresh_token)
         return resp
@@ -55,6 +50,7 @@ def login():
 @ui_blueprint.route('/leagueTable')
 @jwt_optional
 def league_table(season=0, division_id=0):
+    if
     data = dict()
     data['season'] = season
     data['divisions'] = [{"link": "/link", "name": "test"}]
