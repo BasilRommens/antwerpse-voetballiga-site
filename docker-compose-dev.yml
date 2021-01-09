@@ -40,6 +40,7 @@ services:
       - APP_SETTINGS=project.config.DevelopmentConfig
     depends_on:
       - users
+      - admin
   users:
     build:
       context: ./services/users
@@ -48,6 +49,20 @@ services:
       - './services/users:/usr/src/app'
     ports:
       - 5014:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+    depends_on:
+      - database
+  admin:
+    build:
+      context: ./services/admin
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/admin:/usr/src/app'
+    ports:
+      - 5013:5000
     environment:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development

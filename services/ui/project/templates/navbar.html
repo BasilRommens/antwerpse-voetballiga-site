@@ -1,7 +1,7 @@
-{% if admin %}
+{% if nav.admin %}
     {% include 'navbar/admin.html' %}
 {% endif %}
-{% if logged %}
+{% if nav.logged %}
     {% include 'navbar/logged_in.html' %}
 {% else %}
     {% include 'navbar/logged_out.html' %}

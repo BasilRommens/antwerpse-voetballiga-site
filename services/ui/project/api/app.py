@@ -4,19 +4,23 @@ import requests
 import subprocess, socket
 import project.api.weather
 
-
 ui_blueprint = Blueprint('ui', __name__)
 
 
-@ui_blueprint.route('/secure')
-@jwt_required
-def safe():
-    return "success"
+def setup_nav(data_dict, user_id):
+    data_dict['nav'] = {}
+    data_dict['nav']['logged'] = user_id
+    data_dict['nav']['user_club'] = requests.get(f'http://database:5000/db/users/{user_id}').json()
+    admin_data = requests.get(f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
+    data_dict['nav']['admin'] = admin_data['adminID']
+    data_dict['nav']['super_admin'] = admin_data['isSuper']
+    return data_dict
 
 
 @ui_blueprint.route('/', methods=['GET'])
 @jwt_optional
 def render_login():
+    data = setup_nav(dict(), get_jwt_identity())
     return render_template('login.html', admin=0)
 
 
@@ -26,17 +30,20 @@ def logout():
     unset_jwt_cookies(resp)
     return resp
 
+
 @ui_blueprint.route('/', methods=['POST'])
+@jwt_optional
 def login():
     username = str(request.form.get('Username'))
     password = str(request.form.get('Password'))
     # Check login over network
     data = {'username': username, 'password': password}
+    data = setup_nav(data, get_jwt_identity())
     login_response = requests.post('http://users:5000/srv/user/log_in', json=data)
     login_response = login_response.json()
     # de user heeft zijn email fout
     if not login_response:
-        return render_template('login.html', admin=0)
+        return render_template('login.html', data=0)
     else:
         # Create the tokens we will be sending back to the user
         access_token = create_access_token(
@@ -56,15 +63,13 @@ def login():
 @ui_blueprint.route('/leagueTable')
 @jwt_optional
 def league_table(season=0, division_id=0):
-    logged_in=get_jwt_identity()
-    admin=0
-    user_club=0
     data = dict()
+    data = setup_nav(data, get_jwt_identity())
     data['season'] = season
     data['divisions'] = [{"link": "/link", "name": "test"}]
     data['ranking'] = {
         "length":
-        1,
+            1,
         "teams": [{
             "TeamName": "Team",
             "TeamLink": "/link",
@@ -77,7 +82,7 @@ def league_table(season=0, division_id=0):
             "P": 0
         }]
     }
-    return render_template('league_table.html', data=data, admin=admin, logged=logged_in, user_club=user_club)
+    return render_template('league_table.html', data=data)
 
 
 @ui_blueprint.route('/fixtures/<division_id>/<team_id>/<week>')
@@ -213,9 +218,9 @@ def view_match(match_id=0):
     bg_color = '#008055'
     data['status'] = {
         'text':
-        'To be played',
+            'To be played',
         'style':
-        f'background-color: {bg_color}; color: {fg_color}; font-weight: bold;'
+            f'background-color: {bg_color}; color: {fg_color}; font-weight: bold;'
     }
     data['teams'] = "Team 1 (home) - Team 2 (away)"
     data['home_team'] = 'Team 1'

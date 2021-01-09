@@ -86,7 +86,8 @@ def get_single_user(user_id):
         'message': 'User does not exist'
     }
     try:
-        user = User.query.filter_by(id=int(user_id)).first()
+        user = User.query.filter_by(ID=int(user_id)).first()
+        return jsonify(response_object)
         if not user:
             return jsonify(response_object), 404
         else:

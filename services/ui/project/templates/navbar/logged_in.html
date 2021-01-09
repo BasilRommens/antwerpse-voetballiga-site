@@ -1,15 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #800000;">
     <a class="navbar-brand" href="#"
-        >&emsp;<i class="fas fa-futbol"></i>&nbsp; </a
+    >&emsp;<i class="fas fa-futbol"></i>&nbsp; </a
     >
     <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
     >
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,10 +24,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="/bestOfDivision">Division Stats</a>
             </li>
+            {% if nav.user_club %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/edit_club/{{ nav.user_club }}">Division Stats</a>
+                </li>
+            {% endif %}
         </ul>
         <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
             <li class="nav-item">
-                    <a class="nav-link active" href="/logout">Log out&emsp;</a>
+                <a class="nav-link active" href="/logout">Log out&emsp;</a>
             </li>
         </ul>
     </div>

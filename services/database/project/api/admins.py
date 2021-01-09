@@ -85,14 +85,14 @@ def get_single_admin(admin_id):
     }
     try:
         admin = Admin.query.filter_by(userID=int(admin_id)).first()
-        if not user:
+        if not admin:
             return jsonify(response_object), 404
         else:
             response_object = {
                 'status': 'success',
                 'data': {
-                    'adminID': user.adminID,
-                    'isSuper': user.username
+                    'adminID': admin.adminID,
+                    'isSuper': admin.username
                 }
             }
             return jsonify(response_object), 200
