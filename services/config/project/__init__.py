@@ -12,12 +12,12 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     # register blueprints
-    from project.api.tests import test_blueprint
+    from project.api.app import test_blueprint
     app.register_blueprint(test_blueprint)
 
     # shell context for flask cli
     @app.shell_context_processor
     def ctx():
-        return {'app': app, 'db': db}
+        return {'app': app}
 
     return app

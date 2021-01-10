@@ -24,9 +24,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/bestOfDivision">Division Stats</a>
             </li>
-            {% if nav.user_club %}
+            {% if data.nav.user_club %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/edit_club/{{ nav.user_club }}">Division Stats</a>
+                    <a class="nav-link" href="/edit_club/{{ user_club }}">Edit club</a>
                 </li>
             {% endif %}
         </ul>

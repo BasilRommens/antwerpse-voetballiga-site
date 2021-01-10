@@ -76,7 +76,7 @@ def update_admin():
         return jsonify(response_object), 400
 
 
-@admin_blueprint.route('/db/admins/<admin_id>', methods=['GET'])
+@admin_blueprint.route('/db/admin/<admin_id>', methods=['GET'])
 def get_single_admin(admin_id):
     """Get single admin details"""
     response_object = {
@@ -91,8 +91,8 @@ def get_single_admin(admin_id):
             response_object = {
                 'status': 'success',
                 'data': {
-                    'adminID': admin.adminID,
-                    'isSuper': admin.username
+                    'adminID': admin.userID,
+                    'isSuper': admin.isSuper
                 }
             }
             return jsonify(response_object), 200
