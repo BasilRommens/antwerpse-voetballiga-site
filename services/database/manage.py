@@ -26,6 +26,7 @@ def test():
         return 0
     return 1
 
+
 @cli.command()
 def seed_db():
     """Seeds the database."""
