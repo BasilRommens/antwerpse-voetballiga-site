@@ -1,7 +1,7 @@
 import os
 import sys
 from flask import Flask, jsonify, redirect, url_for, make_response, request
-from flask_jwt_extended import *
+from flask_jwt_extended import JWTManager, jwt_refresh_token_required, jwt_optional
 
 
 def create_app(script_info=None):
