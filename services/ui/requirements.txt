@@ -1,6 +1,6 @@
-Flask==1.0.2
+Flask==1.1.1
 Flask-Testing==0.6.2
 Werkzeug==0.16.1
 requests
-flask-jwt-extended==3
+Flask-JWT-Extended==3.25.0
 greenlet

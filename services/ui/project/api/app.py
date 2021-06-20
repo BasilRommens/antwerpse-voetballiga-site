@@ -1,22 +1,27 @@
-from flask import Flask, render_template, request, Blueprint, jsonify, redirect, make_response, url_for
-from flask_jwt_extended import *
 import requests
-import subprocess, socket
+from flask import render_template, request, Blueprint, redirect, \
+    make_response, url_for
+from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import set_access_cookies, set_refresh_cookies, unset_jwt_cookies
+from flask_jwt_extended import jwt_required, jwt_optional
+from flask_jwt_extended import get_jwt_identity
 
 ui_blueprint = Blueprint('ui', __name__)
 
 
 def setup_nav(data_dict, user_id):
     data_dict['nav'] = {}
-    if not user_id:
+    if user_id is None:
         data_dict['nav']['logged'] = 0
         data_dict['nav']['user_club'] = 0
         data_dict['nav']['admin'] = 0
         data_dict['nav']['super_admin'] = 0
         return data_dict
     data_dict['nav']['logged'] = True
-    data_dict['nav']['user_club'] = requests.get(f'http://users:5000/srv/user/{user_id}').json()['clubID']
-    admin_data = requests.get(f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
+    data_dict['nav']['user_club'] = \
+    requests.get(f'http://users:5000/srv/user/{user_id}').json()['clubID']
+    admin_data = requests.get(
+        f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
     if admin_data['status'] == 'fail':
         data_dict['nav']['admin'] = 0
         data_dict['nav']['super_admin'] = False
@@ -30,6 +35,9 @@ def setup_nav(data_dict, user_id):
 @jwt_optional
 def render_login():
     data = setup_nav(dict(), get_jwt_identity())
+    if get_jwt_identity():
+        resp = make_response(redirect(url_for('ui.league_table')))
+        return resp
     return render_template('login.html', data=data)
 
 
@@ -47,18 +55,18 @@ def login():
     password = str(request.form.get('Password'))
     # Check login over network
     data = {'username': username, 'password': password}
-    login_response = requests.post('http://users:5000/srv/user/log_in', json=data)
+    login_response = requests.post('http://users:5000/srv/user/log_in',
+                                   json=data)
     login_response = login_response.json()
-    # de user heeft zijn email fout
+    # The user does not have an email or password
     if not login_response:
         data = setup_nav(dict(), get_jwt_identity())
         return render_template('login.html', data=data)
     else:
+        print(login_response['ID'])
         # Create the tokens we will be sending back to the user
-        access_token = create_access_token(
-            identity=login_response['ID'])
-        refresh_token = create_refresh_token(
-            identity=login_response['ID'])
+        access_token = create_access_token(identity=login_response['ID'])
+        refresh_token = create_refresh_token(identity=login_response['ID'])
 
         # redirect the user to home
         resp = make_response(redirect(url_for('ui.league_table')))
@@ -299,7 +307,8 @@ def admin_edit_referee(referee_id=0):
 def admin_view_users():
     data = setup_nav(dict(), get_jwt_identity())
     data['users'] = [{'username': 'John Doe', 'email': 'yeet@yeet', 'ID': 0,
-                      'tags': [{'class': 'badge bg-custom-red', 'text': 'Club'}]}]
+                      'tags': [
+                          {'class': 'badge bg-custom-red', 'text': 'Club'}]}]
     return render_template('admin/view_users.html', data=data, admin=1)
 
 
@@ -365,7 +374,8 @@ def admin_add_user():
 def admin_view_season():
     seasons = [1, 2, 3]
     data = setup_nav(dict(), get_jwt_identity())
-    return render_template('admin/view_seasons.html', seasons=seasons, data=data)
+    return render_template('admin/view_seasons.html', seasons=seasons,
+                           data=data)
 
 
 @ui_blueprint.route('/admin/viewDivisions')
@@ -395,7 +405,8 @@ def admin_edit_division(division_id=0):
 @ui_blueprint.route('/yeet')
 def view_weather():
     day = 0
-    admin_data = requests.get(f'http://weather:5000/srv/weather/get_weather?day={day}').json()
+    admin_data = requests.get(
+        f'http://weather:5000/srv/weather/get_weather?day={day}').json()
     return admin_data
 
 

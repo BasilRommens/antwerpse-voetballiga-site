@@ -1,7 +1,9 @@
+import datetime
 import os
 import sys
 from flask import Flask, jsonify, redirect, url_for, make_response, request
-from flask_jwt_extended import JWTManager, jwt_refresh_token_required, jwt_optional
+from flask_jwt_extended import JWTManager, jwt_refresh_token_required, \
+    jwt_optional
 
 
 def create_app(script_info=None):
@@ -27,9 +29,10 @@ def create_app(script_info=None):
     # app.config['JWT_SESSION_COOKIE'] = True
     # expiration
     # 30 min
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 1800
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(seconds=1800)
     # 20 dagen
-    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = 1728000
+    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = datetime.timedelta(
+        seconds=1728000)
 
     app.config[
         'SECRET_KEY'] = '*^*(*&)(*)(*afafafaSDD47j\3yX R~X@H!jmM]Lwf/,?KT'
