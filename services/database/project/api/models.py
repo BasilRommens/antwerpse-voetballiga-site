@@ -156,6 +156,7 @@ class Match(db.Model):
         self.matchStatus = matchStatus
         self.mDate = mDate
         self.mTime = mTime
+        self.week = week
         self.teamHomeID = teamHomeID
         self.teamAwayID = teamAwayID
         self.divisionID = divisionID

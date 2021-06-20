@@ -8,13 +8,11 @@ def log_in():
     data = request.get_json()
     username = data['username']
     password = data['password']
-    users = requests.get('http://database:5000/db/all_users')
-    users = users.json()['data']
+    users = requests.get('http://database:5000/db/all_users')['data']
     for user in users['users']:
-        if user['username'] == username:
-            if user['password'] == password:
-                return jsonify(user)
-            return jsonify(False)
+        if user['username'] != username:
+            continue
+        return jsonify(user) if user['password'] == password else jsonify(False)
     return jsonify(False)
 
 

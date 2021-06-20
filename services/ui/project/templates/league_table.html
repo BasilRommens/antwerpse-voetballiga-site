@@ -1,72 +1,87 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>League Table</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-2"></div>
-                <div class="col-9">
-                    <h1>
-                            <strong>League Table (Season {{ data.season }})</strong>
-                    </h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-2">
-                    <h2><strong>Divisions</strong></h2>
-                </div>
-                <div class="col-9">
-                    <h2>Div 2</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-2">
-                    {% for division in data.divisions %}
-                    <a href="{{ division.link }}">{{division.name}}</a><br />
-                    {% endfor %}
-                </div>
-                <div class="col-9">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Team</th>
-                                <th scope="col">GP</th>
-                                <th scope="col">W</th>
-                                <th scope="col">D</th>
-                                <th scope="col">L</th>
-                                <th scope="col">F</th>
-                                <th scope="col">A</th>
-                                <th scope="col" class="right">P</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for i in range(data.ranking.length) %}
-                            <tr>
-                                    <th scope="row">{{ i + 1 }}</th>
-                                <!--<th scope="row">{{i}}</th>-->
-                                <td>
-                                    <a href="{{ data.ranking.teams[i].TeamLink }}"
-                                        >{{ data.ranking.teams[i].TeamName }}</a
-                                    >
-                                </td>
-                                <td>{{ data.ranking.teams[i].GP }}</td>
-                                <td>{{ data.ranking.teams[i].W }}</td>
-                                <td>{{ data.ranking.teams[i].D }}</td>
-                                <td>{{ data.ranking.teams[i].L }}</td>
-                                <td>{{ data.ranking.teams[i].F }}</td>
-                                <td>{{ data.ranking.teams[i].A }}</td>
-                                <td>{{ data.ranking.teams[i].P }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+{% include 'header.html' %}
+<head>
+    <title>League Table</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-2"></div>
+        <div class="col-9">
+            <h1>
+                <strong>League Table (Season {{ data.season }})</strong>
+            </h1>
         </div>
-    </body>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <h2><strong>Divisions</strong></h2>
+        </div>
+        <div class="col-9">
+            <h2>Div 2</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            {% for division in data.divisions %}
+                <a href="{{ division.link }}">{{ division.name }}</a><br/>
+            {% endfor %}
+        </div>
+        <div class="col-9">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">GP&nbsp;<i class="fas fa-info-circle text-black-50"
+                                               title="The amount of games the team has played"
+                                               style="cursor: help"></i></th>
+                    <th scope="col">W&nbsp;<i class="fas fa-info-circle text-black-50"
+                                              title="The amount of matches that this team has won"
+                                              style="cursor: help"></i></th>
+                    <th scope="col">D&nbsp;<i class="fas fa-info-circle text-black-50"
+                                              title="The amount of matches that this team has gotten a draw"
+                                              style="cursor: help"></i></th>
+                    <th scope="col">L&nbsp;<i class="fas fa-info-circle text-black-50"
+                                              title="The amount of matches that this team has lost"
+                                              style="cursor: help"></i></th>
+                    <th scope="col">F&nbsp;<i class="fas fa-info-circle text-black-50"
+                                              title="The amount of goals that this team has scored"
+                                              style="cursor: help"></i></th>
+                    <th scope="col">A&nbsp;<i class="fas fa-info-circle text-black-50"
+                                              title="The amount of goals that this team has gotten against itself"
+                                              style="cursor: help"></i>
+                    </th>
+                    <th scope="col" class="right">Pts&nbsp;<i class="fas fa-info-circle text-black-50"
+                                                              title="The amount of points of this team"
+                                                              style="cursor: help"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in range(data.ranking.length) %}
+                    <tr>
+                        <th scope="row">{{ i + 1 }}</th>
+                        <!--<th scope="row">{{i}}</th>-->
+                        <td>
+                            <a href="{{ data.ranking.teams[i].TeamLink }}"
+                            >{{ data.ranking.teams[i].TeamName }}</a
+                            >
+                        </td>
+                        <td>{{ data.ranking.teams[i].GP }}</td>
+                        <td>{{ data.ranking.teams[i].W }}</td>
+                        <td>{{ data.ranking.teams[i].D }}</td>
+                        <td>{{ data.ranking.teams[i].L }}</td>
+                        <td>{{ data.ranking.teams[i].F }}</td>
+                        <td>{{ data.ranking.teams[i].A }}</td>
+                        <td>{{ data.ranking.teams[i].P }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
 </html>

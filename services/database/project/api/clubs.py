@@ -66,8 +66,10 @@ def update_club():
             response_object['message'] = 'Sorry. Can\'t update club'
             return jsonify(response_object), 400
         else:
-            club.update({Club.name: name, Club.address: address, Club.city: city,
-                         Club.zipCode: zipCode, Club.stamNumber: stamNumber, Club.website: website})
+            club.update(
+                {Club.name: name, Club.address: address, Club.city: city,
+                 Club.zipCode: zipCode, Club.stamNumber: stamNumber,
+                 Club.website: website})
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated club {name}'

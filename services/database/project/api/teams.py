@@ -66,7 +66,7 @@ def update_team():
             return jsonify(response_object), 400
         else:
             team.update({Team.suffix: suffix, Team.colors: colors,
-                Team.stamNumber: stamNumber})
+                         Team.stamNumber: stamNumber})
 
             db.session.commit()
             response_object['status'] = 'success'
@@ -76,7 +76,7 @@ def update_team():
         db.session.rollback()
 
 
-@team_blueprint.route('/teams/<team_id>', methods=['GET'])
+@team_blueprint.route('/db/teams/<team_id>', methods=['GET'])
 def get_single_team(team_id):
     """Get single team details"""
     response_object = {

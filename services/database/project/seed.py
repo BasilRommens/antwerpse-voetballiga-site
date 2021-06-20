@@ -1,4 +1,5 @@
-from project.api.models import Club, Division, Match, Referee, Status, Team, Season, User, Admin
+from project.api.models import Club, Division, Match, Referee, Status, Team, \
+    Season, User, Admin
 import csv
 
 
@@ -38,7 +39,8 @@ def add_seasons(db):
 def seed_matches(db):
     add_seasons(db)
     current_season = 0
-    for file_name in ['matches_2018_2019.csv', 'matches_2019_2020.csv', 'matches_2020_2021.csv']:
+    for file_name in ['matches_2018_2019.csv', 'matches_2019_2020.csv',
+                      'matches_2020_2021.csv']:
         current_season += 1
         with open(f'project/data/{file_name}', 'r') as csv_file:
             reader = csv.reader(csv_file)
@@ -48,21 +50,15 @@ def seed_matches(db):
                 if skip:
                     skip = False
                     continue
-                no_eight = row[8]
-                no_one = row[1]
-                no_six = row[6]
-                no_seven = row[7]
-                if row[8] == 'NULL':
-                    no_eight = None
-                if row[1] == 'NULL':
-                    no_one = None
-                if row[6] == 'NULL':
-                    no_six = None
-                if row[7] == 'NULL':
-                    no_seven = None
-
-                db.session.add(Match(goalsHome=no_six, goalsAway=no_seven, matchStatus=no_eight, mDate=row[2], mTime=row[3],
-                                     week=no_one, teamHomeID=row[4], teamAwayID=row[5], divisionID=row[0], seasonID=current_season, refID=None))
+                goals_home = row[6] if row[6] != 'NULL' else None
+                goals_away = row[7] if row[7] != 'NULL' else None
+                match_status = row[8] if row[8] != 'NULL' else None
+                db.session.add(Match(goalsHome=goals_home, goalsAway=goals_away,
+                                     matchStatus=match_status, mDate=row[2],
+                                     mTime=row[3],
+                                     week=row[1], teamHomeID=row[4],
+                                     teamAwayID=row[5], divisionID=row[0],
+                                     seasonID=current_season, refID=None))
     db.session.commit()
 
 
@@ -75,8 +71,11 @@ def seed_referees(db):
             if skip:
                 skip = False
                 continue
-            db.session.add(Referee(firstName=row[0], lastName=row[1], address=row[2], zipCode=int(
-                row[3]), city=row[4], phoneNumber=int(row[5]), email=row[6], dateOfBirth=row[7]))
+            db.session.add(
+                Referee(firstName=row[0], lastName=row[1], address=row[2],
+                        zipCode=int(
+                            row[3]), city=row[4], phoneNumber=int(row[5]),
+                        email=row[6], dateOfBirth=row[7]))
     db.session.commit()
 
 
