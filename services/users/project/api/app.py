@@ -17,6 +17,7 @@ def log_in():
             return jsonify(False)
     return jsonify(False)
 
+
 @user_blueprint.route('/srv/user/<user_id>', methods=['GET'])
 def get_user(user_id=1):
     user = requests.get(f'http://database:5000/db/users/{user_id}')

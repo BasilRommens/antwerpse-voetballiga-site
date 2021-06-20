@@ -69,4 +69,15 @@ services:
       - APP_SETTINGS=project.config.DevelopmentConfig
     depends_on:
       - database
-
+  weather:
+    build:
+      context: ./services/weather
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/weather:/usr/src/app'
+    ports:
+      - 5016:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig

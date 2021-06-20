@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, Blueprint, jsonify, redirect,
 from flask_jwt_extended import *
 import requests
 import subprocess, socket
-import project.api.weather
 
 ui_blueprint = Blueprint('ui', __name__)
 
@@ -391,6 +390,13 @@ def admin_edit_division(division_id=0):
     data = setup_nav(dict(), get_jwt_identity())
     data['division'] = {'name': 'Division A', 'ID': 0}
     return render_template('admin/edit_division.html', data=data, admin=1)
+
+
+@ui_blueprint.route('/yeet')
+def view_weather():
+    day = 0
+    admin_data = requests.get(f'http://weather:5000/srv/weather/get_weather?day={day}').json()
+    return admin_data
 
 
 if __name__ == '__main__':

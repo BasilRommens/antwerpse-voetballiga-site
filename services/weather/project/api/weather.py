@@ -40,7 +40,7 @@ def determine_icon(icon):
     return icon
 
 
-def get_weather(day):
+def get_weather_day(day):
     if day < 0 or day > 6:
         return ""
     location = "Antwerp"
