@@ -60,22 +60,21 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for i in range(data.ranking.length) %}
+                {% for team in data.league_table.teams %}
                     <tr>
-                        <th scope="row">{{ i + 1 }}</th>
-                        <!--<th scope="row">{{i}}</th>-->
+                        <th scope="row"><b>{{ team.ranking }}</b></th>
                         <td>
-                            <a href="{{ data.ranking.teams[i].TeamLink }}"
-                            >{{ data.ranking.teams[i].TeamName }}</a
+                            <a href="/yeet"
+                            >{{ team.name }}</a
                             >
                         </td>
-                        <td>{{ data.ranking.teams[i].GP }}</td>
-                        <td>{{ data.ranking.teams[i].W }}</td>
-                        <td>{{ data.ranking.teams[i].D }}</td>
-                        <td>{{ data.ranking.teams[i].L }}</td>
-                        <td>{{ data.ranking.teams[i].F }}</td>
-                        <td>{{ data.ranking.teams[i].A }}</td>
-                        <td>{{ data.ranking.teams[i].P }}</td>
+                        <td>{{ team.GP }}</td>
+                        <td>{{ team.W }}</td>
+                        <td>{{ team.D }}</td>
+                        <td>{{ team.L }}</td>
+                        <td>{{ team.F }}</td>
+                        <td>{{ team.A }}</td>
+                        <td>{{ team.Pts }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

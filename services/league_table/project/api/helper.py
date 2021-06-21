@@ -1,5 +1,8 @@
+from project.api.config import *
+
+
 def is_valid_match(match, season: int, division: int):
-    return match['seasonID'] == season and match['divisionID'] == division
+    return match['season_ID'] == season and match['division_ID'] == division
 
 
 def get_matches(season: int, division: int) -> list:
@@ -20,9 +23,26 @@ def is_team_in_here(league_table: dict, team_id: int):
     return False
 
 
+def create_default_team():
+    return {
+        'team_id': None,
+        'stam_number': None,
+        'name': None,
+        'F': None,
+        'A': None,
+        'GP': None,
+        'L': None,
+        'W': None,
+        'D': None,
+        'Pts': None,
+        'Ranking': None
+    }
+
+
 def add_teams(league_table: dict, matches: list):
+    league_table['teams'] = list()
     for match in matches:
-        for team_id_name in ["teamHomeID", "teamAwayID"]:
+        for team_id_name in ["team_home_ID", "team_away_ID"]:
             team = \
                 requests.get(
                     f'http://database:5000/db/teams/{match[team_id_name]}').json()[
@@ -30,32 +50,165 @@ def add_teams(league_table: dict, matches: list):
             team_id = team['id']
             stam_number = team['stamNumber']
             if not is_team_in_here(league_table, team_id):
-                league_table['teams'].append(
-                    {'team_id': team_id, 'stam_number': stam_number})
+                team_suffix = team['suffix']
+                club_name = requests.get(
+                    f'http://database:5000/db/clubs/{stam_number}').json()[
+                    'data']['name']
+                team = create_default_team()
+                team['team_id'] = team_id
+                team['stam_number'] = stam_number
+                team['name'] = f'{club_name} {team_suffix}'
+                league_table['teams'].append(team)
+    return league_table
 
 
-def add_matches_total(league_table: dict, matches: list):
-    return
+def has_home_won(match: dict):
+    return match['goals_home'] > match['goals_away']
 
 
-def add_matches_result(league_table: dict, matches: list):
-    return
+def is_draw(match: dict):
+    return match['goals_home'] == match['goals_away']
+
+
+def increase(letter: str, league_table: dict, team_id: int, amount: int = 1):
+    for team in league_table['teams']:
+        if team['team_id'] == team_id:
+            if team[letter] is None:
+                team[letter] = amount
+                continue
+            else:
+                team[letter] += amount
+    return league_table
+
+
+def set_ranking(league_table: dict, team_id: int, ranking: int):
+    for team in league_table['teams']:
+        if team['team_id'] == team_id:
+            team['ranking'] = ranking
+    return league_table
+
+
+def increase_draw(league_table: dict, team_id: int):
+    league_table = increase('D', league_table, team_id)
+    return league_table
+
+
+def increase_win(league_table: dict, team_id: int):
+    league_table = increase('W', league_table, team_id)
+    return league_table
+
+
+def increase_loss(league_table: dict, team_id: int):
+    league_table = increase('L', league_table, team_id)
+    return league_table
+
+
+def increase_matches_played(league_table: dict, team_id: int):
+    league_table = increase('GP', league_table, team_id)
+    return league_table
+
+
+def increase_points_draw(league_table: dict, team_id: int):
+    league_table = increase('Pts', league_table, team_id, 1)
+    return league_table
+
+
+def increase_points_win(league_table: dict, team_id: int):
+    league_table = increase('Pts', league_table, team_id, 3)
+    return league_table
+
+
+def add_goals_for(league_table: dict, team_id: int, amount: int):
+    league_table = increase('F', league_table, team_id, amount)
+    return league_table
+
+
+def add_goals_against(league_table: dict, team_id: int, amount: int):
+    league_table = increase('A', league_table, team_id, amount)
+    return league_table
+
+
+def is_null_goals(match: dict):
+    return match['goals_home'] is None or match['goals_away'] is None
+
+
+def add_matches_played(league_table: dict, matches: list):
+    for match in matches:
+        if is_null_goals(match):
+            continue
+        # update the games played score
+        for call_ids in ["team_home_ID", "team_away_ID"]:
+            team_id = match[call_ids]
+            league_table = increase_matches_played(league_table, team_id)
+        # update the win/loss/draw scores
+        if is_draw(match):
+            for call_ids in ["team_home_ID", "team_away_ID"]:
+                team_id = match[call_ids]
+                league_table = increase_draw(league_table, team_id)
+        elif has_home_won(match):
+            home_team_id = match['team_home_ID']
+            league_table = increase_win(league_table, home_team_id)
+            away_team_id = match['team_away_ID']
+            league_table = increase_loss(league_table, away_team_id)
+        else:
+            home_team_id = match['team_home_ID']
+            league_table = increase_loss(league_table, home_team_id)
+            away_team_id = match['team_away_ID']
+            league_table = increase_win(league_table, away_team_id)
+    return league_table
+
+
+def add_teams_points(league_table: dict, matches: list):
+    for match in matches:
+        if is_null_goals(match):
+            continue
+        if is_draw(match):
+            for call_ids in ["team_home_ID", "team_away_ID"]:
+                team_id = match[call_ids]
+                league_table = increase_points_draw(league_table, team_id)
+        elif has_home_won(match):
+            home_team_id = match['team_home_ID']
+            league_table = increase_points_win(league_table, home_team_id)
+        else:
+            away_team_id = match['team_away_ID']
+            league_table = increase_points_win(league_table, away_team_id)
+    return league_table
 
 
 def add_matches_goals(league_table: dict, matches: list):
-    return
+    for match in matches:
+        if is_null_goals(match):
+            continue
+        goals_home = match['goals_home']
+        goals_against = match['goals_away']
+        home_team_id = match['team_home_ID']
+        league_table = add_goals_for(league_table, home_team_id, goals_home)
+        league_table = add_goals_against(league_table, home_team_id,
+                                         goals_against)
+        away_team_id = match['team_away_ID']
+        league_table = add_goals_for(league_table, away_team_id, goals_against)
+        league_table = add_goals_against(league_table, away_team_id, goals_home)
+    return league_table
 
 
-def add_table_standing(league_table: dict, matches: list):
-    return
+def add_table_ranking(league_table: dict):
+    print(league_table['teams'])
+    league_table['teams'] = sorted(league_table['teams'],
+                                   key=lambda x: x['Pts'], reverse=True)
+    for idx in range(len(league_table['teams'])):
+        league_table['teams'][idx]['ranking'] = idx+1
+    print(league_table['teams'])
+    return league_table
 
 
 def generate_league_table(season: int, division: int) -> dict:
     matches = get_matches(season, division)
     league_table = dict()
-    add_teams(league_table, matches)
-    add_matches_total(league_table, matches)
-    add_matches_result(league_table, matches)
-    add_matches_goals(league_table, matches)
-    add_table_standing(league_table, matches)
-    return jsonify(league_table)
+    league_table = add_teams(league_table, matches)
+    league_table = add_matches_played(league_table, matches)
+    league_table = add_teams_points(league_table, matches)
+    league_table = add_matches_goals(league_table, matches)
+    # This function must stand at the end, because otherwise the final scores
+    # would be calculated wrong
+    league_table = add_table_ranking(league_table)
+    return league_table

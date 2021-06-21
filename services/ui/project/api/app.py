@@ -2,7 +2,8 @@ import requests
 from flask import render_template, request, Blueprint, redirect, \
     make_response, url_for
 from flask_jwt_extended import create_access_token, create_refresh_token
-from flask_jwt_extended import set_access_cookies, set_refresh_cookies, unset_jwt_cookies
+from flask_jwt_extended import set_access_cookies, set_refresh_cookies, \
+    unset_jwt_cookies
 from flask_jwt_extended import jwt_required, jwt_optional
 from flask_jwt_extended import get_jwt_identity
 
@@ -19,7 +20,7 @@ def setup_nav(data_dict, user_id):
         return data_dict
     data_dict['nav']['logged'] = True
     data_dict['nav']['user_club'] = \
-    requests.get(f'http://users:5000/srv/user/{user_id}').json()['clubID']
+        requests.get(f'http://users:5000/srv/user/{user_id}').json()['clubID']
     admin_data = requests.get(
         f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
     if admin_data['status'] == 'fail':
@@ -76,28 +77,19 @@ def login():
         return resp
 
 
-@ui_blueprint.route('/leagueTable/<season>/<division_id>')
 @ui_blueprint.route('/leagueTable')
 @jwt_optional
-def league_table(season=0, division_id=0):
+def league_table():
     data = setup_nav(dict(), get_jwt_identity())
+    season = int(request.args.get('season')) if request.args.get(
+        'season') is not None else 1
+    division = int(request.args.get('division')) if request.args.get(
+        'division') is not None else 1
     data['season'] = season
-    data['divisions'] = [{"link": "/link", "name": "test"}]
-    data['ranking'] = {
-        "length":
-            1,
-        "teams": [{
-            "TeamName": "Team",
-            "TeamLink": "/link",
-            "GP": 0,
-            "W": 0,
-            "D": 0,
-            "L": 0,
-            "F": 0,
-            "A": 0,
-            "P": 0
-        }]
-    }
+    data['division'] = division
+    data['league_table'] = requests.get(
+        f'http://league_table:5000/srv/league_table?season={season}&division={division}').json()
+    data['divisions'] = [{"link": "/link", "name": "temp"}]
     return render_template('league_table.html', data=data)
 
 

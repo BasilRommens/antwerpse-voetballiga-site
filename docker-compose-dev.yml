@@ -81,3 +81,15 @@ services:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
+  league_table:
+    build:
+      context: ./services/league_table
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/league_table:/usr/src/app'
+    ports:
+      - 5017:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig

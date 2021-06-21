@@ -33,12 +33,12 @@ def delete_club(club_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
         # Check for user existence
-        club_user = Club.query.filter_by(ID=club_id).first()
+        club_user = Club.query.filter_by(stamNumber=club_id).first()
         if not club_user:
             response_object['message'] = 'Sorry. Can\'t delete club'
             return jsonify(response_object), 400
         else:
-            Club.query.filter_by(ID=club_id).delete()
+            Club.query.filter_by(stamNumber=club_id).delete()
             db.session.commit()
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
@@ -52,7 +52,6 @@ def update_club():
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    club_id = post_data.get('ID')
     name = post_data.get('name')
     address = post_data.get('address')
     zipCode = post_data.get('zipCode')
@@ -61,7 +60,7 @@ def update_club():
     website = post_data.get('website')
     try:
         # Check for user existence
-        club = Club.query.filter_by(ID=club_id).first()
+        club = Club.query.filter_by(stamNumber=club_id).first()
         if not club:
             response_object['message'] = 'Sorry. Can\'t update club'
             return jsonify(response_object), 400
@@ -87,14 +86,13 @@ def get_single_club(club_id):
         'message': 'Club does not exist'
     }
     try:
-        club = Club.query.filter_by(ID=int(club_id)).first()
+        club = Club.query.filter_by(stamNumber=int(club_id)).first()
         if not club:
             return jsonify(response_object), 404
         else:
             response_object = {
                 'status': 'success',
                 'data': {
-                    'ID': club.ID,
                     'name': club.name,
                     'address': club.address,
                     'zipCode': club.zipCode,
