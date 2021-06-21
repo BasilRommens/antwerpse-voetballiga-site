@@ -172,6 +172,23 @@ def add_teams_points(league_table: dict, matches: list):
         else:
             away_team_id = match['team_away_ID']
             league_table = increase_points_win(league_table, away_team_id)
+    league_table = clean_up_points(league_table)
+    return league_table
+
+
+def clean_up_points(league_table: dict) -> dict:
+    for team in league_table['teams']:
+        for match_outcome_letter in ['L', 'D', 'W']:
+            if team[match_outcome_letter] is None:
+                team[match_outcome_letter] = 0
+    return league_table
+
+
+def clean_up_goals(league_table: dict) -> dict:
+    for team in league_table['teams']:
+        for goal_type_letter in ['F', 'A']:
+            if team[goal_type_letter] is None:
+                team[goal_type_letter] = 0
     return league_table
 
 
@@ -188,16 +205,15 @@ def add_matches_goals(league_table: dict, matches: list):
         away_team_id = match['team_away_ID']
         league_table = add_goals_for(league_table, away_team_id, goals_against)
         league_table = add_goals_against(league_table, away_team_id, goals_home)
+    league_table = clean_up_goals(league_table)
     return league_table
 
 
 def add_table_ranking(league_table: dict):
-    print(league_table['teams'])
     league_table['teams'] = sorted(league_table['teams'],
                                    key=lambda x: x['Pts'], reverse=True)
     for idx in range(len(league_table['teams'])):
-        league_table['teams'][idx]['ranking'] = idx+1
-    print(league_table['teams'])
+        league_table['teams'][idx]['ranking'] = idx + 1
     return league_table
 
 
