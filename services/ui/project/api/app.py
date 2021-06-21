@@ -77,19 +77,42 @@ def login():
         return resp
 
 
+def get_league_table_data(data, season, division):
+    data = setup_nav(dict(), get_jwt_identity())
+    data['season'] = int(season)
+    data['division'] = int(division)
+    data['league_table'] = requests.get(
+        f'http://league_table:5000/srv/league_table?season={season}&division={division}').json()
+    data['divisions'] = \
+        requests.get('http://database:5000/db/all_divisions').json()['data'][
+            'divisions']
+    for _division in data['divisions']:
+        if int(_division['ID']) == int(division):
+            data['division_name'] = _division['name']
+            break
+    data['seasons'] = \
+        requests.get('http://database:5000/db/all_seasons').json()['data'][
+            'seasons']
+    return data
+
+
+@ui_blueprint.route('/leagueTable', methods=['POST'])
+@jwt_optional
+def post_league_table():
+    season = request.form.get('season')
+    division = request.form.get('division')
+    data = get_league_table_data(dict(), season, division)
+    return render_template('league_table.html', data=data)
+
+
 @ui_blueprint.route('/leagueTable')
 @jwt_optional
 def league_table():
-    data = setup_nav(dict(), get_jwt_identity())
     season = int(request.args.get('season')) if request.args.get(
         'season') is not None else 1
     division = int(request.args.get('division')) if request.args.get(
         'division') is not None else 1
-    data['season'] = season
-    data['division'] = division
-    data['league_table'] = requests.get(
-        f'http://league_table:5000/srv/league_table?season={season}&division={division}').json()
-    data['divisions'] = [{"link": "/link", "name": "temp"}]
+    data = get_league_table_data(dict(), season, division)
     return render_template('league_table.html', data=data)
 
 

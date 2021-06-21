@@ -8,28 +8,35 @@
 {% include 'navbar.html' %}
 <div class="container">
     <div class="row mt-5">
-        <div class="col-2"></div>
+        <div class="col-2">
+        </div>
         <div class="col-9">
             <h1>
                 <strong>League Table (Season {{ data.season }})</strong>
             </h1>
+
         </div>
     </div>
     <div class="row">
         <div class="col-2">
-            <h2><strong>Divisions</strong></h2>
+            <form action="/leagueTable" method="POST">
+                <h2><strong>Divisions</strong></h2>
+                {% for division in data.divisions %}
+                    <input type="radio" name="division" value="{{ division.ID }}"
+                           {% if division.ID == data.division %}checked="checked"{% endif %}>&nbsp;{{ division.name }}
+                    <br>
+                {% endfor %}
+                <h2 class="mt-2"><strong>Seasons</strong></h2>
+                {% for season in data.seasons %}
+                    <input type="radio" name="season" value="{{ season.season }}"
+                           {% if season.season == data.season %}checked="checked"{% endif %}>&nbsp;Season
+                    {{ season.season }}<br>
+                {% endfor %}
+                <input class="btn btn-custom-green mt-2" type="submit" value="Get league table">
+            </form>
         </div>
         <div class="col-9">
-            <h2>Div 2</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2">
-            {% for division in data.divisions %}
-                <a href="{{ division.link }}">{{ division.name }}</a><br/>
-            {% endfor %}
-        </div>
-        <div class="col-9">
+            <h2>{{ data.division_name }}</h2>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -64,7 +71,7 @@
                     <tr>
                         <th scope="row"><b>{{ team.ranking }}</b></th>
                         <td>
-                            <a href="/yeet"
+                            <a href="/team/{{ team.team_id }}"
                             >{{ team.name }}</a
                             >
                         </td>
@@ -79,6 +86,14 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+
+        </div>
+        <div class="col-9">
+
         </div>
     </div>
 </div>
