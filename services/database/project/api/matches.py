@@ -1,4 +1,5 @@
 from project.api.config import *
+from sqlalchemy import and_
 
 match_blueprint = Blueprint('matches', __name__)
 
@@ -20,8 +21,11 @@ def add_match():
     seasonID = post_data.get('seasonID')
     refID = post_data.get('refID')
     try:
-        db.session.add(Match(goalsHome=goalsHome, goalsAway=goalsAway, matchStatus=matchStatus, mDate=mDate, mTime=mTime,
-                             teamHomeID=teamHomeID, teamAwayID=teamAwayID, divisionID=divisionID, seasonID=seasonID, refID=refID))
+        db.session.add(Match(goalsHome=goalsHome, goalsAway=goalsAway,
+                             matchStatus=matchStatus, mDate=mDate, mTime=mTime,
+                             teamHomeID=teamHomeID, teamAwayID=teamAwayID,
+                             divisionID=divisionID, seasonID=seasonID,
+                             refID=refID))
 
         db.session.commit()
         response_object['status'] = 'success'
@@ -75,8 +79,13 @@ def update_match():
             response_object['message'] = 'Sorry. Can\'t update match'
             return jsonify(response_object), 400
         else:
-            match.update({Match.goalsHome: goalsHome, Match.goalsAway: goalsAway, Match.matchStatus: matchStatus, Match.mDate: mDate, Match.mTime: mTime,
-                          Match.teamHomeID: teamHomeID, Match.teamAwayID: teamAwayID, Match.divisionID: divisionID, Match.seasonID: seasonID, Match.refID: refID})
+            match.update(
+                {Match.goalsHome: goalsHome, Match.goalsAway: goalsAway,
+                 Match.matchStatus: matchStatus, Match.mDate: mDate,
+                 Match.mTime: mTime,
+                 Match.teamHomeID: teamHomeID, Match.teamAwayID: teamAwayID,
+                 Match.divisionID: divisionID, Match.seasonID: seasonID,
+                 Match.refID: refID})
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated match {match_id}'
@@ -117,6 +126,51 @@ def get_single_match(match_id):
             return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
+
+
+@match_blueprint.route('/db/matches_team_week', methods=['GET'])
+def get_matches_team_week():
+    """Get all matches per week per team"""
+    division = int(request.args.get('division'))
+    season = int(request.args.get('season'))
+    week = int(request.args.get('week'))
+    team = int(request.args.get('team'))
+    home_matches = [match.to_json() for match in
+                    Match.query.filter(and_(Match.seasonID == season,
+                                            Match.divisionID == division,
+                                            Match.week == week,
+                                            Match.teamHomeID == team))]
+    away_matches = [match.to_json() for match in
+                    Match.query.filter(and_(Match.seasonID == season,
+                                            Match.divisionID == division,
+                                            Match.week == week,
+                                            Match.teamAwayID == team))]
+
+    response_object = {
+        'status': 'success',
+        'data': {
+            'matches': home_matches + away_matches
+        }
+    }
+    return jsonify(response_object), 200
+
+
+@match_blueprint.route('/db/matches_week_all', methods=['GET'])
+def get_matches_all_team_week():
+    """Get all matches per week"""
+    division = int(request.args.get('division'))
+    season = int(request.args.get('season'))
+    week = int(request.args.get('week'))
+    response_object = {
+        'status': 'success',
+        'data': {
+            'matches': [match.to_json() for match in
+                        Match.query.filter(and_(Match.seasonID == season,
+                                                Match.divisionID == division,
+                                                Match.week == week))]
+        }
+    }
+    return jsonify(response_object), 200
 
 
 @match_blueprint.route('/db/all_matches', methods=['GET'])

@@ -84,13 +84,19 @@ def get_division_name(data: dict, division: int):
     return data
 
 
+def get_all_divisions():
+    return requests.get('http://database:5000/db/all_divisions').json()['data'][
+        'divisions']
+
+
+def get_all_seasons():
+    return requests.get('http://database:5000/db/all_seasons').json()['data'][
+        'seasons']
+
+
 def get_all_seasons_and_divisions(data: dict):
-    data['divisions'] = \
-        requests.get('http://database:5000/db/all_divisions').json()['data'][
-            'divisions']
-    data['seasons'] = \
-        requests.get('http://database:5000/db/all_seasons').json()['data'][
-            'seasons']
+    data['divisions'] = get_all_divisions()
+    data['seasons'] = get_all_seasons()
     return data
 
 
@@ -125,26 +131,55 @@ def league_table():
     return render_template('league_table.html', data=data)
 
 
-@ui_blueprint.route('/fixtures/<division_id>/<team_id>/<week>')
-@ui_blueprint.route('/fixtures/<division_id>/<week>')
+def get_team_name(team_id: int):
+    team = requests.get(
+        f'http://database:5000/db/teams/{team_id}').json()['data']
+    team_suffix = team['suffix']
+    stam_number = int(team['stamNumber'])
+    club_name = requests.get(
+        f'http://database:5000/db/clubs/{stam_number}').json()[
+        'data']['name']
+    team_name = f'{club_name} {team_suffix}'
+    return team_name
+
+
+def set_vs_team_name_match(match: dict):
+    home_team_id = int(match['team_home_ID'])
+    home_team_name = get_team_name(home_team_id)
+    away_team_id = int(match['team_away_ID'])
+    away_team_name = get_team_name(away_team_id)
+    match['teams'] = f'{home_team_name} (H) - {away_team_name} (A)'
+    return match
+
+
 @ui_blueprint.route('/fixtures')
 @jwt_optional
-def fixtures(week=1, division_id=0, team_id=0):
-    data = dict()
+def fixtures():
     data = setup_nav(dict(), get_jwt_identity())
+    week = int(request.args.get('week')) if request.args.get(
+        'week') is not None else 1
+    season = int(request.args.get('season')) if request.args.get(
+        'season') is not None else 1
+    division = int(request.args.get('division')) if request.args.get(
+        'division') is not None else 1
+    team = int(request.args.get('team')) if request.args.get(
+        'team') is not None else -1
     data['week'] = week
-    data['division_id'] = division_id
-    data['team_id'] = team_id
+    data['season'] = season
+    data['division_id'] = division
+    data['team_id'] = team
+    if team == -1:
+        data['matches'] = requests.get(
+            f'http://database:5000/db/matches_week_all?division={division}&season={season}&week={week}').json()['data']['matches']
+        for match in data['matches']:
+            match = set_vs_team_name_match(match)
+    else:
+        data['matches'] = requests.get(
+            f'http://database:5000/db/matches_team_week?division={division}&season={season}&week={week}&team={team}').json()['data']['matches']
+        for match in data['matches']:
+            match = set_vs_team_name_match(match)
 
-    data['matches'] = [{
-        "id": 0,
-        "date": "20/12/2020",
-        "teams": "team 1 (h) - team 2 (a)",
-        "link": "/match"
-    }]
-
-    data['divisions'] = [{"link": "/link", "name": "test"}]
-    data['teams'] = [{"link": "/link", "name": "Team"}]
+    data = get_all_seasons_and_divisions(data)
     return render_template('fixtures.html', data=data)
 
 

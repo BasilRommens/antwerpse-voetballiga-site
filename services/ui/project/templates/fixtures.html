@@ -1,76 +1,76 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Fixtures</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-2"></div>
-                <div class="col-9">
-                    <h1>
-                        <strong>Week {{ data.week }}</strong>
-                    </h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-9">
-                    <nav aria-label="Weeks">
-                        <ul
-                            class="pagination pagination-sm justify-content-center"
-                        >
-                            {% for i in range(52) %} {% if i == data.week %}
-                            <li class="page-item active">{% else %}</li>
-
-                            <li class="page-item">
-                                {% endif %}
-                                <a
-                                    class="page-link"
-                                    href="/fixtures/{{ data.division_id }}/{{ data.team_id }}/{{ i }}"
-                                    >{{ i }}</a
-                                >
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-2">
-                    <h2><strong>Divisions</strong></h2>
-                    {% for division in data.divisions %}
-                    <a href="{{ division.link }}">{{ division.name }}</a><br />
-                    {% endfor %}
-                    <h2 class="mt-2 mb-2"><strong>Team</strong></h2>
-                    {% for team in data.teams %}
-                    <a href="{{ team.link }}">{{ team.name }}</a><br />
-                    {% endfor %}
-                </div>
-                <div class="col-9">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Home - Away</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for match in data.matches %}
-                            <tr>
-                                <th scope="row">{{ match.id }}</th>
-                                <td>{{ match.date }}</td>
-                                <td>{{ match.teams }}</td>
-                                <td><a href="{{ match.link }}">more ></a></td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+{% include 'header.html' %}
+<head>
+    <title>Fixtures</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-2"></div>
+        <div class="col-9">
+            <h1>
+                <strong>Week {{ data.week }}</strong>
+            </h1>
         </div>
-    </body>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <nav aria-label="Weeks">
+                <ul class="pagination pagination-sm justify-content-center">
+                    {% for i in range(52) %} {% if i == data.week - 1 %}
+                        <li class="page-item active">{% else %}</li>
+                        <li class="page-item">
+                    {% endif %}
+                    <a class="page-link"
+                       href="/fixtures?division={{ data.division_id }}&team={{ data.team_id }}&week={{ i + 1 }}&season={{ data.season }}">
+                        {{ i + 1 }}
+                    </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <h2><strong>Divisions</strong></h2>
+            {% for division in data.divisions %}
+                <a href="/fixtures?division={{ division.ID }}&team={{ data.team_id }}&week={{ data.week }}&season={{ data.season }}">{{ division.name }}</a><br/>
+            {% endfor %}
+            <h2><strong>Seasons</strong></h2>
+            {% for season in data.seasons %}
+                <a href="/fixtures?division={{ data.division_id }}&team={{ data.team_id }}&week={{ data.week }}&season={{ data.season }}">Season {{ season.season }}</a><br/>
+            {% endfor %}
+            <h2 class="mt-2 mb-2"><strong>Team</strong></h2>
+            {% for team in data.teams %}
+                <a href="/fixtures?division={{ data.division_id }}&team={{ team.id }}&week={{ data.week }}&season={{ data.season }}">{{ team.name }}</a><br/>
+            {% endfor %}
+        </div>
+        <div class="col-9">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Home - Away</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for match in data.matches %}
+                    <tr>
+                        <td scope="row">{{ match.date }}</td>
+                        <td>{{ match.time }}</td>
+                        <td>{{ match.teams }}</td>
+                        <td><a href="{{ match.link }}">more ></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
 </html>
