@@ -171,6 +171,7 @@ class Match(db.Model):
             'match_status': self.matchStatus,
             'date': str(self.mDate),
             'time': str(self.mTime),
+            'week': str(self.week),
             'team_home_ID': self.teamHomeID,
             'team_away_ID': self.teamAwayID,
             'division_ID': self.divisionID,

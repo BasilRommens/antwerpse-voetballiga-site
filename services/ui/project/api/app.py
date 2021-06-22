@@ -152,6 +152,69 @@ def set_vs_team_name_match(match: dict):
     return match
 
 
+def is_team_in_here(teams: dict, team_id: int):
+    for team in teams:
+        if team['team_id'] == team_id:
+            return True
+    return False
+
+
+def create_default_team():
+    return {
+        'team_id': None,
+        'stam_number': None,
+        'name': None
+    }
+
+
+def is_valid_match(match, season: int, division: int):
+    return match['season_ID'] == season and match['division_ID'] == division
+
+
+def get_matches(season: int, division: int) -> list:
+    all_matches = \
+        requests.get(f'http://database:5000/db/all_matches').json()['data'][
+            'matches']
+    ret_matches = list()
+    for match in all_matches:
+        if is_valid_match(match, season, division):
+            ret_matches.append(match)
+    return ret_matches
+
+
+def get_teams(division: int, season: int):
+    matches = get_matches(season, division)
+    teams = list()
+    for match in matches:
+        for team_id_name in ["team_home_ID", "team_away_ID"]:
+            team = \
+                requests.get(
+                    f'http://database:5000/db/teams/{match[team_id_name]}').json()[
+                    'data']
+            team_id = team['id']
+            stam_number = team['stamNumber']
+            if not is_team_in_here(teams, team_id):
+                team_suffix = team['suffix']
+                club_name = requests.get(
+                    f'http://database:5000/db/clubs/{stam_number}').json()[
+                    'data']['name']
+                team = create_default_team()
+                team['team_id'] = team_id
+                team['stam_number'] = stam_number
+                team['name'] = f'{club_name} {team_suffix}'
+                teams.append(team)
+    return teams
+
+
+def get_match_weeks(matches):
+    match_weeks = set()
+
+    print(matches)
+    for match in matches:
+        match_weeks.add(int(match['week']))
+    return list(match_weeks)
+
+
 @ui_blueprint.route('/fixtures')
 @jwt_optional
 def fixtures():
@@ -168,17 +231,24 @@ def fixtures():
     data['season'] = season
     data['division_id'] = division
     data['team_id'] = team
+    all_matches = requests.get(
+        f'http://database:5000/db/all_matches_div_season?division={division}&season={season}').json()[
+        'data']['matches']
     if team == -1:
         data['matches'] = requests.get(
-            f'http://database:5000/db/matches_week_all?division={division}&season={season}&week={week}').json()['data']['matches']
+        f'http://database:5000/db/matches_week_all?division={division}&season={season}&week={week}').json()[
+        'data']['matches']
         for match in data['matches']:
             match = set_vs_team_name_match(match)
     else:
         data['matches'] = requests.get(
-            f'http://database:5000/db/matches_team_week?division={division}&season={season}&week={week}&team={team}').json()['data']['matches']
+            f'http://database:5000/db/matches_team_week?division={division}&season={season}&week={week}&team={team}').json()[
+            'data']['matches']
         for match in data['matches']:
             match = set_vs_team_name_match(match)
 
+    data['teams'] = get_teams(division, season)
+    data['match_weeks'] = get_match_weeks(all_matches)
     data = get_all_seasons_and_divisions(data)
     return render_template('fixtures.html', data=data)
 

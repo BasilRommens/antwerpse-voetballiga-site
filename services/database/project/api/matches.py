@@ -20,12 +20,13 @@ def add_match():
     divisionID = post_data.get('divisionID')
     seasonID = post_data.get('seasonID')
     refID = post_data.get('refID')
+    week = post_data.get('week')
     try:
         db.session.add(Match(goalsHome=goalsHome, goalsAway=goalsAway,
                              matchStatus=matchStatus, mDate=mDate, mTime=mTime,
                              teamHomeID=teamHomeID, teamAwayID=teamAwayID,
                              divisionID=divisionID, seasonID=seasonID,
-                             refID=refID))
+                             refID=refID, week=week))
 
         db.session.commit()
         response_object['status'] = 'success'
@@ -116,6 +117,7 @@ def get_single_match(match_id):
                     'matchStatus': match.matchStatus,
                     'mDate': str(match.mDate),
                     'mTime': str(match.mTime),
+                    'week': int(match.week),
                     'teamHomeID': match.teamHomeID,
                     'teamAwayID': match.teamAwayID,
                     'divisionID': match.divisionID,
@@ -150,6 +152,22 @@ def get_matches_team_week():
         'status': 'success',
         'data': {
             'matches': home_matches + away_matches
+        }
+    }
+    return jsonify(response_object), 200
+
+
+@match_blueprint.route('/db/all_matches_div_season', methods=['GET'])
+def get_all_matches_div_season():
+    """Get all matches per week"""
+    division = int(request.args.get('division'))
+    season = int(request.args.get('season'))
+    response_object = {
+        'status': 'success',
+        'data': {
+            'matches': [match.to_json() for match in
+                        Match.query.filter(and_(Match.seasonID == season,
+                                                Match.divisionID == division))]
         }
     }
     return jsonify(response_object), 200
