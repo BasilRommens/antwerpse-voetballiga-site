@@ -93,3 +93,15 @@ services:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
+  best_of_division:
+    build:
+      context: ./services/best_of_division
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/best_of_division:/usr/src/app'
+    ports:
+      - 5018:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
