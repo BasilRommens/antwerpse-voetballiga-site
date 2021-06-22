@@ -28,14 +28,7 @@ def create_default_team():
         'team_id': None,
         'stam_number': None,
         'name': None,
-        'F': None,
-        'A': None,
-        'GP': None,
-        'L': None,
-        'W': None,
-        'D': None,
-        'Pts': None,
-        'Ranking': None
+        'clean_sheet_counter': 0
     }
 
 
@@ -62,169 +55,71 @@ def add_teams(league_table: dict, matches: list):
     return league_table
 
 
-def has_home_won(match: dict):
-    return match['goals_home'] > match['goals_away']
+def clean_up_goals(teams: list) -> dict:
+    for team in teams:
+        for goal_type_letter in ['clean_sheet_counter']:
+            if team[goal_type_letter] is None:
+                team[goal_type_letter] = 0
+    return teams
 
 
-def is_draw(match: dict):
-    return match['goals_home'] == match['goals_away']
-
-
-def increase(letter: str, league_table: dict, team_id: int, amount: int = 1):
-    for team in league_table['teams']:
-        if team['team_id'] == team_id:
-            if team[letter] is None:
-                team[letter] = amount
-                continue
-            else:
-                team[letter] += amount
-    return league_table
-
-
-def set_ranking(league_table: dict, team_id: int, ranking: int):
-    for team in league_table['teams']:
-        if team['team_id'] == team_id:
-            team['ranking'] = ranking
-    return league_table
-
-
-def increase_draw(league_table: dict, team_id: int):
-    league_table = increase('D', league_table, team_id)
-    return league_table
-
-
-def increase_win(league_table: dict, team_id: int):
-    league_table = increase('W', league_table, team_id)
-    return league_table
-
-
-def increase_loss(league_table: dict, team_id: int):
-    league_table = increase('L', league_table, team_id)
-    return league_table
-
-
-def increase_matches_played(league_table: dict, team_id: int):
-    league_table = increase('GP', league_table, team_id)
-    return league_table
-
-
-def increase_points_draw(league_table: dict, team_id: int):
-    league_table = increase('Pts', league_table, team_id, 1)
-    return league_table
-
-
-def increase_points_win(league_table: dict, team_id: int):
-    league_table = increase('Pts', league_table, team_id, 3)
-    return league_table
-
-
-def add_goals_for(league_table: dict, team_id: int, amount: int):
-    league_table = increase('F', league_table, team_id, amount)
-    return league_table
-
-
-def add_goals_against(league_table: dict, team_id: int, amount: int):
-    league_table = increase('A', league_table, team_id, amount)
-    return league_table
+def add_clean_sheet(teams: list, team_id: int):
+    for team in teams:
+        if int(team['team_id']) == team_id:
+            team['clean_sheet_counter'] += 1
+    return teams
 
 
 def is_null_goals(match: dict):
     return match['goals_home'] is None or match['goals_away'] is None
 
 
-def add_matches_played(league_table: dict, matches: list):
-    for match in matches:
-        if is_null_goals(match):
-            continue
-        # update the games played score
-        for call_ids in ["team_home_ID", "team_away_ID"]:
-            team_id = match[call_ids]
-            league_table = increase_matches_played(league_table, team_id)
-        # update the win/loss/draw scores
-        if is_draw(match):
-            for call_ids in ["team_home_ID", "team_away_ID"]:
-                team_id = match[call_ids]
-                league_table = increase_draw(league_table, team_id)
-        elif has_home_won(match):
-            home_team_id = match['team_home_ID']
-            league_table = increase_win(league_table, home_team_id)
-            away_team_id = match['team_away_ID']
-            league_table = increase_loss(league_table, away_team_id)
-        else:
-            home_team_id = match['team_home_ID']
-            league_table = increase_loss(league_table, home_team_id)
-            away_team_id = match['team_away_ID']
-            league_table = increase_win(league_table, away_team_id)
-    return league_table
-
-
-def add_teams_points(league_table: dict, matches: list):
-    for match in matches:
-        if is_null_goals(match):
-            continue
-        if is_draw(match):
-            for call_ids in ["team_home_ID", "team_away_ID"]:
-                team_id = match[call_ids]
-                league_table = increase_points_draw(league_table, team_id)
-        elif has_home_won(match):
-            home_team_id = match['team_home_ID']
-            league_table = increase_points_win(league_table, home_team_id)
-        else:
-            away_team_id = match['team_away_ID']
-            league_table = increase_points_win(league_table, away_team_id)
-    league_table = clean_up_points(league_table)
-    return league_table
-
-
-def clean_up_points(league_table: dict) -> dict:
-    for team in league_table['teams']:
-        for match_outcome_letter in ['L', 'D', 'W']:
-            if team[match_outcome_letter] is None:
-                team[match_outcome_letter] = 0
-    return league_table
-
-
-def clean_up_goals(league_table: dict) -> dict:
-    for team in league_table['teams']:
-        for goal_type_letter in ['F', 'A']:
-            if team[goal_type_letter] is None:
-                team[goal_type_letter] = 0
-    return league_table
-
-
-def add_matches_goals(league_table: dict, matches: list):
+def count_clean_sheets(teams: list, matches: list):
     for match in matches:
         if is_null_goals(match):
             continue
         goals_home = match['goals_home']
         goals_against = match['goals_away']
         home_team_id = match['team_home_ID']
-        league_table = add_goals_for(league_table, home_team_id, goals_home)
-        league_table = add_goals_against(league_table, home_team_id,
-                                         goals_against)
+        if goals_against == 0:
+            add_clean_sheet(teams, home_team_id)
         away_team_id = match['team_away_ID']
-        league_table = add_goals_for(league_table, away_team_id, goals_against)
-        league_table = add_goals_against(league_table, away_team_id, goals_home)
-    league_table = clean_up_goals(league_table)
+        if goals_home == 0:
+            teams = add_clean_sheet(teams, away_team_id)
+    league_table = clean_up_goals(teams)
     return league_table
 
 
-def add_table_ranking(league_table: dict):
-    league_table['teams'] = sorted(league_table['teams'],
-                                   key=lambda x: x['Pts'], reverse=True)
-    for idx in range(len(league_table['teams'])):
-        league_table['teams'][idx]['ranking'] = idx + 1
-    return league_table
+def get_most_clean_sheets_team(season: int, division: int):
+    matches = get_matches(season, division)
+    teams = add_teams({'teams': list()}, matches)['teams']
+    clean_sheets = count_clean_sheets(teams, matches)
+    return max(clean_sheets, key=lambda x: x['clean_sheet_counter'])
+
+
+def clean_team_data(data):
+    del data['F']
+    del data['A']
+    del data['W']
+    del data['L']
+    del data['D']
+    del data['GP']
+    del data['Pts']
+    del data['ranking']
+    return data
 
 
 def generate_best_of_division(season: int, division: int) -> dict:
-    matches = get_matches(season, division)
-    league_table = dict()
-    league_table = add_teams(league_table, matches)
-    league_table = add_matches_played(league_table, matches)
-    league_table = add_teams_points(league_table, matches)
-    league_table = add_matches_goals(league_table, matches)
-    # This function must stand at the end, because otherwise the final scores
-    # would be calculated wrong
-    league_table = add_table_ranking(league_table)
-    return league_table
+    best_of_division = {'best_of_division': dict()}
+    league_table = requests.get(
+        f'http://league_table:5000/srv/league_table?season={season}&division={division}').json()
+    best_attack_team = max(league_table['teams'], key=lambda x: int(x['F']))
+    best_defense_team = max(league_table['teams'], key=lambda x: int(x['A']))
+    most_clean_sheets_team = get_most_clean_sheets_team(season, division)
+    best_attack_team = clean_team_data(best_attack_team)
+    best_defense_team = clean_team_data(best_defense_team)
+    best_of_division['best_of_division']['best_attack'] = best_attack_team
+    best_of_division['best_of_division']['best_defense'] = best_defense_team
+    best_of_division['best_of_division'][
+        'most_clean_sheets'] = most_clean_sheets_team
+    return best_of_division

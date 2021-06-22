@@ -21,7 +21,7 @@ def add_division():
         return jsonify(response_object), 400
 
 
-@division_blueprint.route('/divisions/<division_id>', methods=['GET'])
+@division_blueprint.route('/db/divisions/<division_id>', methods=['GET'])
 def get_single_division(division_id):
     """Get single division details"""
     response_object = {
@@ -29,14 +29,14 @@ def get_single_division(division_id):
         'message': 'Division does not exist'
     }
     try:
-        division = User.query.filter_by(id=int(division_id)).first()
+        division = Division.query.filter_by(ID=int(division_id)).first()
         if not division:
             return jsonify(response_object), 404
         else:
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': division.id,
+                    'id': division.ID,
                     'name': division.name
                 }
             }

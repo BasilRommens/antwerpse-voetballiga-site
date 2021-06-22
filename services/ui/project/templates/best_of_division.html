@@ -1,48 +1,59 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Best Of Division</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-2"></div>
-                <div class="col-9">
-                    <h1>
-                        <strong>Best of {{ data.division }}</strong>
-                    </h1>
-                </div>
+{% include 'header.html' %}
+<head>
+    <title>Best Of Division</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-2"></div>
+        <div class="col-9">
+            <h1>
+                <strong>Best of {{ data.division }}</strong>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <form action="/bestOfDivision" method="POST">
+                <h2><strong>Divisions</strong></h2>
+                {% for division in data.divisions %}
+                    <input type="radio" name="division" value="{{ division.ID }}"
+                           {% if division.ID == data.division %}checked="checked"{% endif %}>&nbsp;{{ division.name }}
+                    <br>
+                {% endfor %}
+                <h2 class="mt-2"><strong>Seasons</strong></h2>
+                {% for season in data.seasons %}
+                    <input type="radio" name="season" value="{{ season.season }}"
+                           {% if season.season == data.season %}checked="checked"{% endif %}>&nbsp;Season
+                    {{ season.season }}<br>
+                {% endfor %}
+                <input class="btn btn-custom-green mt-2" type="submit" value="Get best of division">
+            </form>
+        </div>
+        <div class="col-9">
+            <div>
+                <h2><strong>Best Attack</strong></h2>
+                <a href="/team/{{ data.best_of_division.best_attack.team_id }}"
+                >{{ data.best_of_division.best_attack.name }}</a
+                ><br/>
             </div>
-            <div class="row">
-                <div class="col-2">
-                    <h2><strong>Divisions</strong></h2>
-                    {% for division in data.divisions %}
-                    <a href="{{ division.link }}">{{ division.name }}</a><br />
-                    {% endfor %}
-                </div>
-                <div class="col-9">
-                    <div>
-                        <h2><strong>Best Attack</strong></h2>
-                        <a href="{{ data.bestattack.link }}"
-                            >{{ data.bestattack.name }}</a
-                        ><br />
-                    </div>
-                    <div class="mt-5">
-                        <h2><strong>Best Defense</strong></h2>
-                        <a href="{{ data.bestdefense.link }}"
-                            >{{ data.bestdefense.name }}</a
-                        ><br />
-                    </div>
-                    <div class="mt-5">
-                        <h2><strong>Most Clean Sheets</strong></h2>
-                        <a href="{{ data.mostcleansheets.link }}"
-                            >{{ data.mostcleansheets.name }}</a
-                        ><br />
-                    </div>
-                </div>
+            <div class="mt-5">
+                <h2><strong>Best Defense</strong></h2>
+                <a href="/team/{{ data.best_of_division.best_defense.team_id }}"
+                >{{ data.best_of_division.best_defense.name }}</a
+                ><br/>
+            </div>
+            <div class="mt-5">
+                <h2><strong>Most Clean Sheets</strong></h2>
+                <a href="/team/{{ data.best_of_division.most_clean_sheets.team_id }}"
+                >{{ data.best_of_division.most_clean_sheets.name }}</a
+                ><br/>
             </div>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

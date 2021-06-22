@@ -77,22 +77,31 @@ def login():
         return resp
 
 
-def get_league_table_data(data, season, division):
+def get_division_name(data: dict, division: int):
+    data['division_name'] = \
+        requests.get(f'http://database:5000/db/divisions/{division}').json()[
+            'data']['name']
+    return data
+
+
+def get_all_seasons_and_divisions(data: dict, division: int):
+    data['divisions'] = \
+        requests.get('http://database:5000/db/all_divisions').json()['data'][
+            'divisions']
+    data['seasons'] = \
+        requests.get('http://database:5000/db/all_seasons').json()['data'][
+            'seasons']
+    return data
+
+
+def get_league_table_data(season: int, division: int):
     data = setup_nav(dict(), get_jwt_identity())
     data['season'] = int(season)
     data['division'] = int(division)
     data['league_table'] = requests.get(
         f'http://league_table:5000/srv/league_table?season={season}&division={division}').json()
-    data['divisions'] = \
-        requests.get('http://database:5000/db/all_divisions').json()['data'][
-            'divisions']
-    for _division in data['divisions']:
-        if int(_division['ID']) == int(division):
-            data['division_name'] = _division['name']
-            break
-    data['seasons'] = \
-        requests.get('http://database:5000/db/all_seasons').json()['data'][
-            'seasons']
+    data = get_all_seasons_and_divisions(data, division)
+    data = get_division_name(data, division)
     return data
 
 
@@ -101,7 +110,7 @@ def get_league_table_data(data, season, division):
 def post_league_table():
     season = request.form.get('season')
     division = request.form.get('division')
-    data = get_league_table_data(dict(), season, division)
+    data = get_league_table_data(season, division)
     return render_template('league_table.html', data=data)
 
 
@@ -112,7 +121,7 @@ def league_table():
         'season') is not None else 1
     division = int(request.args.get('division')) if request.args.get(
         'division') is not None else 1
-    data = get_league_table_data(dict(), season, division)
+    data = get_league_table_data(season, division)
     return render_template('league_table.html', data=data)
 
 
@@ -139,25 +148,33 @@ def fixtures(week=1, division_id=0, team_id=0):
     return render_template('fixtures.html', data=data)
 
 
-@ui_blueprint.route('/bestOfDivision/<division_id>')
+def get_best_of_division_data(season: int, division: int):
+    data = setup_nav(dict(), get_jwt_identity())
+    data['season'] = season
+    data['division'] = division
+    data['best_of_division'] = requests.get(
+        f'http://best_of_division:5000/srv/best_of_division?season={season}&division={division}').json()[
+        'best_of_division']
+    data = get_all_seasons_and_divisions(data, division)
+    data = get_division_name(data, division)
+    return data
+
+
 @ui_blueprint.route('/bestOfDivision')
 @jwt_optional
 def best_of_division(division_id=0):
-    data = dict()
-    data = setup_nav(dict(), get_jwt_identity())
-    data['division'] = division_id
-    data['divisions'] = [{"link": "/link", "name": "name"}]
-    data['bestattack'] = {"link": "/link", "name": "name"}
-    data['bestdefense'] = {"link": "/link", "name": "name"}
-    data['mostcleansheets'] = {"link": "/link", "name": "name"}
-    return render_template('best_of_division.html', data=data, admin=0)
+    season = int(request.args.get('season')) if request.args.get(
+        'season') is not None else 1
+    division = int(request.args.get('division')) if request.args.get(
+        'division') is not None else 1
+    data = get_best_of_division_data(season, division)
+    return render_template('best_of_division.html', data=data)
 
 
 @ui_blueprint.route('/team/<team_id>')
 @ui_blueprint.route('/team')
 @jwt_optional
 def team(team_id=0):
-    data = dict()
     data = setup_nav(dict(), get_jwt_identity())
     data['team'] = team_id
     data['previous_matches'] = [{
