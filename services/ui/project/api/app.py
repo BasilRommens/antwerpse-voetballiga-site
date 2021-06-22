@@ -84,7 +84,7 @@ def get_division_name(data: dict, division: int):
     return data
 
 
-def get_all_seasons_and_divisions(data: dict, division: int):
+def get_all_seasons_and_divisions(data: dict):
     data['divisions'] = \
         requests.get('http://database:5000/db/all_divisions').json()['data'][
             'divisions']
@@ -100,7 +100,7 @@ def get_league_table_data(season: int, division: int):
     data['division'] = int(division)
     data['league_table'] = requests.get(
         f'http://league_table:5000/srv/league_table?season={season}&division={division}').json()
-    data = get_all_seasons_and_divisions(data, division)
+    data = get_all_seasons_and_divisions(data)
     data = get_division_name(data, division)
     return data
 
@@ -150,19 +150,28 @@ def fixtures(week=1, division_id=0, team_id=0):
 
 def get_best_of_division_data(season: int, division: int):
     data = setup_nav(dict(), get_jwt_identity())
-    data['season'] = season
-    data['division'] = division
+    data['season'] = int(season)
+    data['division'] = int(division)
     data['best_of_division'] = requests.get(
         f'http://best_of_division:5000/srv/best_of_division?season={season}&division={division}').json()[
         'best_of_division']
-    data = get_all_seasons_and_divisions(data, division)
+    data = get_all_seasons_and_divisions(data)
     data = get_division_name(data, division)
     return data
 
 
+@ui_blueprint.route('/bestOfDivision', methods=['POST'])
+@jwt_optional
+def post_best_of_division():
+    season = request.form.get('season')
+    division = request.form.get('division')
+    data = get_best_of_division_data(season, division)
+    return render_template('best_of_division.html', data=data)
+
+
 @ui_blueprint.route('/bestOfDivision')
 @jwt_optional
-def best_of_division(division_id=0):
+def best_of_division():
     season = int(request.args.get('season')) if request.args.get(
         'season') is not None else 1
     division = int(request.args.get('division')) if request.args.get(

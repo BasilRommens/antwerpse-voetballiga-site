@@ -98,14 +98,17 @@ def get_most_clean_sheets_team(season: int, division: int):
 
 
 def clean_team_data(data):
-    del data['F']
-    del data['A']
-    del data['W']
-    del data['L']
-    del data['D']
-    del data['GP']
-    del data['Pts']
-    del data['ranking']
+    try:
+        del data['F']
+        del data['A']
+        del data['W']
+        del data['L']
+        del data['D']
+        del data['GP']
+        del data['Pts']
+        del data['ranking']
+    except KeyError:
+        return data
     return data
 
 

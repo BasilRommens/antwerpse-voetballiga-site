@@ -35,7 +35,7 @@ def create_default_team():
         'W': None,
         'D': None,
         'Pts': None,
-        'Ranking': None
+        'ranking': None
     }
 
 
@@ -178,7 +178,7 @@ def add_teams_points(league_table: dict, matches: list):
 
 def clean_up_points(league_table: dict) -> dict:
     for team in league_table['teams']:
-        for match_outcome_letter in ['L', 'D', 'W']:
+        for match_outcome_letter in ['L', 'D', 'W', 'Pts']:
             if team[match_outcome_letter] is None:
                 team[match_outcome_letter] = 0
     return league_table
@@ -206,6 +206,13 @@ def add_matches_goals(league_table: dict, matches: list):
         league_table = add_goals_for(league_table, away_team_id, goals_against)
         league_table = add_goals_against(league_table, away_team_id, goals_home)
     league_table = clean_up_goals(league_table)
+    return league_table
+
+
+def clean_up_ranking(league_table: dict):
+    for team in league_table['teams']:
+        if team['ranking'] is None:
+            team['ranking'] = 0
     return league_table
 
 

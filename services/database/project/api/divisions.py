@@ -36,7 +36,7 @@ def get_single_division(division_id):
             response_object = {
                 'status': 'success',
                 'data': {
-                    'id': division.ID,
+                    'ID': division.ID,
                     'name': division.name
                 }
             }
