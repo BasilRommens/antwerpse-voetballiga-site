@@ -236,8 +236,8 @@ def fixtures():
         'data']['matches']
     if team == -1:
         data['matches'] = requests.get(
-        f'http://database:5000/db/matches_week_all?division={division}&season={season}&week={week}').json()[
-        'data']['matches']
+            f'http://database:5000/db/matches_week_all?division={division}&season={season}&week={week}').json()[
+            'data']['matches']
         for match in data['matches']:
             match = set_vs_team_name_match(match)
     else:
@@ -380,8 +380,8 @@ def add_team(club_id=0):
 @jwt_optional
 def view_match(match_id=0):
     data = setup_nav(dict(), get_jwt_identity())
-    day = 0
-    data['weather'] = weather.get_weather(day)
+    data['match_info'] = requests.get(
+        f'http://fixture_info:5000/srv/fixture_info/{match_id}').json()
     data['date'] = {'day': 'friday', 'slash': '12/12', 'time': '20:00'}
     data['referee'] = 'John Doe'
     fg_color = 'white'
@@ -398,7 +398,7 @@ def view_match(match_id=0):
     data['current_form'] = {'home_team': 'WWDLWW', 'away_team': 'LLDWW'}
     data['head_to_head'] = {'home_team': 3, 'away_team': 1, 'draw': 4}
     data['last_3'] = {'home_team': [2, 3, 0], 'away_team': [2, 4, 0]}
-    return render_template('view_match.html', data=data, admin=0)
+    return render_template('view_match.html', data=data)
 
 
 @ui_blueprint.route('/admin/viewMatches')

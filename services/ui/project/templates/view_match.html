@@ -15,18 +15,20 @@
             <div class="row mt-5">
                 <div class="col-1 mt-3">
                     <time datetime="2014-09-20" class="icon">
-                        <strong>{{ data.date.day }}</strong>
-                        <span>{{ data.date.slash }}</span>
-                        <em>{{ data.date.time }}</em>
+                        <strong>{{ data.match_info.day }}</strong>
+                        <span>{{ data.match_info.date }}</span>
+                        <em>{{ data.match_info.time }}</em>
                     </time>
                 </div>
                 <div class="col-9 mt-1">
                     <h1>
-                        <strong>Team 1 (home) - Team 2 (away)</strong>
+                        <strong>{{ data.match_info.home_team_name }} (home) - {{ data.match_info.away_team_name }} (away)</strong>
                     </h1>
                     <div class="row">
                         <div class="col text-start">
-                            <i class="fas fa-user"></i>&nbsp;&nbsp;John Doe
+                            {% if data.match_info.ref_name|length != 0 %}
+                            <i class="fas fa-user"></i>&nbsp;&nbsp;{{ data.match_info.ref_name }}
+                            {% endif %}
                         </div>
                         <div
                             class="col text-center"
@@ -51,16 +53,18 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">{{ data.home_team }}</th>
+                                <th scope="col">{{ data.match_info.home_team_name }}</th>
                                 <th scope="col">Draw</th>
-                                <th scope="col">{{ data.away_team }}</th>
+                                <th scope="col">{{ data.match_info.away_team_name }}</th>
+                                <th scope="col">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ data.head_to_head.home_team }}</td>
-                                <td>{{ data.head_to_head.draw }}</td>
-                                <td>{{ data.head_to_head.away_team }}</td>
+                                <td>{{ data.match_info.head_to_head.W }}</td>
+                                <td>{{ data.match_info.head_to_head.D }}</td>
+                                <td>{{ data.match_info.head_to_head.GP - (data.match_info.head_to_head.D + data.match_info.head_to_head.W) }}</td>
+                                <td>{{ data.match_info.head_to_head.GP }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -68,14 +72,14 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">{{ data.home_team }}</th>
-                                <th scope="col">{{ data.away_team }}</th>
+                                <th scope="col">{{ data.match_info.home_team_name }}</th>
+                                <th scope="col">{{ data.match_info.away_team_name }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ data.current_form.home_team }}</td>
-                                <td>{{ data.current_form.away_team }}</td>
+                                <td>{{ data.match_info.current_form_H }}</td>
+                                <td>{{ data.match_info.current_form_A }}</td>
                             </tr>
                         </tbody>
                     </table>

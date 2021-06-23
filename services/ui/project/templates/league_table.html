@@ -69,7 +69,7 @@
                 <tbody>
                 {% for team in data.league_table.teams %}
                     <tr>
-                        <th scope="row"><b>{{ team.ranking }}</b></th>
+                        <th scope="row">{{ team.ranking }}</th>
                         <td>
                             <a href="/team/{{ team.team_id }}"
                             >{{ team.name }}</a

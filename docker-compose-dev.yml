@@ -105,3 +105,15 @@ services:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
+  fixture_info:
+    build:
+      context: ./services/fixture_info
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/fixture_info:/usr/src/app'
+    ports:
+      - 5019:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
