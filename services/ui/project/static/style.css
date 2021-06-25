@@ -61,7 +61,7 @@ a {
 }
 
 .btn-custom-green {
-    background-color: var(--custom-red);
+    background-color: var(--custom-green);
     color: white;
     border: none;
 }
