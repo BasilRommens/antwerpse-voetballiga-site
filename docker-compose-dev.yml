@@ -117,3 +117,15 @@ services:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
+  team_info:
+    build:
+      context: ./services/team_info
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/team_info:/usr/src/app'
+    ports:
+      - 5020:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig

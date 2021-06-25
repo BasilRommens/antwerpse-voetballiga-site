@@ -290,6 +290,8 @@ def best_of_division():
 @jwt_optional
 def team(team_id=0):
     data = setup_nav(dict(), get_jwt_identity())
+    data['team_info'] = requests.get(
+        f'http://team_info:5000/srv/team_info/{team_id}').json()
     data['team'] = team_id
     data['previous_matches'] = [{
         "id": 0,

@@ -92,6 +92,7 @@ def get_current_form_string(team_id: int):
         f'http://database:5000/db/all_team_matches/{team_id}').json()[
         'data']['matches']
     team_matches = sort_matches_date(team_matches)
+    team_matches = get_historical_matches(team_matches)
     team_matches_string = ''
     for match in team_matches[:5]:
         team_matches_string += get_str_match(match, team_id)
@@ -140,6 +141,20 @@ def get_team_historical_scores(vs_matches: list, team_id: int) -> list:
     return historical_score_list
 
 
+def is_history_match(match: dict) -> bool:
+    match_day = convert_to_date(match['date'])
+    current_day = date.today()
+    return current_day > match_day
+
+
+def get_historical_matches(matches: list) -> list:
+    history_matches = list()
+    for match in matches:
+        if is_history_match(match):
+            history_matches.append(match)
+    return history_matches
+
+
 def get_historical_scores(all_fixture_info: dict, fixture_info: dict) -> dict:
     team_1_id = int(all_fixture_info['teamHomeID'])
     team_2_id = int(all_fixture_info['teamAwayID'])
@@ -147,6 +162,7 @@ def get_historical_scores(all_fixture_info: dict, fixture_info: dict) -> dict:
         f'http://database:5000/db/all_vs_matches?team1={team_1_id}&team2={team_2_id}').json()[
         'data']['matches']
     vs_matches = sort_matches_date(vs_matches)
+    vs_matches = get_historical_matches(vs_matches)
     fixture_info['last_three']['home_team'] = get_team_historical_scores(
         vs_matches[:3], team_1_id)
     fixture_info['last_three']['away_team'] = get_team_historical_scores(
