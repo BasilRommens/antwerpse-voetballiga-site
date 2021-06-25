@@ -15,9 +15,17 @@ def get_default_fixture() -> dict:
             'GP': 0,
             'W': 0
         },
-        'history_scores': [],
+        'last_three': {
+            'home_team': [],
+            'away_team': []
+        },
         'current_form_H': '',
-        'current_form_A': ''
+        'current_form_A': '',
+        'status': {
+            'text': '',
+            'style': ''
+        },
+        'result': ''
     }
 
 
@@ -30,7 +38,10 @@ def convert_to_date(date_str: str):
 
 
 def is_null_goals(match: dict) -> bool:
-    return match['goals_home'] is None or match['goals_away'] is None
+    try:
+        return match['goals_home'] is None or match['goals_away'] is None
+    except KeyError:
+        return match['goalsHome'] is None or match['goalsAway'] is None
 
 
 def count_vs_matches(vs_matches: list) -> int:
@@ -120,6 +131,15 @@ def sort_matches_date(vs_matches: list):
     return sorted(vs_matches, key=lambda x: convert_to_date(x['date']))
 
 
+def get_team_historical_scores(vs_matches: list, team_id: int) -> list:
+    historical_score_list = list()
+    for match in vs_matches:
+        new_score = int(match['goals_home']) if team_id == match[
+            'team_home_ID'] else int(match['goals_away'])
+        historical_score_list.append(new_score)
+    return historical_score_list
+
+
 def get_historical_scores(all_fixture_info: dict, fixture_info: dict) -> dict:
     team_1_id = int(all_fixture_info['teamHomeID'])
     team_2_id = int(all_fixture_info['teamAwayID'])
@@ -127,9 +147,10 @@ def get_historical_scores(all_fixture_info: dict, fixture_info: dict) -> dict:
         f'http://database:5000/db/all_vs_matches?team1={team_1_id}&team2={team_2_id}').json()[
         'data']['matches']
     vs_matches = sort_matches_date(vs_matches)
-    fixture_info['history_scores'] = [
-        f'{match["goals_home"]}-{match["goals_away"]}' for match in
-        vs_matches[:3]]
+    fixture_info['last_three']['home_team'] = get_team_historical_scores(
+        vs_matches[:3], team_1_id)
+    fixture_info['last_three']['away_team'] = get_team_historical_scores(
+        vs_matches[:3], team_2_id)
     return fixture_info
 
 
@@ -187,7 +208,53 @@ def get_date_time(all_fixture_info: dict, fixture_info: dict) -> dict:
     date_str = all_fixture_info['mDate']
     fixture_info['day'] = get_week_day_name(date_str)
     fixture_info['date'] = get_date(date_str)
-    print(get_date(date_str))
+    return fixture_info
+
+
+def get_status_style(all_fixture_info: dict) -> str:
+    fg_color = ''
+    bg_color = ''
+    if all_fixture_info['matchStatus'] is not None:
+        fg_color = 'white'
+        bg_color = 'black'
+    elif all_fixture_info['matchStatus'] is None and convert_to_date(
+            all_fixture_info['mDate']) > date.today():
+        fg_color = 'white'
+        bg_color = 'var(--custom-red)'
+    elif not is_null_goals(all_fixture_info):
+        fg_color = 'white'
+        bg_color = 'black'
+    else:
+        fg_color = 'white'
+        bg_color = 'var(--custom-green)'
+    return f'background-color: {bg_color}; color: {fg_color}; font-weight: bold;'
+
+
+def get_status_text(all_fixture_info: dict) -> str:
+    if all_fixture_info['matchStatus'] is not None:
+        return all_fixture_info['matchStatus']
+    elif all_fixture_info['matchStatus'] is None and convert_to_date(
+            all_fixture_info['mDate']) > date.today():
+        return 'Match to be played'
+    elif not is_null_goals(all_fixture_info):
+        return 'Match finished'
+    else:
+        return 'Score needs to be updated'
+
+
+def get_status(all_fixture_info: dict, fixture_info: dict) -> dict:
+    fixture_info['status']['text'] = get_status_text(all_fixture_info)
+    fixture_info['status']['style'] = get_status_style(all_fixture_info)
+    return fixture_info
+
+
+def get_result(all_fixture_info: dict, fixture_info: dict) -> dict:
+    if is_null_goals(all_fixture_info):
+        return all_fixture_info
+    print(all_fixture_info)
+    home_goals = all_fixture_info['goalsHome']
+    away_goals = all_fixture_info['goalsAway']
+    fixture_info['score'] = f'{home_goals} - {away_goals}'
     return fixture_info
 
 
@@ -202,4 +269,6 @@ def get_fixture_info(fixture_id: int) -> dict:
     fixture_info = get_head_to_head(all_fixture_info, fixture_info)
     fixture_info = get_historical_scores(all_fixture_info, fixture_info)
     fixture_info = get_current_form(all_fixture_info, fixture_info)
+    fixture_info = get_status(all_fixture_info, fixture_info)
+    fixture_info = get_result(all_fixture_info, fixture_info)
     return fixture_info

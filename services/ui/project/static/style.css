@@ -5,20 +5,31 @@
     src: url(weather.woff), url(weather.ttf);
 }
 
+:root {
+    --custom-red: #800000;
+    --custom-red-hover: #a00000;
+    --custom-green: #008055;
+    --custom-green-hover: #009b67;
+    --custom-black-hover: #200000;
+    --header-font-size-1: 2.5rem;
+    --header-font-size-2: 1.8rem;
+    --header-font-size-3: 1.25rem;
+    --main-font: Montserrrat;
+}
 * {
-    font-family: Montserrat, sans-serif;
+    font-family: var(--main-font), sans-serif;
 }
 
 h1 {
-    font-size: 50px;
+    font-size: var(--header-font-size-1);
 }
 
 h2 {
-    font-size: 30px;
+    font-size: var(--header-font-size-2);
 }
 
 h3 {
-    font-size: 20px;
+    font-size: var(--header-font-size-3);
 }
 
 a {
@@ -26,41 +37,41 @@ a {
 }
 
 .btn-custom-red {
-    background-color: #800000;
-    color: #ffffff;
+    background-color: var(--custom-red);
+    color: white;
     border: none;
 }
 
 .btn-custom-red:hover {
-    background-color: #a00000;
-    color: #ffffff;
+    background-color: var(--custom-red-hover);
+    color: white;
     border: none;
 }
 
 .btn-custom-black {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: black;
+    color: white;
     border: none;
 }
 
 .btn-custom-black:hover {
-    background-color: #200000;
-    color: #ffffff;
+    background-color: var(--custom-black-hover);
+    color: white;
     border: none;
 }
 
 .btn-custom-green {
-    background-color: #008055;
-    color: #ffffff;
+    background-color: var(--custom-red);
+    color: white;
     border: none;
 }
 
 .btn-custom-green:hover {
-    background-color: #009b67;
-    color: #ffffff;
+    background-color: var(--custom-green-hover);
+    color: white;
     border: none;
 }
 
 .bg-custom-red {
-    background-color: #800000;
+    background-color: var(--custom-red);
 }

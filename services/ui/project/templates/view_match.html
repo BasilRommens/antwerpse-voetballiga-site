@@ -32,15 +32,15 @@
                         </div>
                         <div
                             class="col text-center"
-                            style="{{ data.status.style }}"
+                            style="{{ data.match_info.status.style }}"
                         >
-                            {{ data.status.text }}
+                            {{ data.match_info.status.text }}
                         </div>
                         <div
                             class="col text-end"
                             style="font-family: Weather, Montserrat"
                         >
-                            {{ data.weather }}
+                            {{ data.match_info.weather }}
                         </div>
                     </div>
                 </div>
@@ -48,6 +48,9 @@
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-9">
+                {% if data.match_info.score|length != 0 %}
+                    <h1 class="text-center mt-4"><strong>{{ data.match_info.score }}</strong></h1>
+                {% else %}
                     <h2><strong>Stats</strong></h2>
                     <h3><strong>Head-to-head</strong></h3>
                     <table class="table">
@@ -87,19 +90,20 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">{{ data.home_team }}</th>
-                                <th scope="col">{{ data.away_team }}</th>
+                                <th scope="col">{{ data.match_info.home_team_name }}</th>
+                                <th scope="col">{{ data.match_info.away_team_name }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for match_idx in range(3) %}
+                            {% for match_idx in range(data.match_info.last_three.home_team|length) %}
                             <tr>
-                                <td>{{ data.last_3.home_team[match_idx] }}</td>
-                                <td>{{ data.last_3.away_team[match_idx] }}</td>
+                                <td>{{ data.match_info.last_three.home_team[match_idx] }}</td>
+                                <td>{{ data.match_info.last_three.away_team[match_idx] }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                {% endif %}
                 </div>
             </div>
         </div>

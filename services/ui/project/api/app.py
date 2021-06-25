@@ -382,22 +382,6 @@ def view_match(match_id=0):
     data = setup_nav(dict(), get_jwt_identity())
     data['match_info'] = requests.get(
         f'http://fixture_info:5000/srv/fixture_info/{match_id}').json()
-    data['date'] = {'day': 'friday', 'slash': '12/12', 'time': '20:00'}
-    data['referee'] = 'John Doe'
-    fg_color = 'white'
-    bg_color = '#008055'
-    data['status'] = {
-        'text':
-            'To be played',
-        'style':
-            f'background-color: {bg_color}; color: {fg_color}; font-weight: bold;'
-    }
-    data['teams'] = "Team 1 (home) - Team 2 (away)"
-    data['home_team'] = 'Team 1'
-    data['away_team'] = 'Team 2'
-    data['current_form'] = {'home_team': 'WWDLWW', 'away_team': 'LLDWW'}
-    data['head_to_head'] = {'home_team': 3, 'away_team': 1, 'draw': 4}
-    data['last_3'] = {'home_team': [2, 3, 0], 'away_team': [2, 4, 0]}
     return render_template('view_match.html', data=data)
 
 
