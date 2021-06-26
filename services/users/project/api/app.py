@@ -8,7 +8,7 @@ def log_in():
     data = request.get_json()
     username = data['username']
     password = data['password']
-    users = requests.get('http://database:5000/db/all_users')['data']
+    users = requests.get('http://database:5000/db/all_users').json()['data']
     for user in users['users']:
         if user['username'] != username:
             continue

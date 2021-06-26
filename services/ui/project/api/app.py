@@ -1,28 +1,36 @@
+import json
 import requests
 from flask import render_template, request, Blueprint, redirect, \
-    make_response, url_for
+    make_response, url_for, abort
 from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required, jwt_optional
 from flask_jwt_extended import set_access_cookies, set_refresh_cookies, \
     unset_jwt_cookies
-from flask_jwt_extended import jwt_required, jwt_optional
-from flask_jwt_extended import get_jwt_identity
 
 ui_blueprint = Blueprint('ui', __name__)
 
 
-def setup_nav(data_dict, user_id):
-    data_dict['nav'] = {}
-    if user_id is None:
-        data_dict['nav']['logged'] = 0
-        data_dict['nav']['user_club'] = 0
-        data_dict['nav']['admin'] = 0
-        data_dict['nav']['super_admin'] = 0
-        return data_dict
-    data_dict['nav']['logged'] = True
-    data_dict['nav']['user_club'] = \
-        requests.get(f'http://users:5000/srv/user/{user_id}').json()['clubID']
+def get_club_id(user_id: int):
+    return requests.get(f'http://users:5000/srv/user/{user_id}').json()[
+        'clubID']
+
+
+def get_admin_data(user_id: int) -> dict:
     admin_data = requests.get(
         f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
+    return admin_data
+
+
+def setup_nav(data_dict: dict, user_id: int) -> dict:
+    data_dict['nav'] = dict()
+    if user_id is None:
+        for nav_element in ['logged', 'user_club', 'admin', 'super_admin']:
+            data_dict['nav'][nav_element] = 0
+        return data_dict
+    data_dict['nav']['logged'] = True
+    data_dict['nav']['user_club'] = get_club_id(user_id)
+    admin_data = get_admin_data(user_id)
     if admin_data['status'] == 'fail':
         data_dict['nav']['admin'] = 0
         data_dict['nav']['super_admin'] = False
@@ -64,7 +72,6 @@ def login():
         data = setup_nav(dict(), get_jwt_identity())
         return render_template('login.html', data=data)
     else:
-        print(login_response['ID'])
         # Create the tokens we will be sending back to the user
         access_token = create_access_token(identity=login_response['ID'])
         refresh_token = create_refresh_token(identity=login_response['ID'])
@@ -292,19 +299,6 @@ def team(team_id=0):
     data = setup_nav(dict(), get_jwt_identity())
     data['team_info'] = requests.get(
         f'http://team_info:5000/srv/team_info/{team_id}').json()
-    data['team'] = team_id
-    data['previous_matches'] = [{
-        "id": 0,
-        "date": "20/12/2020",
-        "teams": "team 1 (h) - team 2 (a)",
-        "score": "2 - 2"
-    }]
-    data['future_matches'] = [{
-        "id": 0,
-        "date": "20/12/2020",
-        "teams": "team 1 (h) - team 2 (a)",
-        "score": "2 - 2"
-    }]
     return render_template('team.html', data=data, admin=0)
 
 
@@ -330,7 +324,6 @@ def view_club(club_id=0):
 @ui_blueprint.route('/editFixture')
 @jwt_optional
 def edit_fixture(match_id=0):
-    data = dict()
     data = setup_nav(dict(), get_jwt_identity())
     data['teams'] = "team 1 (h) - team 2 (a)"
     data['home_team'] = "team 1"
@@ -340,20 +333,32 @@ def edit_fixture(match_id=0):
     return render_template('edit_fixture.html', data=data, admin=0)
 
 
+def remove_redundant_array(json_dict: dict):
+    for element in json_dict.keys():
+        json_dict[element] = json_dict[element][0]
+    return json_dict
+
+
+@ui_blueprint.route('/editClub/<club_id>', methods=['POST'])
+@jwt_required
+def post_edit_club(club_id=0):
+    if get_club_id(get_jwt_identity()) is None:
+        abort(403)
+    json_data = json.dumps(remove_redundant_array(dict(request.form.lists())))
+    requests.put(
+        f'http://database:5000/db/update_club/{club_id}',
+        json=json_data)
+    return redirect(f'/editClub/{club_id}')
+
+
 @ui_blueprint.route('/editClub/<club_id>')
 @ui_blueprint.route('/editClub')
-@jwt_optional
+@jwt_required
 def edit_club(club_id=0):
-    data = dict()
     data = setup_nav(dict(), get_jwt_identity())
-    data['name'] = "fc twente"
-    data['stam_number'] = 32
-    data['address'] = 'chickenstreet'
-    data['zip_code'] = 33892
-    data['city'] = 'Antwerpen'
-    data['phone_number'] = 783498745923
-    data['website'] = 'http://yeet.com'
-    return render_template('edit_club.html', data=data, admin=1)
+    data['club_info'] = requests.get(
+        f'http://database:5000/db/clubs/{club_id}').json()['data']
+    return render_template('edit_club.html', data=data)
 
 
 @ui_blueprint.route('/editTeam/<team_id>')
@@ -532,14 +537,6 @@ def admin_edit_division(division_id=0):
     data = setup_nav(dict(), get_jwt_identity())
     data['division'] = {'name': 'Division A', 'ID': 0}
     return render_template('admin/edit_division.html', data=data, admin=1)
-
-
-@ui_blueprint.route('/yeet')
-def view_weather():
-    day = 0
-    admin_data = requests.get(
-        f'http://weather:5000/srv/weather/get_weather?day={day}').json()
-    return admin_data
 
 
 if __name__ == '__main__':

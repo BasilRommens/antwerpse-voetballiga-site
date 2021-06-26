@@ -1,3 +1,4 @@
+import json
 from project.api.config import *
 
 club_blueprint = Blueprint('clubs', __name__)
@@ -46,9 +47,10 @@ def delete_club(club_id):
         return jsonify(response_object), 400
 
 
-@club_blueprint.route('/db/update_club', methods=['UPDATE'])
-def update_club():
-    post_data = request.get_json()
+@club_blueprint.route('/db/update_club/<club_id>', methods=['PUT'])
+def update_club(club_id=0):
+    post_data = json.loads(request.get_json())
+
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
@@ -65,10 +67,12 @@ def update_club():
             response_object['message'] = 'Sorry. Can\'t update club'
             return jsonify(response_object), 400
         else:
-            club.update(
-                {Club.name: name, Club.address: address, Club.city: city,
-                 Club.zipCode: zipCode, Club.stamNumber: stamNumber,
-                 Club.website: website})
+            club.name = name
+            club.address = address
+            club.city = city
+            club.zipCode = zipCode
+            club.stamNumber = stamNumber
+            club.website = website
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated club {name}'
