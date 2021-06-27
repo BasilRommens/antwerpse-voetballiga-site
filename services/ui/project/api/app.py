@@ -13,7 +13,7 @@ ui_blueprint = Blueprint('ui', __name__)
 
 def get_club_id(user_id: int):
     return requests.get(f'http://users:5000/srv/user/{user_id}').json()[
-        'clubID']
+        'teamID']
 
 
 def get_admin_data(user_id: int) -> dict:
@@ -178,6 +178,14 @@ def is_valid_match(match, season: int, division: int):
     return match['season_ID'] == season and match['division_ID'] == division
 
 
+def get_team_matches(team_id: int) -> list:
+    team_matches = \
+        requests.get(
+            f'http://database:5000/db/all_team_matches/{team_id}').json()[
+            'data']['matches']
+    return team_matches
+
+
 def get_matches(season: int, division: int) -> list:
     all_matches = \
         requests.get(f'http://database:5000/db/all_matches').json()['data'][
@@ -211,6 +219,12 @@ def get_teams(division: int, season: int):
                 team['name'] = f'{club_name} {team_suffix}'
                 teams.append(team)
     return teams
+
+
+def get_club_id_from_team_id(team_id: int) -> int:
+    team_info = requests.get(
+        f'http://database:5000/db/teams/{team_id}').json()['data']
+    return int(team_info['stamNumber'])
 
 
 def get_match_weeks(matches):

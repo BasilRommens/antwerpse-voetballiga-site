@@ -26,6 +26,9 @@
             </li>
             {% if data.nav.user_club %}
                 <li class="nav-item">
+                    <a class="nav-link" href="/viewFixtures/{{ data.nav.user_team }}">View matches</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/editClub/{{ data.nav.user_club }}">Edit club</a>
                 </li>
             {% endif %}

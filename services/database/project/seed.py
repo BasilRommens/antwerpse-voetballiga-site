@@ -108,7 +108,7 @@ def seed_team(db):
 
 def seed_users(db):
     # Club user
-    db.session.add(User(username='a', email='a', password='a', clubID=13))
+    db.session.add(User(username='a', email='a', password='a', teamID=13))
     # Super admin user
     db.session.add(User(username='b', email='b', password='b'))
     db.session.add(Admin(userID=2, isSuper=True))

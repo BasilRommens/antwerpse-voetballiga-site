@@ -12,12 +12,12 @@ def add_user():
     username = post_data.get('username')
     email = post_data.get('email')
     password = post_data.get('password')
-    clubID = post_data.get('clubID')
+    teamID = post_data.get('teamID')
     try:
         user = User.query.filter_by(email=email).first()
         if not user:
             db.session.add(User(username=username, email=email,
-                                password=password, clubID=clubID))
+                                password=password, teamID=teamID))
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'{username} was added!'
@@ -59,7 +59,7 @@ def update_user():
     username = post_data.get('username')
     email = post_data.get('email')
     password = post_data.get('password')
-    clubID = post_data.get('clubID')
+    teamID = post_data.get('teamID')
     try:
         # Check for user existence
         user = User.query.filter_by(ID=user_id).first()
@@ -68,7 +68,7 @@ def update_user():
             return jsonify(response_object), 400
         else:
             user.update({User.username: username, User.email: email, User.password: password,
-                         User.clubID: clubID})
+                         User.teamID: teamID})
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated user {username}'
@@ -97,7 +97,7 @@ def get_single_user(user_id):
                     'username': user.username,
                     'email': user.email,
                     'password': user.password,
-                    'clubID': user.clubID
+                    'teamID': user.teamID
                 }
             }
             return jsonify(response_object), 200

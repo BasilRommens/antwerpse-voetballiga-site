@@ -51,13 +51,13 @@ class User(db.Model):
     username = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
-    clubID = db.Column(db.Integer, ForeignKey('club.stamNumber'), nullable=True)
+    teamID = db.Column(db.Integer, ForeignKey('club.stamNumber'), nullable=True)
 
-    def __init__(self, username, email, password, clubID=None):
+    def __init__(self, username, email, password, teamID=None):
         self.username = username
         self.email = email
         self.password = password
-        self.clubID = clubID
+        self.teamID = teamID
 
     def to_json(self):
         return {
@@ -65,7 +65,7 @@ class User(db.Model):
             'username': self.username,
             'email': self.email,
             'password': self.password,
-            'clubID': self.clubID
+            'teamID': self.teamID
         }
 
 

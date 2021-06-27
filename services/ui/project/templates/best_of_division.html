@@ -30,7 +30,9 @@
                            {% if season.season == data.season %}checked="checked"{% endif %}>&nbsp;Season
                     {{ season.season }}<br>
                 {% endfor %}
-                <input class="btn btn-custom-green mt-2" type="submit" value="Get best of division">
+                <button class="btn btn-custom-green mt-2" type="submit" onclick="add_spinner('Get division stats')" id="submit-button">
+                    Get division stats
+                </button>
             </form>
         </div>
         <div class="col-9">
