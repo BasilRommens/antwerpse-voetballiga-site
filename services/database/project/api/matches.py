@@ -191,6 +191,36 @@ def get_matches_all_team_week():
     return jsonify(response_object), 200
 
 
+def get_home_matches(team_id):
+    return [match.to_json() for match in
+            Match.query.filter(and_(Match.teamHomeID == team_id))]
+
+
+def get_away_matches(team_id):
+    return [match.to_json() for match in
+            Match.query.filter(and_(Match.teamAwayID == team_id))]
+
+
+@match_blueprint.route('/db/all_team_home_matches/<team_id>', methods=['GET'])
+def get_all_team_home_matches(team_id=0):
+    team_id = int(team_id)
+    if team_id < 1:
+        response_object = {
+            'status': 'failed',
+            'message': 'No team with such an ID found'
+        }
+        return jsonify(response_object), 400
+
+    response_object = {
+        'status': 'success',
+        'data': {
+            'matches': get_home_matches(team_id)
+        }
+    }
+
+    return jsonify(response_object), 200
+
+
 @match_blueprint.route('/db/all_team_matches/<team_id>', methods=['GET'])
 def get_all_team_matches(team_id=0):
     team_id = int(team_id)
@@ -201,15 +231,10 @@ def get_all_team_matches(team_id=0):
         }
         return jsonify(response_object), 400
 
-    home_matches = [match.to_json() for match in
-                    Match.query.filter(and_(Match.teamHomeID == team_id))]
-    away_matches = [match.to_json() for match in
-                    Match.query.filter(and_(Match.teamAwayID == team_id))]
-
     response_object = {
         'status': 'success',
         'data': {
-            'matches': home_matches + away_matches
+            'matches': get_home_matches(team_id) + get_away_matches(team_id)
         }
     }
 

@@ -1,5 +1,6 @@
 import json
 import requests
+from project.api.helper import *
 from flask import render_template, request, Blueprint, redirect, \
     make_response, url_for, abort
 from flask_jwt_extended import create_access_token, create_refresh_token
@@ -11,51 +12,17 @@ from flask_jwt_extended import set_access_cookies, set_refresh_cookies, \
 ui_blueprint = Blueprint('ui', __name__)
 
 
-def get_club_id(user_id: int) -> int:
-    team_id = int(requests.get(f'http://users:5000/srv/user/{user_id}').json()[
-                      'teamID'])
-    return int(requests.get(f'http://database:5000/db/teams/{team_id}').json()[
-                   'data']['stamNumber'])
-
-
-def get_team_id(user_id: int) -> int:
-    return requests.get(f'http://users:5000/srv/user/{user_id}').json()[
-        'teamID']
-
-
-def get_admin_data(user_id: int) -> dict:
-    admin_data = requests.get(
-        f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
-    return admin_data
-
-
-def setup_nav(data_dict: dict, user_id: int) -> dict:
-    data_dict['nav'] = dict()
-    if user_id is None:
-        for nav_element in ['logged', 'user_club', 'admin', 'super_admin']:
-            data_dict['nav'][nav_element] = 0
-        return data_dict
-    data_dict['nav']['logged'] = True
-    data_dict['nav']['user_club'] = get_club_id(user_id)
-    data_dict['nav']['user_team'] = get_team_id(user_id)
-    admin_data = get_admin_data(user_id)
-    if admin_data['status'] == 'fail':
-        data_dict['nav']['admin'] = 0
-        data_dict['nav']['super_admin'] = False
-        return data_dict
-    data_dict['nav']['admin'] = admin_data['data']['adminID']
-    data_dict['nav']['super_admin'] = admin_data['data']['isSuper']
-    return data_dict
-
-
 @ui_blueprint.route('/', methods=['GET'])
 @jwt_optional
 def render_login():
     data = setup_nav(dict(), get_jwt_identity())
-    if get_jwt_identity():
-        resp = make_response(redirect(url_for('ui.league_table')))
-        return resp
-    return render_template('login.html', data=data)
+    if not get_jwt_identity():
+        return render_template('login.html', data=data)
+    team_id = get_team_id(get_jwt_identity())
+    if team_id == -1 or team_id is None:
+        return make_response(redirect(url_for('ui.league_table')))
+    else:
+        return make_response(redirect(url_for(f'ui.view_fixtures')))
 
 
 @ui_blueprint.route('/logout')
@@ -85,45 +52,16 @@ def login():
         refresh_token = create_refresh_token(identity=login_response['ID'])
 
         # redirect the user to home
-        resp = make_response(redirect(url_for('ui.league_table')))
+        resp = None
+        team_id = get_team_id(login_response['ID'])
+        if team_id == -1 or team_id is None:
+            resp = make_response(redirect(url_for('ui.league_table')))
+        else:
+            resp = make_response(redirect(url_for('ui.view_fixtures')))
         # Set the JWT cookies in the response
         set_access_cookies(resp, access_token)
         set_refresh_cookies(resp, refresh_token)
         return resp
-
-
-def get_division_name(data: dict, division: int):
-    data['division_name'] = \
-        requests.get(f'http://database:5000/db/divisions/{division}').json()[
-            'data']['name']
-    return data
-
-
-def get_all_divisions():
-    return requests.get('http://database:5000/db/all_divisions').json()['data'][
-        'divisions']
-
-
-def get_all_seasons():
-    return requests.get('http://database:5000/db/all_seasons').json()['data'][
-        'seasons']
-
-
-def get_all_seasons_and_divisions(data: dict):
-    data['divisions'] = get_all_divisions()
-    data['seasons'] = get_all_seasons()
-    return data
-
-
-def get_league_table_data(season: int, division: int):
-    data = setup_nav(dict(), get_jwt_identity())
-    data['season'] = int(season)
-    data['division'] = int(division)
-    data['league_table'] = requests.get(
-        f'http://league_table:5000/srv/league_table?season={season}&division={division}').json()
-    data = get_all_seasons_and_divisions(data)
-    data = get_division_name(data, division)
-    return data
 
 
 @ui_blueprint.route('/leagueTable', methods=['POST'])
@@ -158,92 +96,6 @@ def get_team_name(team_id: int):
     return team_name
 
 
-def set_vs_team_name_match(match: dict):
-    home_team_id = int(match['team_home_ID'])
-    home_team_name = get_team_name(home_team_id)
-    away_team_id = int(match['team_away_ID'])
-    away_team_name = get_team_name(away_team_id)
-    match['teams'] = f'{home_team_name} (H) - {away_team_name} (A)'
-    return match
-
-
-def is_team_in_here(teams: dict, team_id: int):
-    for team in teams:
-        if team['team_id'] == team_id:
-            return True
-    return False
-
-
-def create_default_team():
-    return {
-        'team_id': None,
-        'stam_number': None,
-        'name': None
-    }
-
-
-def is_valid_match(match, season: int, division: int):
-    return match['season_ID'] == season and match['division_ID'] == division
-
-
-def get_team_matches(team_id: int) -> list:
-    team_matches = \
-        requests.get(
-            f'http://database:5000/db/all_team_matches/{team_id}').json()[
-            'data']['matches']
-    return team_matches
-
-
-def get_matches(season: int, division: int) -> list:
-    all_matches = \
-        requests.get(f'http://database:5000/db/all_matches').json()['data'][
-            'matches']
-    ret_matches = list()
-    for match in all_matches:
-        if is_valid_match(match, season, division):
-            ret_matches.append(match)
-    return ret_matches
-
-
-def get_teams(division: int, season: int):
-    matches = get_matches(season, division)
-    teams = list()
-    for match in matches:
-        for team_id_name in ["team_home_ID", "team_away_ID"]:
-            team = \
-                requests.get(
-                    f'http://database:5000/db/teams/{match[team_id_name]}').json()[
-                    'data']
-            team_id = team['id']
-            stam_number = team['stamNumber']
-            if not is_team_in_here(teams, team_id):
-                team_suffix = team['suffix']
-                club_name = requests.get(
-                    f'http://database:5000/db/clubs/{stam_number}').json()[
-                    'data']['name']
-                team = create_default_team()
-                team['team_id'] = team_id
-                team['stam_number'] = stam_number
-                team['name'] = f'{club_name} {team_suffix}'
-                teams.append(team)
-    return teams
-
-
-def get_club_id_from_team_id(team_id: int) -> int:
-    team_info = requests.get(
-        f'http://database:5000/db/teams/{team_id}').json()['data']
-    return int(team_info['stamNumber'])
-
-
-def get_match_weeks(matches):
-    match_weeks = set()
-
-    print(matches)
-    for match in matches:
-        match_weeks.add(int(match['week']))
-    return list(match_weeks)
-
-
 @ui_blueprint.route('/fixtures')
 @jwt_optional
 def fixtures():
@@ -261,18 +113,6 @@ def fixtures():
     data = setup_nav(data, get_jwt_identity())
 
     return render_template('fixtures.html', data=data)
-
-
-def get_best_of_division_data(season: int, division: int):
-    data = setup_nav(dict(), get_jwt_identity())
-    data['season'] = int(season)
-    data['division'] = int(division)
-    data['best_of_division'] = requests.get(
-        f'http://best_of_division:5000/srv/best_of_division?season={season}&division={division}').json()[
-        'best_of_division']
-    data = get_all_seasons_and_divisions(data)
-    data = get_division_name(data, division)
-    return data
 
 
 @ui_blueprint.route('/bestOfDivision', methods=['POST'])
@@ -336,12 +176,6 @@ def edit_fixture(match_id=0):
     return render_template('edit_fixture.html', data=data, admin=0)
 
 
-def remove_redundant_array(json_dict: dict):
-    for element in json_dict.keys():
-        json_dict[element] = json_dict[element][0]
-    return json_dict
-
-
 @ui_blueprint.route('/editClub/<club_id>', methods=['POST'])
 @jwt_required
 def post_edit_club(club_id=0):
@@ -368,7 +202,6 @@ def edit_club(club_id=0):
 @ui_blueprint.route('/editTeam')
 @jwt_required
 def edit_team(team_id=0):
-    data = dict()
     data = setup_nav(dict(), get_jwt_identity())
     data['suffix'] = "A"
     data['home_color'] = "red"
@@ -387,8 +220,10 @@ def add_team(club_id=0):
 
 @ui_blueprint.route('/viewFixtures/<team_id>')
 @ui_blueprint.route('/viewFixtures')
-@jwt_optional
+@jwt_required
 def view_fixtures(team_id=0):
+    if team_id == 0:
+        team_id = get_team_id(get_jwt_identity())
     data = requests.get(
         f'http://team_info:5000/srv/team_info/private_fixtures/{team_id}').json()
     data = setup_nav(data, get_jwt_identity())

@@ -107,7 +107,6 @@ def get_historical_scores(team_info: dict, team_id: int) -> dict:
         'data']['matches']
     team_matches = sort_matches_date(team_matches)
     historical_matches = get_historical_matches(team_matches)
-    print(team_matches)
     team_info['last_three'] = filter_match_data(historical_matches[:3])
     return team_info
 
@@ -213,9 +212,22 @@ def get_team_info(team_id: int) -> dict:
     return team_info
 
 
+def give_team_names(matches: list):
+    for match in matches:
+        match = set_vs_team_name_match(match)
+    return matches
+
+
 def get_private_fixtures(team_id: int) -> dict:
-    fixtures = dict()
-    return fixtures
+    data = dict()
+    data['team_name'] = get_team_name(team_id)
+    all_matches = requests.get(
+        f'http://database:5000/db/all_team_home_matches/{team_id}').json()[
+        'data']['matches']
+    all_matches = give_team_names(all_matches)
+    data['matches'] = sort_matches_date(get_historical_matches(all_matches))[
+                      ::-1]
+    return data
 
 
 def get_public_fixtures(team: int, week: int, season: int,

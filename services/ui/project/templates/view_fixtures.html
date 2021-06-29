@@ -8,8 +8,12 @@
 {% include 'navbar.html' %}
 <div class="container">
     <div class="row mt-5">
-        <div class="col-2"></div>
-        <div class="col-9">
+        <div class="col">
+            <h1><strong>Fixtures of {{ data.team_name }}</strong></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -25,25 +29,11 @@
                         <td scope="row">{{ match.date }}</td>
                         <td>{{ match.time }}</td>
                         <td>{{ match.teams }}</td>
-                        <td><a href="/viewMatch/{{ match.ID }}">more ></a></td>
+                        <td><a href="/editFixture/{{ match.ID }}">edit ></a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            <nav aria-label="Weeks">
-                <ul class="pagination pagination-sm">
-                    {% for match_week in data.match_weeks %} {% if match_week == data.week %}
-                        <li class="page-item active">{% else %}</li>
-                        <li class="page-item">
-                    {% endif %}
-                    <a class="page-link"
-                       href="/fixtures?division={{ data.division_id }}&team={{ data.team_id }}&week={{ match_week }}&season={{ data.season }}">
-                        {{ match_week }}
-                    </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </nav>
         </div>
     </div>
 </div>
