@@ -11,7 +11,14 @@ from flask_jwt_extended import set_access_cookies, set_refresh_cookies, \
 ui_blueprint = Blueprint('ui', __name__)
 
 
-def get_club_id(user_id: int):
+def get_club_id(user_id: int) -> int:
+    team_id = int(requests.get(f'http://users:5000/srv/user/{user_id}').json()[
+                      'teamID'])
+    return int(requests.get(f'http://database:5000/db/teams/{team_id}').json()[
+                   'data']['stamNumber'])
+
+
+def get_team_id(user_id: int) -> int:
     return requests.get(f'http://users:5000/srv/user/{user_id}').json()[
         'teamID']
 
@@ -30,6 +37,7 @@ def setup_nav(data_dict: dict, user_id: int) -> dict:
         return data_dict
     data_dict['nav']['logged'] = True
     data_dict['nav']['user_club'] = get_club_id(user_id)
+    data_dict['nav']['user_team'] = get_team_id(user_id)
     admin_data = get_admin_data(user_id)
     if admin_data['status'] == 'fail':
         data_dict['nav']['admin'] = 0
@@ -239,7 +247,6 @@ def get_match_weeks(matches):
 @ui_blueprint.route('/fixtures')
 @jwt_optional
 def fixtures():
-    data = setup_nav(dict(), get_jwt_identity())
     week = int(request.args.get('week')) if request.args.get(
         'week') is not None else 1
     season = int(request.args.get('season')) if request.args.get(
@@ -248,29 +255,11 @@ def fixtures():
         'division') is not None else 1
     team = int(request.args.get('team')) if request.args.get(
         'team') is not None else -1
-    data['week'] = week
-    data['season'] = season
-    data['division_id'] = division
-    data['team_id'] = team
-    all_matches = requests.get(
-        f'http://database:5000/db/all_matches_div_season?division={division}&season={season}').json()[
-        'data']['matches']
-    if team == -1:
-        data['matches'] = requests.get(
-            f'http://database:5000/db/matches_week_all?division={division}&season={season}&week={week}').json()[
-            'data']['matches']
-        for match in data['matches']:
-            match = set_vs_team_name_match(match)
-    else:
-        data['matches'] = requests.get(
-            f'http://database:5000/db/matches_team_week?division={division}&season={season}&week={week}&team={team}').json()[
-            'data']['matches']
-        for match in data['matches']:
-            match = set_vs_team_name_match(match)
 
-    data['teams'] = get_teams(division, season)
-    data['match_weeks'] = get_match_weeks(all_matches)
-    data = get_all_seasons_and_divisions(data)
+    data = requests.get(
+        f'http://team_info:5000/srv/team_info/public_fixtures?week={week}&season={season}&division={division}&team={team}').json()
+    data = setup_nav(data, get_jwt_identity())
+
     return render_template('fixtures.html', data=data)
 
 
@@ -312,7 +301,7 @@ def best_of_division():
 def team(team_id=0):
     data = setup_nav(dict(), get_jwt_identity())
     data['team_info'] = requests.get(
-        f'http://team_info:5000/srv/team_info/{team_id}').json()
+        f'http://team_info:5000/srv/team_info/info/{team_id}').json()
     return render_template('team.html', data=data, admin=0)
 
 
@@ -394,6 +383,16 @@ def add_team(club_id=0):
     data = setup_nav(dict(), get_jwt_identity())
     data['club_id'] = club_id
     return render_template('add_team.html', data=data, admin=0)
+
+
+@ui_blueprint.route('/viewFixtures/<team_id>')
+@ui_blueprint.route('/viewFixtures')
+@jwt_optional
+def view_fixtures(team_id=0):
+    data = requests.get(
+        f'http://team_info:5000/srv/team_info/private_fixtures/{team_id}').json()
+    data = setup_nav(data, get_jwt_identity())
+    return render_template('view_fixtures.html', data=data)
 
 
 @ui_blueprint.route('/viewMatch/<match_id>')

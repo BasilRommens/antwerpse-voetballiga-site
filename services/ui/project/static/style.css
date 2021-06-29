@@ -11,6 +11,8 @@
     --custom-green: #008055;
     --custom-green-hover: #009b67;
     --custom-black-hover: #200000;
+    --custom-blue: #008BD1;
+    --custom-blue-hover: #BFEAFF;
     --header-font-size-1: 2.5rem;
     --header-font-size-2: 1.8rem;
     --header-font-size-3: 1.25rem;
@@ -34,6 +36,17 @@ h3 {
 
 a {
     text-decoration: none;
+    font-weight: bold;
+    color: var(--custom-blue)
+}
+
+a:hover {
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    color: var(--custom-blue);
+    background-color: var(--custom-blue-hover);
+    transition: 300ms;
 }
 
 .btn-custom-red {

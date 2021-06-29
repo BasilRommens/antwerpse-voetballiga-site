@@ -38,7 +38,7 @@
         <div class="col-2">
             <h2><strong>Divisions</strong></h2>
             {% for division in data.divisions %}
-                <a href="/fixtures?division={{ division.ID }}&team={{ data.team_id }}&week={{ data.week }}&season={{ data.season }}">{{ division.name }}</a>
+                <a href="/fixtures?division={{ division.ID }}&week={{ data.week }}&season={{ data.season }}">{{ division.name }}</a>
                 <br/>
             {% endfor %}
             <h2><strong>Seasons</strong></h2>
@@ -49,7 +49,7 @@
             <h2 class="mt-2 mb-2">
                 <strong>
                     Team <a
-                        href="/fixtures?division={{ data.division_id }}&team=-1&week={{ data.week }}&season={{ data.season }}">(All)</a><br/>
+                        href="/fixtures?division={{ data.division_id }}&week={{ data.week }}&season={{ data.season }}">(All)</a><br/>
                 </strong>
             </h2>
             {% for team in data.teams %}

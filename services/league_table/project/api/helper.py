@@ -7,13 +7,11 @@ def is_valid_match(match, season: int, division: int):
 
 def get_matches(season: int, division: int) -> list:
     all_matches = \
-        requests.get(f'http://database:5000/db/all_matches').json()['data'][
+        requests.get(
+            f'http://database:5000/db/all_matches_div_season?division={division}&season={season}').json()[
+            'data'][
             'matches']
-    ret_matches = list()
-    for match in all_matches:
-        if is_valid_match(match, season, division):
-            ret_matches.append(match)
-    return ret_matches
+    return all_matches
 
 
 def is_team_in_here(league_table: dict, team_id: int):
@@ -39,6 +37,13 @@ def create_default_team():
     }
 
 
+def get_club(stam_number: int) -> dict:
+    club = requests.get(
+        f'http://database:5000/db/clubs/{stam_number}').json()[
+        'data']
+    return club
+
+
 def add_teams(league_table: dict, matches: list):
     league_table['teams'] = list()
     for match in matches:
@@ -51,9 +56,7 @@ def add_teams(league_table: dict, matches: list):
             stam_number = team['stamNumber']
             if not is_team_in_here(league_table, team_id):
                 team_suffix = team['suffix']
-                club_name = requests.get(
-                    f'http://database:5000/db/clubs/{stam_number}').json()[
-                    'data']['name']
+                club_name = get_club(stam_number)['name']
                 team = create_default_team()
                 team['team_id'] = team_id
                 team['stam_number'] = stam_number
