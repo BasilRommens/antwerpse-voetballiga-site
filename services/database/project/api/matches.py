@@ -56,6 +56,32 @@ def delete_match(match_id):
         return jsonify(response_object), 400
 
 
+@match_blueprint.route('/db/update_match_score/<match_id>', methods=['PUT'])
+def update_match_score(match_id=0):
+    post_data = json.loads(request.get_json())
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    if not post_data:
+        return jsonify(response_object), 400
+    goalsHome = post_data.get('goalsHome')
+    goalsAway = post_data.get('goalsAway')
+    try:
+        # Check for match existence
+        match = Match.query.filter_by(ID=match_id).first()
+        if not match:
+            response_object['message'] = 'Sorry. Can\'t update match'
+            return jsonify(response_object), 400
+        else:
+            match.goalsHome = goalsHome
+            match.goalsAway = goalsAway
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Updated match {match_id}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
 @match_blueprint.route('/db/update_match', methods=['UPDATE'])
 def update_match():
     post_data = request.get_json()
@@ -110,20 +136,7 @@ def get_single_match(match_id):
         else:
             response_object = {
                 'status': 'success',
-                'data': {
-                    'ID': match.ID,
-                    'goalsHome': match.goalsHome,
-                    'goalsAway': match.goalsAway,
-                    'matchStatus': match.matchStatus,
-                    'mDate': str(match.mDate),
-                    'mTime': str(match.mTime),
-                    'week': int(match.week),
-                    'teamHomeID': match.teamHomeID,
-                    'teamAwayID': match.teamAwayID,
-                    'divisionID': match.divisionID,
-                    'seasonID': match.seasonID,
-                    'refID': match.refID
-                }
+                'data': match.to_json()
             }
             return jsonify(response_object), 200
     except ValueError:

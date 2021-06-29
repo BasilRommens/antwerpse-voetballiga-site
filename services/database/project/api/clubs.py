@@ -1,4 +1,3 @@
-import json
 from project.api.config import *
 
 club_blueprint = Blueprint('clubs', __name__)

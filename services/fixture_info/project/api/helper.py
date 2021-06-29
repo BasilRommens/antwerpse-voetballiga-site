@@ -38,10 +38,7 @@ def convert_to_date(date_str: str):
 
 
 def is_null_goals(match: dict) -> bool:
-    try:
-        return match['goals_home'] is None or match['goals_away'] is None
-    except KeyError:
-        return match['goalsHome'] is None or match['goalsAway'] is None
+    return match['goals_home'] is None or match['goals_away'] is None
 
 
 def count_vs_matches(vs_matches: list) -> int:
@@ -100,9 +97,9 @@ def get_current_form_string(team_id: int):
 
 
 def get_current_form(all_fixture_info: dict, fixture_info: dict) -> dict:
-    team_1_id = int(all_fixture_info['teamHomeID'])
+    team_1_id = int(all_fixture_info['team_home_id'])
     fixture_info['current_form_H'] = get_current_form_string(team_1_id)
-    team_2_id = int(all_fixture_info['teamAwayID'])
+    team_2_id = int(all_fixture_info['team_away_id'])
     fixture_info['current_form_A'] = get_current_form_string(team_2_id)
     return fixture_info
 
@@ -116,8 +113,8 @@ def get_str_match(match: dict, team_id: int):
 
 
 def get_head_to_head(all_fixture_info: dict, fixture_info: dict) -> dict:
-    team_1_id = int(all_fixture_info['teamHomeID'])
-    team_2_id = int(all_fixture_info['teamAwayID'])
+    team_1_id = int(all_fixture_info['team_home_id'])
+    team_2_id = int(all_fixture_info['team_away_id'])
     vs_matches = requests.get(
         f'http://database:5000/db/all_vs_matches?team1={team_1_id}&team2={team_2_id}').json()[
         'data']['matches']
@@ -156,8 +153,8 @@ def get_historical_matches(matches: list) -> list:
 
 
 def get_historical_scores(all_fixture_info: dict, fixture_info: dict) -> dict:
-    team_1_id = int(all_fixture_info['teamHomeID'])
-    team_2_id = int(all_fixture_info['teamAwayID'])
+    team_1_id = int(all_fixture_info['team_home_id'])
+    team_2_id = int(all_fixture_info['team_away_id'])
     vs_matches = requests.get(
         f'http://database:5000/db/all_vs_matches?team1={team_1_id}&team2={team_2_id}').json()[
         'data']['matches']
@@ -171,7 +168,7 @@ def get_historical_scores(all_fixture_info: dict, fixture_info: dict) -> dict:
 
 
 def get_weather(all_fixture_info: dict, fixture_info: dict) -> dict:
-    current_day = convert_to_date(all_fixture_info['mDate'])
+    current_day = convert_to_date(all_fixture_info['date'])
     match_day = date.today()
     day_delta = current_day - match_day
     if day_delta.days < 0 or day_delta.days > 7:
@@ -183,8 +180,8 @@ def get_weather(all_fixture_info: dict, fixture_info: dict) -> dict:
 
 
 def get_team_names(all_fixture_info: dict, fixture_info: dict) -> dict:
-    for call_id in [('teamHomeID', 'home_team_name'),
-                    ('teamAwayID', 'away_team_name')]:
+    for call_id in [('team_home_id', 'home_team_name'),
+                    ('team_away_id', 'away_team_name')]:
         team = \
             requests.get(
                 f'http://database:5000/db/teams/{all_fixture_info[call_id[0]]}').json()[
@@ -220,8 +217,8 @@ def get_date(current_date: str) -> str:
 
 
 def get_date_time(all_fixture_info: dict, fixture_info: dict) -> dict:
-    fixture_info['time'] = all_fixture_info['mTime']
-    date_str = all_fixture_info['mDate']
+    fixture_info['time'] = all_fixture_info['time']
+    date_str = all_fixture_info['date']
     fixture_info['day'] = get_week_day_name(date_str)
     fixture_info['date'] = get_date(date_str)
     return fixture_info
@@ -230,11 +227,11 @@ def get_date_time(all_fixture_info: dict, fixture_info: dict) -> dict:
 def get_status_style(all_fixture_info: dict) -> str:
     fg_color = ''
     bg_color = ''
-    if all_fixture_info['matchStatus'] is not None:
+    if all_fixture_info['match_status'] is not None:
         fg_color = 'white'
         bg_color = 'black'
-    elif all_fixture_info['matchStatus'] is None and convert_to_date(
-            all_fixture_info['mDate']) > date.today():
+    elif all_fixture_info['match_status'] is None and convert_to_date(
+            all_fixture_info['date']) > date.today():
         fg_color = 'white'
         bg_color = 'var(--custom-red)'
     elif not is_null_goals(all_fixture_info):
@@ -247,9 +244,9 @@ def get_status_style(all_fixture_info: dict) -> str:
 
 
 def get_status_text(all_fixture_info: dict) -> str:
-    if all_fixture_info['matchStatus'] is not None:
-        return all_fixture_info['matchStatus']
-    elif all_fixture_info['matchStatus'] is None and convert_to_date(
+    if all_fixture_info['match_status'] is not None:
+        return all_fixture_info['match_status']
+    elif all_fixture_info['match_status'] is None and convert_to_date(
             all_fixture_info['mDate']) > date.today():
         return 'Match to be played'
     elif not is_null_goals(all_fixture_info):
@@ -268,8 +265,8 @@ def get_result(all_fixture_info: dict, fixture_info: dict) -> dict:
     if is_null_goals(all_fixture_info):
         return all_fixture_info
     print(all_fixture_info)
-    home_goals = all_fixture_info['goalsHome']
-    away_goals = all_fixture_info['goalsAway']
+    home_goals = all_fixture_info['goals_home']
+    away_goals = all_fixture_info['goals_away']
     fixture_info['score'] = f'{home_goals} - {away_goals}'
     return fixture_info
 

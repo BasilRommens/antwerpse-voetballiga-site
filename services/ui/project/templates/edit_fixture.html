@@ -10,15 +10,15 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
-                        <strong>Edit {{ data.teams }}</strong>
+                        <strong>Edit score of {{ data.teams }}</strong>
                     </h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-9">
-                    <form id="editScore" action="" method="post">
+                    <form id="editScore" action="/editFixture/{{ data.match_id }}" method="POST">
                         <div class="mb-3 col-3">
-                            <label for="homeTeamScore" class="form-label"
+                            <label for="goalsHome" class="form-label"
                                 ><strong
                                     >{{ data.home_team }} score</strong
                                 ></label
@@ -26,12 +26,13 @@
                             <input
                                 type="number"
                                 class="form-control"
-                                id="homeTeamScore"
+                                id="goalsHome"
+                                name="goalsHome"
                                 value="{{ data.home_score }}"
                             />
                         </div>
                         <div class="mb-3 col-3">
-                            <label for="awayTeamScore" class="form-label"
+                            <label for="goalsAway" class="form-label"
                                 ><strong
                                     >{{ data.away_team }} score</strong
                                 ></label
@@ -39,14 +40,15 @@
                             <input
                                 type="number"
                                 class="form-control"
-                                id="awayTeamScore"
+                                id="goalsAway"
+                                name="goalsAway"
                                 value="{{ data.away_score }}"
                             />
                         </div>
                         <div class="col-12">
                             <button
                                 type="submit"
-                                class="btn btn-primary btn-custom-red"
+                                class="btn btn-primary btn-custom-green"
                             >
                                 Save
                             </button>

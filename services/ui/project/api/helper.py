@@ -87,6 +87,18 @@ def get_best_of_division_data(season: int, division: int):
     return data
 
 
+def get_team_name(team_id: int):
+    team = requests.get(
+        f'http://database:5000/db/teams/{team_id}').json()['data']
+    team_suffix = team['suffix']
+    stam_number = int(team['stamNumber'])
+    club_name = requests.get(
+        f'http://database:5000/db/clubs/{stam_number}').json()[
+        'data']['name']
+    team_name = f'{club_name} {team_suffix}'
+    return team_name
+
+
 def set_vs_team_name_match(match: dict):
     home_team_id = int(match['team_home_ID'])
     home_team_name = get_team_name(home_team_id)
@@ -176,3 +188,17 @@ def remove_redundant_array(json_dict: dict):
     for element in json_dict.keys():
         json_dict[element] = json_dict[element][0]
     return json_dict
+
+
+def get_fixture(match_id: int) -> dict:
+    match = \
+        requests.get(f'http://database:5000/db/matches/{match_id}').json()[
+            'data']
+
+    data = set_vs_team_name_match(match)
+    data['home_team'] = get_team_name(match['team_home_ID'])
+    data['away_team'] = get_team_name(match['team_away_ID'])
+    data['home_score'] = match['goals_home']
+    data['away_score'] = match['goals_away']
+    data['match_id'] = match_id
+    return data

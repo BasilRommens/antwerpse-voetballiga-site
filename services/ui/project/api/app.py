@@ -84,18 +84,6 @@ def league_table():
     return render_template('league_table.html', data=data)
 
 
-def get_team_name(team_id: int):
-    team = requests.get(
-        f'http://database:5000/db/teams/{team_id}').json()['data']
-    team_suffix = team['suffix']
-    stam_number = int(team['stamNumber'])
-    club_name = requests.get(
-        f'http://database:5000/db/clubs/{stam_number}').json()[
-        'data']['name']
-    team_name = f'{club_name} {team_suffix}'
-    return team_name
-
-
 @ui_blueprint.route('/fixtures')
 @jwt_optional
 def fixtures():
@@ -164,16 +152,21 @@ def view_club(club_id=0):
 
 
 @ui_blueprint.route('/editFixture/<match_id>')
-@ui_blueprint.route('/editFixture')
 @jwt_optional
-def edit_fixture(match_id=0):
-    data = setup_nav(dict(), get_jwt_identity())
-    data['teams'] = "team 1 (h) - team 2 (a)"
-    data['home_team'] = "team 1"
-    data['away_team'] = "team 7"
-    data['home_score'] = 0
-    data['away_score'] = 2
-    return render_template('edit_fixture.html', data=data, admin=0)
+def edit_fixture(match_id):
+    data = get_fixture(match_id)
+    data = setup_nav(data, get_jwt_identity())
+    return render_template('edit_fixture.html', data=data)
+
+
+@ui_blueprint.route('/editFixture/<match_id>', methods=['POST'])
+@jwt_optional
+def post_edit_fixture(match_id):
+    json_data = json.dumps(remove_redundant_array(dict(request.form.lists())))
+    status = requests.put(
+        f'http://database:5000/db/update_match_score/{match_id}',
+        json=json_data).json()['status']
+    return redirect(f'/editFixture/{match_id}')
 
 
 @ui_blueprint.route('/editClub/<club_id>', methods=['POST'])
