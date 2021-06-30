@@ -20,8 +20,10 @@ def add_referee():
     try:
         referee = Referee.query.filter_by(email=email).first()
         if not referee:
-            db.session.add(Referee(firstName=firstName, lastName=lastName, address=address,
-                                   zipCode=zipCode, city=city, phoneNumber=phoneNumber, email=email, dateOfBirth=dateOfBirth))
+            db.session.add(
+                Referee(firstName=firstName, lastName=lastName, address=address,
+                        zipCode=zipCode, city=city, phoneNumber=phoneNumber,
+                        email=email, dateOfBirth=dateOfBirth))
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'{email} was added!'
@@ -51,7 +53,6 @@ def get_single_referee(referee_id):
                 'data': referee.to_json()
             }
 
-            print(response_object['data'])
             return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
@@ -59,16 +60,15 @@ def get_single_referee(referee_id):
 
 @referee_blueprint.route('/db/delete_referee/<referee_id>', methods=['DELETE'])
 def delete_referee(referee_id):
-    post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
         # Check for referee existence
         referee = Referee.query.filter_by(ID=referee_id).first()
-        if not referee_referee:
+        if not referee:
             response_object['message'] = 'Sorry. Can\'t delete referee'
             return jsonify(response_object), 400
         else:
-            referee.delete()
+            db.session.delete(referee)
             db.session.commit()
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
@@ -76,9 +76,9 @@ def delete_referee(referee_id):
         return jsonify(response_object), 400
 
 
-@referee_blueprint.route('/db/update_referee', methods=['UPDATE'])
-def update_referee():
-    post_data = request.get_json()
+@referee_blueprint.route('/db/update_referee/<referee_id>', methods=['PUT'])
+def update_referee(referee_id=0):
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
@@ -97,11 +97,18 @@ def update_referee():
             response_object['message'] = 'Sorry. Can\'t update referee'
             return jsonify(response_object), 400
         else:
-            referee.update({Referee.firstName: firstName, Referee.lastName: lastName, Referee.address: address, Referee.zipCode: zipCode,
-                            Referee.city: city, Referee.phoneNumber: phoneNumber, Referee.email: email, Referee.dateOfBirth: dateOfBirth})
+            referee.firstName = firstName
+            referee.lastName = lastName
+            referee.address = address
+            referee.zipCode = zipCode
+            referee.city = city
+            referee.phoneNumber = phoneNumber
+            referee.email = email
+            referee.dateOfBirth = dateOfBirth
             db.session.commit()
             response_object['status'] = 'success'
-            response_object['message'] = f'Updated referee {firstName} {lastName}'
+            response_object[
+                'message'] = f'Updated referee {firstName} {lastName}'
             return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()

@@ -162,7 +162,7 @@ def edit_fixture(match_id):
 @ui_blueprint.route('/editFixture/<match_id>', methods=['POST'])
 @jwt_optional
 def post_edit_fixture(match_id):
-    json_data = json.dumps(remove_redundant_array(dict(request.form.lists())))
+    json_data = get_form_data(request)
     status = requests.put(
         f'http://database:5000/db/update_match_score/{match_id}',
         json=json_data).json()['status']
@@ -174,7 +174,7 @@ def post_edit_fixture(match_id):
 def post_edit_club(club_id=0):
     if get_club_id(get_jwt_identity()) is None:
         abort(403)
-    json_data = json.dumps(remove_redundant_array(dict(request.form.lists())))
+    json_data = get_form_data(request)
     requests.put(
         f'http://database:5000/db/update_club/{club_id}',
         json=json_data)
@@ -206,9 +206,11 @@ def edit_team(team_id=0):
 @ui_blueprint.route('/addTeam')
 @jwt_required
 def add_team(club_id=0):
-    data = setup_nav(dict(), get_jwt_identity())
+    user_id = get_jwt_identity()
+    data = setup_nav(dict(), user_id)
     data['club_id'] = club_id
-    return render_template('add_team.html', data=data, admin=0)
+    return render_template('add_team.html', data=data,
+                           admin=get_admin_number(user_id))
 
 
 @ui_blueprint.route('/viewFixtures/<team_id>')
@@ -261,22 +263,45 @@ def admin_view_referees():
 @ui_blueprint.route('/admin/addReferee')
 @jwt_optional
 def admin_add_referee():
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
+    admin = get_admin_number(get_jwt_identity())
     return render_template('admin/add_referee.html', data=data, admin=1)
 
 
 @ui_blueprint.route('/admin/editReferee/<referee_id>')
-@ui_blueprint.route('/admin/editReferee')
 @jwt_optional
 def admin_edit_referee(referee_id=0):
     data = get_referee(referee_id)
     data = setup_nav(data, get_jwt_identity())
+    admin = get_admin_number(get_jwt_identity())
     return render_template('admin/edit_referee.html', data=data, admin=1)
+
+
+@ui_blueprint.route('/admin/editReferee/<referee_id>', methods=['POST'])
+@jwt_optional
+def post_admin_edit_referee(referee_id=0):
+    json_data = get_form_data(request)
+    status = requests.put(
+        f'http://database:5000/db/update_referee/{referee_id}',
+        json=json_data).json()['status']
+    return redirect(f'/admin/editReferee/{referee_id}')
+
+
+@ui_blueprint.route('/admin/delete-referee/<referee_id>', methods=['POST'])
+@jwt_optional
+def delete_admin_edit_referee(referee_id=0):
+    json_data = get_form_data(request)
+    status = requests.delete(
+        f'http://database:5000/db/delete_referee/{referee_id}',
+        json=json_data).json()['status']
+    return redirect(f'/admin/viewReferees')
 
 
 @ui_blueprint.route('/admin/viewUsers')
 @jwt_optional
 def admin_view_users():
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     data['users'] = [{'username': 'John Doe', 'email': 'yeet@yeet', 'ID': 0,
                       'tags': [
@@ -287,6 +312,7 @@ def admin_view_users():
 @ui_blueprint.route('/admin/addFixture')
 @jwt_optional
 def admin_add_match():
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     data['teams'] = [{'name': 'test', 'ID': 0}]
     data['status'] = ['status']
@@ -299,6 +325,7 @@ def admin_add_match():
 @ui_blueprint.route('/admin/addClub')
 @jwt_optional
 def admin_add_club():
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     return render_template('admin/add_club.html', admin=1)
 
@@ -307,6 +334,7 @@ def admin_add_club():
 @ui_blueprint.route('/admin/viewTeams')
 @jwt_optional
 def admin_view_teams(club_id=0):
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     data['teams'] = [{'name': 'A', 'ID': 0}]
     data['club'] = {'name': 'club 1', 'ID': club_id}
@@ -317,6 +345,7 @@ def admin_view_teams(club_id=0):
 @ui_blueprint.route('/admin/assignReferee')
 @jwt_optional
 def admin_assign_referee(referee_id=0):
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     data['matches'] = [{'ID': 0, 'teams': 'Team 1 (h) - Team 2 (a)'}]
     return render_template('admin/assign_referee.html', data=data, admin=1)
@@ -326,6 +355,7 @@ def admin_assign_referee(referee_id=0):
 @ui_blueprint.route('/admin/editUser')
 @jwt_optional
 def admin_edit_user(user_id=0):
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     data['ID'] = 'ID'
     data['username'] = 'John Doe'
@@ -337,6 +367,7 @@ def admin_edit_user(user_id=0):
 @ui_blueprint.route('/admin/addUser')
 @jwt_optional
 def admin_add_user():
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     return render_template('admin/add_user.html', data=data)
 
@@ -344,6 +375,7 @@ def admin_add_user():
 @ui_blueprint.route('/admin/viewSeasons')
 @jwt_optional
 def admin_view_season():
+    # TODO
     seasons = [1, 2, 3]
     data = setup_nav(dict(), get_jwt_identity())
     return render_template('admin/view_seasons.html', seasons=seasons,
@@ -353,6 +385,7 @@ def admin_view_season():
 @ui_blueprint.route('/admin/viewDivisions')
 @jwt_optional
 def admin_view_division():
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     data['divisions'] = [{'name': 'Division A', 'ID': 0}]
     return render_template('admin/view_divisions.html', data=data, admin=1)
@@ -361,6 +394,7 @@ def admin_view_division():
 @ui_blueprint.route('/admin/addDivision')
 @jwt_optional
 def admin_add_division():
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     return render_template('admin/add_division.html', admin=1)
 
@@ -369,6 +403,7 @@ def admin_add_division():
 @ui_blueprint.route('/admin/editDivision')
 @jwt_optional
 def admin_edit_division(division_id=0):
+    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     data['division'] = {'name': 'Division A', 'ID': 0}
     return render_template('admin/edit_division.html', data=data, admin=1)

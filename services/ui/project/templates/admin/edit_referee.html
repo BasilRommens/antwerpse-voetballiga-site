@@ -1,131 +1,148 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Edit Referee [admin]</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1>
-                        <strong>Edit Referee</strong>
-                    </h1>
-                    <form
-                        id="editClub"
-                        action="/admin/editReferee/{{ data.ID }}"
-                        method="POST"
+{% include 'header.html' %}
+<head>
+    <title>Edit Referee [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-9">
+            <h1>
+                <strong>Edit Referee</strong>
+            </h1>
+            <form
+                    id="editClub"
+                    action="/admin/editReferee/{{ data.ID }}"
+                    method="POST"
+            >
+                <div class="mb-3 col-3">
+                    <label for="first_name" class="form-label"
+                    ><strong>First Name</strong></label
                     >
-                        <div class="mb-3 col-3">
-                            <label for="first_name" class="form-label"
-                                ><strong>First Name</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="first_name"
-                                value="{{ data.first_name }}"
-                            />
-                        </div>
-
-                        <div class="mb-3 col-3">
-                            <label for="last_name" class="form-label"
-                                ><strong>Last Name</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="last_name"
-                                value="{{ data.last_name }}"
-                            />
-                        </div>
-
-                        <div class="mb-3 col-3">
-                            <label for="email" class="form-label"
-                                ><strong>E-mail</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="email"
-                                value="{{ data.email }}"
-                            />
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="address" class="form-label"
-                                ><strong>address</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="address"
-                                value="{{ data.address }}"
-                            />
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="zipCode" class="form-label"
-                                ><strong>Zip Code</strong></label
-                            >
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="zipCode"
-                                value="{{ data.zip_code }}"
-                            />
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="city" class="form-label"
-                                ><strong>City</strong></label
-                            >
-                            <input
-                                type="city"
-                                class="form-control"
-                                id="city"
-                                value="{{ data.city }}"
-                            />
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="phoneNumber" class="form-label"
-                                ><strong>Phone Number</strong></label
-                            >
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="phoneNumber"
-                                value="{{ data.phone_number }}"
-                            />
-                        </div>
-
-                        <div class="mb-3 col-3">
-                            <label for="birthday" class="form-label"
-                                ><strong>Birthday</strong></label
-                            >
-                            <input
-                                type="date"
-                                class="form-control"
-                                id="birthday"
-                                value="{{ data.date_of_birth }}"
-                            />
-                        </div>
-
-                        <div class="col-12">
-                            <button
-                                type="submit"
-                                class="btn btn-custom-green"
-                            >
-                                Save
-                            </button>
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-red"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </form>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="first_name"
+                            name="firstName"
+                            value="{{ data.first_name }}"
+                    />
                 </div>
-            </div>
+
+                <div class="mb-3 col-3">
+                    <label for="last_name" class="form-label"
+                    ><strong>Last Name</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="last_name"
+                            name="lastName"
+                            value="{{ data.last_name }}"
+                    />
+                </div>
+
+                <div class="mb-3 col-3">
+                    <label for="email" class="form-label"
+                    ><strong>E-mail</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            value="{{ data.email }}"
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="address" class="form-label"
+                    ><strong>address</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="address"
+                            name="address"
+                            value="{{ data.address }}"
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="zipCode" class="form-label"
+                    ><strong>Zip Code</strong></label
+                    >
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="zipCode"
+                            name="zipCode"
+                            value="{{ data.zip_code }}"
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="city" class="form-label"
+                    ><strong>City</strong></label
+                    >
+                    <input
+                            type="city"
+                            class="form-control"
+                            id="city"
+                            name="city"
+                            value="{{ data.city }}"
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="phoneNumber" class="form-label"
+                    ><strong>Phone Number</strong></label
+                    >
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            value="{{ data.phone_number }}"
+                    />
+                </div>
+
+                <div class="mb-3 col-3">
+                    <label for="birthday" class="form-label"
+                    ><strong>Birthday</strong></label
+                    >
+                    <input
+                            type="date"
+                            class="form-control"
+                            id="birthday"
+                            name="dateOfBirth"
+                            value="{{ data.date_of_birth }}"
+                    />
+                </div>
+
+                <div class="col-12">
+                    <button
+                            type="submit"
+                            class="btn btn-custom-green"
+                            value="save"
+                    >
+                        Save
+                    </button>
+
+                </div>
+            </form>
+            <form
+                    id="editClub"
+                    action="/admin/delete-referee/{{ data.ID }}"
+                    method="POST"
+            >
+                <button
+                        type="submit"
+                        class="btn btn-primary btn-custom-red"
+                        value="delete"
+                >
+                    Delete
+                </button>
+            </form>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

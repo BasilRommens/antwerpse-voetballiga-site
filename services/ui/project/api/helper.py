@@ -1,4 +1,4 @@
-import requests
+import requests, json
 import datetime
 from flask_jwt_extended import get_jwt_identity
 
@@ -24,7 +24,19 @@ def get_team_id(user_id: int) -> int:
 def get_admin_data(user_id: int) -> dict:
     admin_data = requests.get(
         f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
+    if admin_data['status'] == 'fail':
+        return None
     return admin_data
+
+
+def is_admin(user_id: int) -> bool:
+    return get_admin_data(user_id) is not None
+
+
+def is_super_admin(user_id: int) -> bool:
+    if get_admin_data(user_id) is None:
+        return False
+    return get_admin_data(user_id)['data']['is_super']
 
 
 def setup_nav(data_dict: dict, user_id: int) -> dict:
@@ -41,8 +53,8 @@ def setup_nav(data_dict: dict, user_id: int) -> dict:
         data_dict['nav']['admin'] = 0
         data_dict['nav']['super_admin'] = False
         return data_dict
-    data_dict['nav']['admin'] = admin_data['data']['adminID']
-    data_dict['nav']['super_admin'] = admin_data['data']['isSuper']
+    data_dict['nav']['admin'] = admin_data['data']['admin_id']
+    data_dict['nav']['super_admin'] = admin_data['data']['is_super']
     return data_dict
 
 
@@ -221,3 +233,12 @@ def get_referee(ref_id: int) -> list:
         requests.get(f'http://database:5000/db/referees/{ref_id}').json()[
             'data']
     return referee
+
+
+def get_admin_number(user_id: int) -> int:
+    return 0 if not is_admin(user_id) else 1
+
+
+def get_form_data(request: any) -> any:
+    json_data = json.dumps(remove_redundant_array(dict(request.form.lists())))
+    return json_data

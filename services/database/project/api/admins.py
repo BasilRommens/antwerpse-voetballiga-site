@@ -90,10 +90,7 @@ def get_single_admin(admin_id):
         else:
             response_object = {
                 'status': 'success',
-                'data': {
-                    'adminID': admin.userID,
-                    'isSuper': admin.isSuper
-                }
+                'data': admin.to_json()
             }
             return jsonify(response_object), 200
     except ValueError:

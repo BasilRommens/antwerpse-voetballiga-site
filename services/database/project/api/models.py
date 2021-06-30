@@ -79,7 +79,7 @@ class Admin(db.Model):
         self.isSuper = isSuper
 
     def to_json(self):
-        return {'userID': self.userID, 'isSuper': self.isSuper}
+        return {'admin_id': self.userID, 'is_super': self.isSuper}
 
 
 class Season(db.Model):
