@@ -103,7 +103,7 @@ class Referee(db.Model):
     city = db.Column(db.String(128), nullable=False)
     phoneNumber = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(128), nullable=False)
-    dateOfBirth = db.Column(db.DateTime, nullable=False)
+    dateOfBirth = db.Column(db.Date, nullable=False)
 
     def __init__(self, firstName, lastName, address, zipCode, city,
                  phoneNumber, email, dateOfBirth):
@@ -122,11 +122,11 @@ class Referee(db.Model):
             'first_name': self.firstName,
             'last_name': self.lastName,
             'address': self.address,
-            'zipCode': self.zipCode,
+            'zip_code': self.zipCode,
             'city': self.city,
             'phone_number': self.phoneNumber,
             'email': self.email,
-            'dateOfBirth': self.dateOfBirth
+            'date_of_birth': self.dateOfBirth.strftime('%Y-%m-%d')
         }
 
 

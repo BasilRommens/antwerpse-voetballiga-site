@@ -29,7 +29,7 @@
                             {% for referee in data.referees %}
                             <tr>
                                 <th scope="row">{{ referee.ID }}</th>
-                                <td>{{ referee.name }}</td>
+                                <td>{{ referee.first_name }} {{ referee.last_name }}</td>
                                 <td>
                                     <a
                                         href="/admin/assignReferee/{{ referee.ID }}"

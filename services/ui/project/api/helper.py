@@ -1,10 +1,15 @@
 import requests
+import datetime
 from flask_jwt_extended import get_jwt_identity
 
 
 def get_club_id(user_id: int) -> int:
-    team_id = int(requests.get(f'http://users:5000/srv/user/{user_id}').json()[
-                      'teamID'])
+    try:
+        team_id = int(
+            requests.get(f'http://users:5000/srv/user/{user_id}').json()[
+                'teamID'])
+    except Exception:
+        return None
     return int(requests.get(f'http://database:5000/db/teams/{team_id}').json()[
                    'data']['stamNumber'])
 
@@ -202,3 +207,17 @@ def get_fixture(match_id: int) -> dict:
     data['away_score'] = match['goals_away']
     data['match_id'] = match_id
     return data
+
+
+def get_all_referees() -> list:
+    referees = \
+        requests.get(f'http://database:5000/db/all_referees').json()['data'][
+            'referees']
+    return referees
+
+
+def get_referee(ref_id: int) -> list:
+    referee = \
+        requests.get(f'http://database:5000/db/referees/{ref_id}').json()[
+            'data']
+    return referee

@@ -15,7 +15,7 @@
                     <form
                         id="editClub"
                         action="/admin/editReferee/{{ data.ID }}"
-                        method="post"
+                        method="POST"
                     >
                         <div class="mb-3 col-3">
                             <label for="first_name" class="form-label"
@@ -105,14 +105,14 @@
                                 type="date"
                                 class="form-control"
                                 id="birthday"
-                                value="{{ data.birthday }}"
+                                value="{{ data.date_of_birth }}"
                             />
                         </div>
 
                         <div class="col-12">
                             <button
                                 type="submit"
-                                class="btn btn-primary btn-custom-black"
+                                class="btn btn-custom-green"
                             >
                                 Save
                             </button>

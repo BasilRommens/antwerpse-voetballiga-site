@@ -254,7 +254,7 @@ def admin_view_clubs():
 @jwt_optional
 def admin_view_referees():
     data = setup_nav(dict(), get_jwt_identity())
-    data['referees'] = [{'name': 'John Doe', 'ID': 0}]
+    data['referees'] = get_all_referees()
     return render_template('admin/view_referees.html', data=data, admin=1)
 
 
@@ -262,21 +262,15 @@ def admin_view_referees():
 @jwt_optional
 def admin_add_referee():
     data = setup_nav(dict(), get_jwt_identity())
-    return render_template('admin/add_referee.html', admin=1)
+    return render_template('admin/add_referee.html', data=data, admin=1)
 
 
 @ui_blueprint.route('/admin/editReferee/<referee_id>')
 @ui_blueprint.route('/admin/editReferee')
 @jwt_optional
 def admin_edit_referee(referee_id=0):
-    data = setup_nav(dict(), get_jwt_identity())
-    data['first_name'] = "george"
-    data['last_name'] = "george"
-    data['address'] = 'chickenstreet'
-    data['zip_code'] = 33892
-    data['city'] = 'Antwerpen'
-    data['phone_number'] = 783498745923
-    data['birthday'] = '22/2/2000'
+    data = get_referee(referee_id)
+    data = setup_nav(data, get_jwt_identity())
     return render_template('admin/edit_referee.html', data=data, admin=1)
 
 
