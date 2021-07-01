@@ -1,44 +1,70 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Matches [admin]</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1><strong>Matches</strong></h1>
-                    <button href="/admin/addMatch" class="btn btn-primary btn-custom-green">
-                        Add Match
-                    </button>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Home team - Away team</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for match in data.matches %}
-                            <tr>
-                                <th scope="row">{{ match.ID }}</th>
-                                <td>{{ match.date }}</td>
-                                <td>{{ match.teams }}</td>
-                                <td>
-                                    <a href="/editFixture/{{ match.ID }}"
-                                        >edit ></a
-                                    >
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+{% include 'header.html' %}
+<head>
+    <title>Matches [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col">
+            <h1><strong>Matches</strong></h1>
+            <button href="/admin/addMatch" class="btn btn-primary btn-custom-green">
+                Add Match
+            </button>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Home team - Away team</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody id="table_body">
+                {% for match in data.matches %}
+                    <tr>
+                        <th scope="row">{{ match.ID }}</th>
+                        <td>{{ match.date }}</td>
+                        <td>{{ match.teams }}</td>
+                        <td>
+                            <a href="/editFixture/{{ match.ID }}"
+                            >edit ></a
+                            >
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </body>
+    </div>
+</div>
+</body>
+<script>
+    $(window).scroll(function () {
+        if ($(window).scrollTop() === $(document).height() - $(window).height()) {
+            // ajax call get data from server and append to the div
+            let minimum_id = Number(document.getElementById("table_body").lastElementChild.firstElementChild.innerHTML) + 1;
+            let maximum_id = minimum_id + 25;
+            let element = document.getElementById('table_body');
+            let test_element = document.getElementById('spinner');
+            console.log(test_element)
+            if (!test_element) {
+                element.parentElement.parentElement.innerHTML += "<td id=\"spinner\" class=\"text-align-center\" colspan=4><div class=\"d-flex justify-content-center\"><span id=\"spinner\" class=\"spinner-border mt-2 mb-5 justify-content-center\" role=\"status\" aria-hidden=\"true\"></span></div></td>"
+            }
+            $.ajax({
+                type: "GET",
+                url: '/admin/getMatches?min=' + minimum_id + '&max=' + maximum_id,
+                success: function (data) {
+                    let element = document.getElementById('table_body');
+                    element.innerHTML += data;
+                    while (element = document.getElementById('spinner')) {
+                        element.remove();
+                    }
+                }
+            });
+        }
+    });
+</script>
 </html>

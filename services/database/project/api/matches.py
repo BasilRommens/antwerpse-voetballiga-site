@@ -276,6 +276,21 @@ def get_all_vs_matches():
     return jsonify(response_object), 200
 
 
+@match_blueprint.route('/db/all_matches_in_range', methods=['GET'])
+def get_all_matches_in_range():
+    """Get all matches in a range"""
+    min = int(request.args.get('min'))
+    max = int(request.args.get('max'))
+    response_object = {
+        'status': 'success',
+        'data': {
+            'matches': [Match.query.get(match_id).to_json() for match_id in
+                        range(min, max + 1)]
+        }
+    }
+    return jsonify(response_object), 200
+
+
 @match_blueprint.route('/db/all_matches', methods=['GET'])
 def get_all_matches():
     """Get all matches"""

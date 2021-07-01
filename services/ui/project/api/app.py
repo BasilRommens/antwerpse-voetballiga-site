@@ -238,10 +238,29 @@ def view_match(match_id=0):
 @ui_blueprint.route('/admin/viewMatches')
 @jwt_optional
 def admin_view_matches():
-    data = setup_nav(dict(), get_jwt_identity())
-    data['matches'] = [
-        {'ID': 1, 'teams': 'team 1 (h) - team 2 (a)', 'date': '22/12'}]
-    return render_template('admin/view_matches.html', data=data, admin=1)
+    user_id = get_jwt_identity()
+    data = dict()
+    data['matches'] = \
+        requests.get(
+            f'http://database:5000/db/all_matches_in_range?min=1&max=25').json()[
+            'data']['matches']
+    data['matches'] = get_match_names(data['matches'])
+    data = setup_nav(data, user_id)
+    admin = get_admin_number(user_id)
+    return render_template('admin/view_matches.html', data=data, admin=admin)
+
+
+@ui_blueprint.route('/admin/getMatches')
+@jwt_optional
+def admin_get_matches_in_range():
+    min = int(request.args.get('min'))
+    max = int(request.args.get('max'))
+    data = \
+        requests.get(
+            f'http://database:5000/db/all_matches_in_range?min={min}&max={max}').json()[
+            'data']
+    data['matches'] = get_match_names(data['matches'])
+    return render_template('admin/append_matches.html', data=data)
 
 
 @ui_blueprint.route('/admin/viewClubs')

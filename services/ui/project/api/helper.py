@@ -116,7 +116,7 @@ def get_team_name(team_id: int):
     return team_name
 
 
-def set_vs_team_name_match(match: dict):
+def set_match_team_names(match: dict):
     home_team_id = int(match['team_home_ID'])
     home_team_name = get_team_name(home_team_id)
     away_team_id = int(match['team_away_ID'])
@@ -212,7 +212,7 @@ def get_fixture(match_id: int) -> dict:
         requests.get(f'http://database:5000/db/matches/{match_id}').json()[
             'data']
 
-    data = set_vs_team_name_match(match)
+    data = set_match_team_names(match)
     data['home_team'] = get_team_name(match['team_home_ID'])
     data['away_team'] = get_team_name(match['team_away_ID'])
     data['home_score'] = match['goals_home']
@@ -237,6 +237,12 @@ def get_referee(ref_id: int) -> list:
 
 def get_admin_number(user_id: int) -> int:
     return 0 if not is_admin(user_id) else 1
+
+
+def get_match_names(matches: list) -> list:
+    for match in matches:
+        match = set_match_team_names(match)
+    return matches
 
 
 def get_form_data(request: any) -> any:

@@ -1,0 +1,12 @@
+{% for match in data.matches %}
+    <tr>
+        <th scope="row">{{ match.ID }}</th>
+        <td>{{ match.date }}</td>
+        <td>{{ match.teams }}</td>
+        <td>
+            <a href="/editFixture/{{ match.ID }}"
+            >edit ></a
+            >
+        </td>
+    </tr>
+{% endfor %}
