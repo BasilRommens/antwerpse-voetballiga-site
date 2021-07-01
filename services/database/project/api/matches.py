@@ -82,18 +82,18 @@ def update_match_score(match_id=0):
         return jsonify(response_object), 400
 
 
-@match_blueprint.route('/db/update_match', methods=['UPDATE'])
-def update_match():
-    post_data = request.get_json()
+@match_blueprint.route('/db/update_match/<match_id>', methods=['PUT'])
+def update_match(match_id):
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    match_id = post_data.get('ID')
     goalsHome = post_data.get('goalsHome')
     goalsAway = post_data.get('goalsAway')
-    matchStatus = post_data.get('matchStatus')
-    mDate = post_data.get('mDate')
-    mTime = post_data.get('mTime')
+    matchStatus = post_data.get('status')
+    mDate = post_data.get('date')
+    mTime = post_data.get('time')
+    week = post_data.get('week')
     teamHomeID = post_data.get('teamHomeID')
     teamAwayID = post_data.get('teamAwayID')
     divisionID = post_data.get('divisionID')
@@ -106,13 +106,17 @@ def update_match():
             response_object['message'] = 'Sorry. Can\'t update match'
             return jsonify(response_object), 400
         else:
-            match.update(
-                {Match.goalsHome: goalsHome, Match.goalsAway: goalsAway,
-                 Match.matchStatus: matchStatus, Match.mDate: mDate,
-                 Match.mTime: mTime,
-                 Match.teamHomeID: teamHomeID, Match.teamAwayID: teamAwayID,
-                 Match.divisionID: divisionID, Match.seasonID: seasonID,
-                 Match.refID: refID})
+            match.goalsHome = goalsHome
+            match.goalsAway = goalsAway
+            match.matchStatus = matchStatus
+            match.mDate = mDate
+            match.mTime = mTime
+            match.week = week
+            match.teamHomeID = teamHomeID
+            match.teamAwayID = teamAwayID
+            match.divisionID = divisionID
+            match.seasonID = seasonID
+            match.refID = refID
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated match {match_id}'

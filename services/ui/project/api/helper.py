@@ -248,3 +248,17 @@ def get_match_names(matches: list) -> list:
 def get_form_data(request: any) -> any:
     json_data = json.dumps(remove_redundant_array(dict(request.form.lists())))
     return json_data
+
+
+def get_all_teams() -> list:
+    teams = requests.get(f'http://database:5000/db/all_teams').json()['data'][
+        'teams']
+    for team in teams:
+        team['team_name'] = get_team_name(team['ID'])
+    return teams
+
+
+def get_all_statuses() -> list:
+    statuses = requests.get(f'http://database:5000/db/all_statuses').json()[
+        'data']['statuses']
+    return statuses

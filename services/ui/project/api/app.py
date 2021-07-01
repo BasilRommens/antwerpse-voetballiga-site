@@ -236,14 +236,13 @@ def view_match(match_id=0):
 
 
 @ui_blueprint.route('/admin/viewMatches')
-@jwt_optional
+@jwt_required
 def admin_view_matches():
     user_id = get_jwt_identity()
-    data = dict()
-    data['matches'] = \
+    data = \
         requests.get(
             f'http://database:5000/db/all_matches_in_range?min=1&max=25').json()[
-            'data']['matches']
+            'data']
     data['matches'] = get_match_names(data['matches'])
     data = setup_nav(data, user_id)
     admin = get_admin_number(user_id)
@@ -251,7 +250,7 @@ def admin_view_matches():
 
 
 @ui_blueprint.route('/admin/getMatches')
-@jwt_optional
+@jwt_required
 def admin_get_matches_in_range():
     min = int(request.args.get('min'))
     max = int(request.args.get('max'))
@@ -261,6 +260,40 @@ def admin_get_matches_in_range():
             'data']
     data['matches'] = get_match_names(data['matches'])
     return render_template('admin/append_matches.html', data=data)
+
+
+@ui_blueprint.route('/admin/editMatch/<match_id>')
+@jwt_required
+def admin_edit_match(match_id):
+    user_id = get_jwt_identity()
+    data = \
+        requests.get(
+            f'http://database:5000/db/matches/{match_id}').json()[
+            'data']
+    if data['team_home_ID'] is not None:
+        data['team_home_ID'] = int(data['team_home_ID'])
+    if data['team_away_ID'] is not None:
+        data['team_away_ID'] = int(data['team_away_ID'])
+    if data['match_status'] is not None:
+        data['match_status'] = int(data['match_status'])
+    data['team_names'] = set_match_team_names(data)['teams']
+    data = setup_nav(data, user_id)
+    admin = get_admin_number(user_id)
+    data['teams'] = get_all_teams()
+    data['divisions'] = get_all_divisions()
+    data['seasons'] = get_all_seasons()
+    data['statuses'] = get_all_statuses()
+    return render_template('admin/edit_match.html', data=data, admin=admin)
+
+
+@ui_blueprint.route('/admin/editMatch/<match_id>', methods=['POST'])
+@jwt_required
+def post_admin_edit_match(match_id):
+    status = \
+        requests.put(
+            f'http://database:5000/db/update_match/{match_id}').json()[
+            'status']
+    return redirect('/admin/editMatch')
 
 
 @ui_blueprint.route('/admin/viewClubs')

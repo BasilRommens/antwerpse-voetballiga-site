@@ -14,8 +14,8 @@
                 Add Match
             </button>
             <table class="table table-striped">
-                <thead>
-                <tr>
+                <thead class="sticky-top">
+                <tr class="bg-white">
                     <th scope="col">#</th>
                     <th scope="col">Date</th>
                     <th scope="col">Home team - Away team</th>
@@ -29,7 +29,7 @@
                         <td>{{ match.date }}</td>
                         <td>{{ match.teams }}</td>
                         <td>
-                            <a href="/editFixture/{{ match.ID }}"
+                            <a href="/admin/editMatch/{{ match.ID }}"
                             >edit ></a
                             >
                         </td>
@@ -52,6 +52,8 @@
             console.log(test_element)
             if (!test_element) {
                 element.parentElement.parentElement.innerHTML += "<td id=\"spinner\" class=\"text-align-center\" colspan=4><div class=\"d-flex justify-content-center\"><span id=\"spinner\" class=\"spinner-border mt-2 mb-5 justify-content-center\" role=\"status\" aria-hidden=\"true\"></span></div></td>"
+            } else {
+                return;
             }
             $.ajax({
                 type: "GET",

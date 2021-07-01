@@ -44,6 +44,9 @@ def create_app(script_info=None):
     from project.api.users import user_blueprint
     app.register_blueprint(user_blueprint)
 
+    from project.api.statuses import status_blueprint
+    app.register_blueprint(status_blueprint)
+
     # shell context for flask cli
     @app.shell_context_processor
     def ctx():

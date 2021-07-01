@@ -1,178 +1,217 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Edit Match [admin]</title>
-    </head>
-    <body>
-        {% include 'navbar/admin.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1>
-                        <strong>Edit match</strong>
-                    </h1>
+{% include 'header.html' %}
+<head>
+    <title>Edit Match [admin]</title>
+</head>
+<body>
+{% include 'navbar/admin.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col">
+            <h1>
+                <strong>Edit match - {{ data.team_names }}</strong>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form id="editMatch" action="/admin/editMatch/{{ data.ID }}" method="post">
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="week" class="form-label"
+                        ><strong>Week</strong></label
+                        >
+                        <select
+                                class="form-select"
+                                id="week"
+                                name="week"
+                                aria-label="Default select example"
+                        >
+                            <option selected value="{{ data.week }}">
+                                {{ data.week }}
+                            </option>
+                            {% for week in range(1, 52 + 1) %}
+                                <option value="{{ week }}">{{ week }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="date" class="form-label"
+                        ><strong>Date</strong></label
+                        >
+                        <input
+                                class="form-control"
+                                type="date"
+                                id="date"
+                                name="date"
+                                value="{{ data.date }}"
+                        >
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="time" class="form-label"
+                        ><strong>Time</strong></label
+                        >
+                        <input
+                                type="time"
+                                class="form-control"
+                                id="time"
+                                name="time"
+                                value="{{ data.time }}"
+                        >
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-9">
-                    <form id="editClub" action="" method="post">
-                        <div class="row">
-                            <div class="mb-3 col-3">
-                                <label for="week" class="form-label"
-                                    ><strong>Week</strong></label
-                                >
-                                <select
-                                    class="form-select"
-                                    id="week"
-                                    aria-label="Default select example"
-                                >
-                                    <option selected>
-                                        Open this select menu
-                                    </option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-3">
-                                <label for="homeTeam" class="form-label"
-                                    ><strong>Home Team</strong></label
-                                >
-                                <select
-                                    class="form-select"
-                                    id="homeTeam"
-                                    aria-label="Default select example"
-                                >
-                                    <option selected>
-                                        Open this select menu
-                                    </option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-3">
-                                <label for="awayTeam" class="form-label"
-                                    ><strong>Away Team</strong></label
-                                >
-                                <select
-                                    class="form-select"
-                                    id="awayTeam"
-                                    aria-label="Default select example"
-                                >
-                                    <option selected>
-                                        Open this select menu
-                                    </option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3 col-3">
-                                <label for="homeGoals" class="form-label"
-                                    ><strong>Home Goals</strong></label
-                                >
-                                <input
-                                    type="number"
-                                    class="form-control"
-                                    id="homeGoals"
-                                    value="2"
-                                />
-                            </div>
-                            <div class="mb-3 col-3">
-                                <label for="awayGoals" class="form-label"
-                                    ><strong>Away Goals</strong></label
-                                >
-                                <input
-                                    type="number"
-                                    class="form-control"
-                                    id="awayGoals"
-                                    value="2"
-                                />
-                            </div>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="status" class="form-label"
-                                ><strong>Status</strong></label
-                            >
-                            <select
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="homeTeam" class="form-label"
+                        ><strong>Home Team</strong></label
+                        >
+                        <select
                                 class="form-select"
-                                id="status"
+                                id="homeTeam"
+                                name="teamHomeID"
                                 aria-label="Default select example"
-                            >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="season" class="form-label"
-                                ><strong>Season</strong></label
-                            >
-                            <select
+                        >
+                            {% if data.team_home_ID is none %}
+                                <option selected>Choose home team</option>
+                            {% endif %}
+                            {% for team in data.teams %}
+                                <option value="{{ team.ID }}"
+                                        {% if team.ID == data.team_home_ID %}selected{% endif %}>{{ team.team_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="awayTeam" class="form-label"
+                        ><strong>Away Team</strong></label
+                        >
+                        <select
                                 class="form-select"
-                                id="season"
+                                id="awayTeam"
+                                name="teamAwayID"
                                 aria-label="Default select example"
-                            >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="division" class="form-label"
-                                ><strong>Division</strong></label
-                            >
-                            <select
-                                class="form-select"
-                                id="division"
-                                aria-label="Default select example"
-                            >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
+                        >
+                            {% if data.team_away_ID is none %}
+                                <option selected>Choose away team</option>
+                            {% endif %}
+                            {% for team in data.teams %}
+                                <option value="{{ team.ID }}"
+                                        {% if team.ID == data.team_away_ID %}selected{% endif %}>{{ team.team_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="homeGoals" class="form-label"
+                        ><strong>Home Goals</strong></label
+                        >
+                        <input
+                                type="number"
+                                class="form-control"
+                                id="homeGoals"
+                                name="goalsHome"
+                                value="{{ data.goals_away }}"
+                        />
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="awayGoals" class="form-label"
+                        ><strong>Away Goals</strong></label
+                        >
+                        <input
+                                type="number"
+                                class="form-control"
+                                id="awayGoals"
+                                name="goalsAway"
+                                value="{{ data.goals_away }}"
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="status" class="form-label"
+                    ><strong>Status</strong>
+                    </label
+                    >
+                    <select
+                            class="form-select"
+                            id="status"
+                            name="status"
+                            aria-label="Default select example"
+                    >
+                        {% if data.match_status is none %}
+                            <option selected>Choose status</option>
+                        {% endif %}
+                        {% for status in data.statuses %}
+                            <option value="{{ status.ID }}"
+                                    {% if status.ID == data.match_status %}selected{% endif %}>{{ status.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="season" class="form-label"
+                    ><strong>Season</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="season"
+                            name="seasonID"
+                            aria-label="Default select example"
+                    >
+                        {% for season in data.seasons %}
+                            <option value="{{ season.season }}"
+                                    {% if season.season == data.season %}selected{% endif %}>
+                                Seizoen {{ season.season }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="division" class="form-label"
+                    ><strong>Division</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="division"
+                            name="divisionID"
+                            aria-label="Default select example"
+                    >
+                        {% for division in data.divisions %}
+                            <option value="{{ division.ID }}"
+                                    {% if division.ID == data.division_ID %}selected{% endif %}>{{ division.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-                        <div class="mb-3 col-3">
-                            <label for="referee" class="form-label"
-                                ><strong>Referee</strong></label
-                            >
-                            <select
-                                class="form-select"
-                                id="referee"
-                                aria-label="Default select example"
-                            >
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </div>
-                        <div class="row">
-                        <div class="col-12">
-                            <button
+                <div class="mb-3 col-3">
+                    <label for="referee" class="form-label"
+                    ><strong>Referee</strong></label
+                    >
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="referee"
+                            name="refID"
+                            value="{{ data.ref_ID }}"
+                            disabled
+                    />
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button
                                 type="submit"
                                 class="btn btn-primary btn-custom-black"
-                            >
-                                Save
-                            </button>
-                            <button
+                        >
+                            Save
+                        </button>
+                        <button
                                 type="submit"
                                 class="btn btn-primary btn-custom-red"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                        >
+                            Delete
+                        </button>
+                    </div>
+            </form>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>
