@@ -263,10 +263,19 @@ def admin_view_referees():
 @ui_blueprint.route('/admin/addReferee')
 @jwt_optional
 def admin_add_referee():
-    # TODO
     data = setup_nav(dict(), get_jwt_identity())
     admin = get_admin_number(get_jwt_identity())
-    return render_template('admin/add_referee.html', data=data, admin=1)
+    return render_template('admin/add_referee.html', data=data, admin=admin)
+
+
+@ui_blueprint.route('/admin/addReferee', methods=['POST'])
+@jwt_optional
+def post_admin_add_referee():
+    json_data = get_form_data(request)
+    status = requests.post(
+        f'http://database:5000/db/add_referee',
+        json=json_data).json()['status']
+    return redirect('/admin/viewReferees')
 
 
 @ui_blueprint.route('/admin/editReferee/<referee_id>')
@@ -275,7 +284,7 @@ def admin_edit_referee(referee_id=0):
     data = get_referee(referee_id)
     data = setup_nav(data, get_jwt_identity())
     admin = get_admin_number(get_jwt_identity())
-    return render_template('admin/edit_referee.html', data=data, admin=1)
+    return render_template('admin/edit_referee.html', data=data, admin=admin)
 
 
 @ui_blueprint.route('/admin/editReferee/<referee_id>', methods=['POST'])

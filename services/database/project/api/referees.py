@@ -3,9 +3,9 @@ from project.api.config import *
 referee_blueprint = Blueprint('referees', __name__)
 
 
-@referee_blueprint.route('/db/referees', methods=['POST'])
+@referee_blueprint.route('/db/add_referee', methods=['POST'])
 def add_referee():
-    post_data = request.get_json()
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
