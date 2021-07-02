@@ -262,3 +262,8 @@ def get_all_statuses() -> list:
     statuses = requests.get(f'http://database:5000/db/all_statuses').json()[
         'data']['statuses']
     return statuses
+
+
+def get_status(status_id: int) -> dict:
+    return requests.get(f'http://database:5000/db/status/{status_id}').json()[
+        'data']

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+{% include 'header.html' %}
+<head>
+    <title>Add Status [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-9">
+            <h1>
+                <strong>Add Status</strong>
+            </h1>
+            <form id="addStatus" action="/admin/addStatus" method="POST">
+                <div class="mb-3 col-3">
+                    <label for="name" class="form-label"
+                    ><strong>Status name</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="name"
+                            name="name"
+                    />
+                </div>
+                <div class="col-12">
+                    <button
+                            type="submit"
+                            class="btn btn-primary btn-custom-black"
+                    >
+                        Add
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

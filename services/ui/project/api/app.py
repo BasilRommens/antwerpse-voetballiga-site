@@ -487,6 +487,50 @@ def admin_view_statuses():
     return render_template('admin/view_statuses.html', data=data)
 
 
+@ui_blueprint.route('/admin/editStatus/<status_id>')
+@jwt_required
+def admin_edit_status(status_id):
+    data = get_status(status_id)
+    data = setup_nav(data, get_jwt_identity())
+    return render_template('admin/edit_status.html', data=data)
+
+
+@ui_blueprint.route('/admin/editStatus/<status_id>', methods=['POST'])
+@jwt_required
+def post_admin_edit_status(status_id):
+    json_data = get_form_data(request)
+    status = requests.put(f'http://database:5000/db/update_status/{status_id}',
+                          json=json_data).json()['status']
+    return redirect(f'/admin/editStatus/{status_id}')
+
+
+@ui_blueprint.route('/admin/deleteStatus/<status_id>', methods=['POST'])
+@jwt_required
+def admin_delete_status(status_id):
+    status = \
+        requests.delete(
+            f'http://database:5000/db/delete_status/{status_id}').json()[
+            'status']
+    return redirect('/admin/viewStatuses')
+
+
+@ui_blueprint.route('/admin/addStatus')
+@jwt_required
+def admin_add_status():
+    data = setup_nav(dict(), get_jwt_identity())
+    return render_template('admin/add_status.html', data=data)
+
+
+@ui_blueprint.route('/admin/addStatus', methods=['POST'])
+@jwt_required
+def post_admin_add_status():
+    json_data = get_form_data(request)
+    status = \
+        requests.post(f'http://database:5000/db/add_status',
+                      json=json_data).json()['status']
+    return redirect('/admin/viewStatuses')
+
+
 @ui_blueprint.route('/admin/viewDivisions')
 @jwt_optional
 def admin_view_division():

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+{% include 'header.html' %}
+<head>
+    <title>Edit Status [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col">
+            <h1>
+                <strong>Edit Status</strong>
+            </h1>
+            <form
+                    id="editClub"
+                    action="/admin/editStatus/{{ data.ID }}"
+                    method="POST"
+            >
+                <div class="mb-3 col-3">
+                    <label for="name" class="form-label"
+                    ><strong>Status name</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="name"
+                            name="name"
+                            value="{{ data.name }}"
+                    />
+                </div>
+                <div class="col-12">
+                    <button
+                            type="submit"
+                            class="btn btn-custom-green"
+                            value="save"
+                    >
+                        Save
+                    </button>
+                </div>
+            </form>
+            <form
+                    id="editClub"
+                    action="/admin/deleteStatus/{{ data.ID }}"
+                    method="POST"
+            >
+                <button
+                        type="submit"
+                        class="btn btn-primary btn-custom-red"
+                        value="delete"
+                >
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
