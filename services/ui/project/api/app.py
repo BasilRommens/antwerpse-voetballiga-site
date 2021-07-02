@@ -455,11 +455,28 @@ def admin_add_user():
 
 
 @ui_blueprint.route('/admin/viewSeasons')
-@jwt_optional
+@jwt_required
 def admin_view_season():
     data = setup_nav(dict(), get_jwt_identity())
     data['seasons'] = get_all_seasons()
     return render_template('admin/view_seasons.html', data=data)
+
+
+@ui_blueprint.route('/admin/deleteSeason/<season>')
+@jwt_required
+def admin_delete_season(season):
+    status = \
+        requests.get(f'http://database:5000/db/delete_season/{season}').json()[
+            'status']
+    return redirect('/admin/viewSeasons')
+
+
+@ui_blueprint.route('/admin/addSeason')
+@jwt_required
+def admin_add_season():
+    status = requests.get(f'http://database:5000/db/add_season').json()[
+        'status']
+    return redirect('/admin/viewSeasons')
 
 
 @ui_blueprint.route('/admin/viewDivisions')

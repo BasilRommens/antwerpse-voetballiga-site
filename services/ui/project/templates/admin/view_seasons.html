@@ -12,12 +12,12 @@
                     <h1>
                         <strong>View Seasons</strong>
                     </h1>
-                    <button
-                        href="/addSeason"
+                    <a
+                        href="/admin/addSeason"
                         class="btn btn-primary btn-custom-green"
                     >
                         Add Season
-                    </button>
+                    </a>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -32,7 +32,7 @@
                                 <th scope="row">{{ season.season }}</th>
                                 <td>Season {{ season.season }}</td>
                                 <td>
-                                    <a href="#" style="color: #800000"
+                                    <a href="/admin/deleteSeason/{{ season.season }}" style="color: #800000"
                                         ><strong>Delete</strong></a
                                     >
                                 </td>
