@@ -39,17 +39,18 @@ def add_match():
 
 @match_blueprint.route('/db/delete_match/<match_id>', methods=['DELETE'])
 def delete_match(match_id):
-    post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
         # Check for match existence
         match = Match.query.filter_by(ID=match_id).first()
-        if not match_match:
+        if not match:
             response_object['message'] = 'Sorry. Can\'t delete match'
             return jsonify(response_object), 400
         else:
-            match.delete()
+            db.session.delete(match)
             db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Match was deleted!'
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
@@ -108,7 +109,8 @@ def update_match(match_id):
         else:
             match.goalsHome = goalsHome
             match.goalsAway = goalsAway
-            match.matchStatus = matchStatus
+            if matchStatus != 'None':
+                match.matchStatus = matchStatus
             match.mDate = mDate
             match.mTime = mTime
             match.week = week
@@ -285,11 +287,16 @@ def get_all_matches_in_range():
     """Get all matches in a range"""
     min = int(request.args.get('min'))
     max = int(request.args.get('max'))
+    matches = list()
+    for match_id in range(min, max + 1):
+        match = Match.query.filter_by(ID=match_id).first()
+        if match:
+            matches.append(match.to_json())
+
     response_object = {
         'status': 'success',
         'data': {
-            'matches': [Match.query.get(match_id).to_json() for match_id in
-                        range(min, max + 1)]
+            'matches': matches
         }
     }
     return jsonify(response_object), 200

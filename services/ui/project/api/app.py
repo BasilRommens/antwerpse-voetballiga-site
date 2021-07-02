@@ -276,6 +276,8 @@ def admin_edit_match(match_id):
         data['team_away_ID'] = int(data['team_away_ID'])
     if data['match_status'] is not None:
         data['match_status'] = int(data['match_status'])
+    if data['week'] is not None:
+        data['week'] = int(data['week'])
     data['team_names'] = set_match_team_names(data)['teams']
     data = setup_nav(data, user_id)
     admin = get_admin_number(user_id)
@@ -289,11 +291,20 @@ def admin_edit_match(match_id):
 @ui_blueprint.route('/admin/editMatch/<match_id>', methods=['POST'])
 @jwt_required
 def post_admin_edit_match(match_id):
+    json_data = get_form_data(request)
+    status = requests.put(f'http://database:5000/db/update_match/{match_id}',
+                          json=json_data).json()['status']
+    return redirect(f'/admin/editMatch/{match_id}')
+
+
+@ui_blueprint.route('/admin/deleteMatch/<match_id>', methods=['POST'])
+@jwt_required
+def admin_delete_match(match_id):
     status = \
-        requests.put(
-            f'http://database:5000/db/update_match/{match_id}').json()[
+        requests.delete(
+            f'http://database:5000/db/delete_match/{match_id}').json()[
             'status']
-    return redirect('/admin/editMatch')
+    return redirect(f'/admin/viewMatches')
 
 
 @ui_blueprint.route('/admin/viewClubs')
