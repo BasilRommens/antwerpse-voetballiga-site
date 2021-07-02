@@ -479,6 +479,14 @@ def admin_add_season():
     return redirect('/admin/viewSeasons')
 
 
+@ui_blueprint.route('/admin/viewStatuses')
+@jwt_required
+def admin_view_statuses():
+    data = setup_nav(dict(), get_jwt_identity())
+    data['statuses'] = get_all_statuses()
+    return render_template('admin/view_statuses.html', data=data)
+
+
 @ui_blueprint.route('/admin/viewDivisions')
 @jwt_optional
 def admin_view_division():
