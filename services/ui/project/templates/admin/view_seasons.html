@@ -2,7 +2,7 @@
 <html>
     {% include 'header.html' %}
     <head>
-        <title>View Teams [admin]</title>
+        <title>View Seasons [admin]</title>
     </head>
     <body>
         {% include 'navbar.html' %}
@@ -27,10 +27,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for season in seasons %}
+                            {% for season in data.seasons %}
                             <tr>
-                                <th scope="row">{{ season }}</th>
-                                <td>Season {{ season }}</td>
+                                <th scope="row">{{ season.season }}</th>
+                                <td>Season {{ season.season }}</td>
                                 <td>
                                     <a href="#" style="color: #800000"
                                         ><strong>Delete</strong></a

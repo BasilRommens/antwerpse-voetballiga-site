@@ -457,11 +457,9 @@ def admin_add_user():
 @ui_blueprint.route('/admin/viewSeasons')
 @jwt_optional
 def admin_view_season():
-    # TODO
-    seasons = [1, 2, 3]
     data = setup_nav(dict(), get_jwt_identity())
-    return render_template('admin/view_seasons.html', seasons=seasons,
-                           data=data)
+    data['seasons'] = get_all_seasons()
+    return render_template('admin/view_seasons.html', data=data)
 
 
 @ui_blueprint.route('/admin/viewDivisions')
