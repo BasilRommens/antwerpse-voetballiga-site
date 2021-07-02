@@ -307,6 +307,29 @@ def admin_delete_match(match_id):
     return redirect(f'/admin/viewMatches')
 
 
+@ui_blueprint.route('/admin/addMatch')
+@jwt_required
+def admin_add_match():
+    user_id = get_jwt_identity()
+    data = setup_nav(dict(), user_id)
+    admin = get_admin_number(user_id)
+    data['teams'] = get_all_teams()
+    data['divisions'] = get_all_divisions()
+    data['seasons'] = get_all_seasons()
+    data['statuses'] = get_all_statuses()
+    data['referees'] = get_all_referees()
+    return render_template('admin/add_match.html', data=data, admin=admin)
+
+
+@ui_blueprint.route('/admin/addMatch', methods=['POST'])
+@jwt_required
+def post_admin_add_match():
+    json_data = get_form_data(request)
+    status = requests.post(f'http://database:5000/db/add_match',
+                           json=json_data).json()['status']
+    return redirect('/admin/viewMatches')
+
+
 @ui_blueprint.route('/admin/viewClubs')
 @jwt_optional
 def admin_view_clubs():
@@ -379,19 +402,6 @@ def admin_view_users():
                       'tags': [
                           {'class': 'badge bg-custom-red', 'text': 'Club'}]}]
     return render_template('admin/view_users.html', data=data, admin=1)
-
-
-@ui_blueprint.route('/admin/addFixture')
-@jwt_optional
-def admin_add_match():
-    # TODO
-    data = setup_nav(dict(), get_jwt_identity())
-    data['teams'] = [{'name': 'test', 'ID': 0}]
-    data['status'] = ['status']
-    data['seasons'] = ['season 1', 'season 2']
-    data['divsions'] = ['division 1']
-    data['referees'] = ['John Doe']
-    return render_template('admin/add_match.html', data=data, admin=1)
 
 
 @ui_blueprint.route('/admin/addClub')

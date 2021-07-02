@@ -4,22 +4,24 @@ from sqlalchemy import and_
 match_blueprint = Blueprint('matches', __name__)
 
 
-@match_blueprint.route('/db/matches', methods=['POST'])
+@match_blueprint.route('/db/add_match', methods=['POST'])
 def add_match():
-    post_data = request.get_json()
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    goalsHome = post_data.get('goalsHome')
-    goalsAway = post_data.get('goalsAway')
+    goalsHome = int(post_data.get('goalsHome'))
+    goalsAway = int(post_data.get('goalsAway'))
     matchStatus = post_data.get('matchStatus')
-    mDate = post_data.get('mDate')
-    mTime = post_data.get('mTime')
-    teamHomeID = post_data.get('teamHomeID')
-    teamAwayID = post_data.get('teamAwayID')
-    divisionID = post_data.get('divisionID')
-    seasonID = post_data.get('seasonID')
-    refID = post_data.get('refID')
+    if matchStatus == 'None':
+        matchStatus = None
+    mDate = post_data.get('date')
+    mTime = post_data.get('time')
+    teamHomeID = int(post_data.get('teamHomeID'))
+    teamAwayID = int(post_data.get('teamAwayID'))
+    divisionID = int(post_data.get('divisionID'))
+    seasonID = int(post_data.get('seasonID'))
+    refID = int(post_data.get('refID'))
     week = post_data.get('week')
     try:
         db.session.add(Match(goalsHome=goalsHome, goalsAway=goalsAway,

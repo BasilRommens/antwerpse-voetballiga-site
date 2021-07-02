@@ -29,7 +29,7 @@
                                 aria-label="Default select example"
                         >
                             {% if data.week is none %}
-                                <option selected>Choose home team</option>
+                                <option selected>Choose week</option>
                             {% endif %}
                             {% for week in range(1, 52 + 1) %}
                                 <option value={{ week }}

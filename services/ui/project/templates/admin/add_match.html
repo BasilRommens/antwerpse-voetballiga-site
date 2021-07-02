@@ -1,151 +1,199 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Add Match [admin]</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1>
-                        <strong>Add match</strong>
-                    </h1>
+{% include 'header.html' %}
+<head>
+    <title>Add Match [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-9">
+            <h1>
+                <strong>Add match</strong>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <form id="editClub" action="" method="post">
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="week" class="form-label"
+                        ><strong>Week</strong></label
+                        >
+                        <select
+                                class="form-select"
+                                id="week"
+                                name="week"
+                                aria-label="Default select example"
+                        >
+                            <option selected>Choose week</option>
+                            {% for week in range(1, 52 + 1) %}
+                                <option value={{ week }}>Week {{ week }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="date" class="form-label"
+                        ><strong>Date</strong></label
+                        >
+                        <input
+                                class="form-control"
+                                type="date"
+                                id="date"
+                                name="date"
+                        >
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="time" class="form-label"
+                        ><strong>Time</strong></label
+                        >
+                        <input
+                                type="time"
+                                class="form-control"
+                                id="time"
+                                name="time"
+                        >
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-9">
-                    <form id="editClub" action="" method="post">
-                        <div class="row">
-                            <div class="mb-3 col-3">
-                                <label for="homeTeam" class="form-label"
-                                    ><strong>Home Team</strong></label
-                                >
-                                <select
-                                    class="form-select"
-                                    id="homeTeam"
-                                    aria-label="Default select example"
-                                >
-                                    <option selected>
-                                    Select Home Team
-                                    </option>
-                                        {% for team in data.teams %}
-                                        <option value="{{ team.ID }}">{{ team.name }}</option>
-                                        {% endfor %}
-                                </select>
-                            </div>
-                            <div class="mb-3 col-3">
-                                <label for="awayTeam" class="form-label"
-                                    ><strong>Away Team</strong></label
-                                >
-                                <select
-                                    class="form-select"
-                                    id="awayTeam"
-                                    aria-label="Default select example"
-                                >
-                                    <option selected>Select Away Team</option>
-                                        {% for team in data.teams %}
-                                        <option value="{{ team.ID }}">{{ team.name }}</option>
-                                        {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3 col-3">
-                                <label for="homeGoals" class="form-label"
-                                    ><strong>Home Goals</strong></label
-                                >
-                                <input
-                                    type="number"
-                                    class="form-control"
-                                    id="homeGoals"
-                                />
-                            </div>
-                            <div class="mb-3 col-3">
-                                <label for="awayGoals" class="form-label"
-                                    ><strong>Away Goals</strong></label
-                                >
-                                <input
-                                    type="number"
-                                    class="form-control"
-                                    id="awayGoals"
-                                />
-                            </div>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="status" class="form-label"
-                                ><strong>Status</strong></label
-                            >
-                            <select
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="homeTeam" class="form-label"
+                        ><strong>Home Team</strong></label
+                        >
+                        <select
                                 class="form-select"
-                                id="status"
+                                id="homeTeam"
+                                name="teamHomeID"
                                 aria-label="Default select example"
-                            >
-                                <option selected>Select Status</option>
-                                {% for status in data.status %}
-                                <option value="{{ status }}">{{ status }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="season" class="form-label"
-                                ><strong>Season</strong></label
-                            >
-                            <select
+                        >
+                            <option selected>
+                                Select Home Team
+                            </option>
+                            {% for team in data.teams %}
+                                <option value={{ team.ID }}>{{ team.team_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="awayTeam" class="form-label"
+                        ><strong>Away Team</strong></label
+                        >
+                        <select
                                 class="form-select"
-                                id="season"
+                                id="awayTeam"
+                                name="teamAwayID"
                                 aria-label="Default select example"
-                            >
-                                <option selected>Select Season</option>
-                                {% for season in data.seasons %}
-                                <option value="{{ season }}">{{ season }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="division" class="form-label"
-                                ><strong>Division</strong></label
-                            >
-                            <select
-                                class="form-select"
-                                id="division"
-                                aria-label="Default select example"
-                            >
-                                <option selected>Select division</option>
-                                {% for division in data.divisions %}
-                                <option value="{{ division }}">{{ division }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        >
+                            <option selected>Select Away Team</option>
+                            {% for team in data.teams %}
+                                <option value={{ team.ID }}>{{ team.team_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-3">
+                        <label for="homeGoals" class="form-label"
+                        ><strong>Home Goals</strong></label
+                        >
+                        <input
+                                type="number"
+                                class="form-control"
+                                id="homeGoals"
+                                name="goalsHome"
+                        />
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="awayGoals" class="form-label"
+                        ><strong>Away Goals</strong></label
+                        >
+                        <input
+                                type="number"
+                                class="form-control"
+                                id="awayGoals"
+                                name="goalsAway"
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="status" class="form-label"
+                    ><strong>Status</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="status"
+                            name="matchStatus"
+                            aria-label="Default select example"
+                    >
+                        <option value="None" selected>Select Status</option>
+                        {% for status in data.statuses %}
+                            <option value={{ status.ID }}>{{ status.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="season" class="form-label"
+                    ><strong>Season</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="season"
+                            name="seasonID"
+                            aria-label="Default select example"
+                    >
+                        <option selected>Select Season</option>
+                        {% for season in data.seasons %}
+                            <option value="{{ season.season }}">Season {{ season.season }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="division" class="form-label"
+                    ><strong>Division</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="division"
+                            name="divisionID"
+                            aria-label="Default select example"
+                    >
+                        <option selected>Select division</option>
+                        {% for division in data.divisions %}
+                            <option value="{{ division.ID }}">{{ division.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-                        <div class="mb-3 col-3">
-                            <label for="referee" class="form-label"
-                                ><strong>Referee</strong></label
-                            >
-                            <select
-                                class="form-select"
-                                id="referee"
-                                aria-label="Default select example"
-                            >
-                                <option selected>Select Referee</option>
-                                {% for referee in data.referees %}
-                                <option value="{{ referee }}">referee</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="row">
-                        <div class="col-12">
-                            <button
+                <div class="mb-3 col-3">
+                    <label for="referee" class="form-label"
+                    ><strong>Referee</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="referee"
+                            name="refID"
+                            aria-label="Default select example"
+                    >
+                        <option selected>Select Referee</option>
+                        {% for referee in data.referees %}
+                            <option value="{{ referee.ID }}">{{ referee.first_name }} {{ referee.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button
                                 type="submit"
                                 class="btn btn-primary btn-custom-black"
-                            >
-                                Add
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                        >
+                            Add
+                        </button>
+                    </div>
+            </form>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>
