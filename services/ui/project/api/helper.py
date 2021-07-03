@@ -267,3 +267,9 @@ def get_all_statuses() -> list:
 def get_status(status_id: int) -> dict:
     return requests.get(f'http://database:5000/db/status/{status_id}').json()[
         'data']
+
+
+def get_division(division_id: int) -> dict:
+    return \
+        requests.get(f'http://database:5000/db/divisions/{division_id}').json()[
+            'data']

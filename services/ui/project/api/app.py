@@ -534,28 +534,54 @@ def post_admin_add_status():
 @ui_blueprint.route('/admin/viewDivisions')
 @jwt_optional
 def admin_view_division():
-    # TODO
-    data = setup_nav(dict(), get_jwt_identity())
-    data['divisions'] = [{'name': 'Division A', 'ID': 0}]
+    data = dict()
+    data['divisions'] = get_all_divisions()
+    data = setup_nav(data, get_jwt_identity())
     return render_template('admin/view_divisions.html', data=data, admin=1)
 
 
 @ui_blueprint.route('/admin/addDivision')
 @jwt_optional
 def admin_add_division():
-    # TODO
     data = setup_nav(dict(), get_jwt_identity())
-    return render_template('admin/add_division.html', admin=1)
+    return render_template('admin/add_division.html', data=data)
+
+
+@ui_blueprint.route('/admin/addDivision', methods=['POST'])
+@jwt_optional
+def post_admin_add_division():
+    json_data = get_form_data(request)
+    status = requests.post(f'http://database:5000/db/add_division',
+                           json=json_data).json()['status']
+    return redirect('/admin/viewDivisions')
 
 
 @ui_blueprint.route('/admin/editDivision/<division_id>')
-@ui_blueprint.route('/admin/editDivision')
 @jwt_optional
 def admin_edit_division(division_id=0):
-    # TODO
     data = setup_nav(dict(), get_jwt_identity())
-    data['division'] = {'name': 'Division A', 'ID': 0}
+    data['division'] = get_division(division_id)
     return render_template('admin/edit_division.html', data=data, admin=1)
+
+
+@ui_blueprint.route('/admin/editDivision/<division_id>', methods=['POST'])
+@jwt_optional
+def post_admin_edit_division(division_id=0):
+    json_data = get_form_data(request)
+    status = \
+        requests.put(f'http://database:5000/db/update_division/{division_id}',
+                     json=json_data).json()['status']
+    return redirect(f'/admin/editDivision/{division_id}')
+
+
+@ui_blueprint.route('/admin/deleteDivision/<division_id>', methods=['POST'])
+@jwt_optional
+def admin_delete_division(division_id=0):
+    status = \
+        requests.delete(
+            f'http://database:5000/db/delete_division/{division_id}').json()[
+            'status']
+    return redirect(f'/admin/viewDivisions')
 
 
 if __name__ == '__main__':

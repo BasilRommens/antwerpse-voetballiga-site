@@ -3,9 +3,9 @@ from project.api.config import *
 division_blueprint = Blueprint('divisions', __name__)
 
 
-@division_blueprint.route('/db/divisions', methods=['POST'])
+@division_blueprint.route('/db/add_division', methods=['POST'])
 def add_division():
-    post_data = request.get_json()
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
@@ -14,7 +14,7 @@ def add_division():
         db.session.add(Division(name=name))
         db.session.commit()
         response_object['status'] = 'success'
-        response_object['message'] = f'{email} was added!'
+        response_object['message'] = f'{name} was added!'
         return jsonify(response_object), 201
     except exc.IntegrityError as e:
         db.session.rollback()
@@ -45,9 +45,9 @@ def get_single_division(division_id):
         return jsonify(response_object), 404
 
 
-@division_blueprint.route('/db/delete_division/<division_id>', methods=['DELETE'])
+@division_blueprint.route('/db/delete_division/<division_id>',
+                          methods=['DELETE'])
 def delete_division(division_id):
-    post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
         # Check for division existence
@@ -56,21 +56,21 @@ def delete_division(division_id):
             response_object['message'] = 'Sorry. Can\'t delete division'
             return jsonify(response_object), 400
         else:
-            division.delete()
+            db.session.delete(division)
             db.session.commit()
-            return jsonify(response_object), 400
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@division_blueprint.route('/db/update_division', methods=['UPDATE'])
-def update_division():
-    post_data = request.get_json()
+@division_blueprint.route('/db/update_division/<division_id>',
+                          methods=['PUT'])
+def update_division(division_id):
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    division_id = post_data.get('ID')
     name = post_data.get('name')
     try:
         # Check for division existence
@@ -79,7 +79,7 @@ def update_division():
             response_object['message'] = 'Sorry. Can\'t update division'
             return jsonify(response_object), 400
         else:
-            division.update({Division.name: name})
+            division.name = name
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated division {division_id}'
@@ -94,7 +94,8 @@ def get_all_divisions():
     response_object = {
         'status': 'success',
         'data': {
-            'divisions': [division.to_json() for division in Division.query.all()]
+            'divisions': [division.to_json() for division in
+                          Division.query.all()]
         }
     }
     return jsonify(response_object), 200

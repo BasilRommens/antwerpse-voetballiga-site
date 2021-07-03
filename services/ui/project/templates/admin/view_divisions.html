@@ -12,9 +12,9 @@
                     <h1>
                         <strong>View Divisions</strong>
                     </h1>
-                    <button href="/addDivision" class="btn btn-primary btn-custom-green">
+                    <a href="/admin/addDivision" class="btn btn-primary btn-custom-green">
                         Add Division
-                    </button>
+                    </a>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -29,7 +29,7 @@
                                 <th scope="row">{{ division.ID }}</th>
                                 <td>{{ division.name }}</td>
                                 <td>
-                                    <a href="/editDivision/{{ division.ID }}">edit ></a>
+                                    <a href="/admin/editDivision/{{ division.ID }}">edit ></a>
                                 </td>
                             </tr>
                             {% endfor %}

@@ -1,50 +1,58 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Edit Division</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1>
-                        <strong>Edit Division</strong>
-                    </h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-9">
-                        <form id="editDivision" action="/editDivision/{{ data.division.ID }}" method="post">
-                        <div class="mb-3 col-3">
-                            <label for="editDivision" class="form-label"
-                                ><strong>Name</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="editDivision"
-                                value="{{ data.division.name }}"
-                            />
-                        </div>
-                        <div class="col-12">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-red"
-                            >
-                                Save
-                            </button>
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-black"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+{% include 'header.html' %}
+<head>
+    <title>Edit Division</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-9">
+            <h1>
+                <strong>Edit Division</strong>
+            </h1>
         </div>
-    </body>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <form id="editDivision" action="/admin/editDivision/{{ data.division.ID }}" method="POST">
+                <div class="mb-3 col-3">
+                    <label for="editDivision" class="form-label"
+                    ><strong>Name</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="editDivision"
+                            name="name"
+                            value="{{ data.division.name }}"
+                    />
+                </div>
+                <div class="col-12">
+                    <button
+                            type="submit"
+                            class="btn btn-primary btn-custom-green"
+                    >
+                        Save
+                    </button>
+                </div>
+            </form>
+            <form
+                    id="editClub"
+                    action="/admin/deleteDivision/{{ data.division.ID }}"
+                    method="POST"
+            >
+                <button
+                        type="submit"
+                        class="btn btn-primary btn-custom-red"
+                        value="delete"
+                >
+                    Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
 </html>
