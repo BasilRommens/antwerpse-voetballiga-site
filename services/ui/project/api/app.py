@@ -172,7 +172,8 @@ def post_edit_fixture(match_id):
 @ui_blueprint.route('/editClub/<club_id>', methods=['POST'])
 @jwt_required
 def post_edit_club(club_id=0):
-    if get_club_id(get_jwt_identity()) is None:
+    user_id = get_jwt_identity()
+    if get_club_id(user_id) is None and not is_admin(user_id):
         abort(403)
     json_data = get_form_data(request)
     requests.put(
@@ -185,10 +186,12 @@ def post_edit_club(club_id=0):
 @ui_blueprint.route('/editClub')
 @jwt_required
 def edit_club(club_id=0):
-    data = setup_nav(dict(), get_jwt_identity())
+    user_id = get_jwt_identity()
+    data = setup_nav(dict(), user_id)
     data['club_info'] = requests.get(
         f'http://database:5000/db/clubs/{club_id}').json()['data']
-    return render_template('edit_club.html', data=data)
+    admin = get_admin_number(user_id)
+    return render_template('edit_club.html', data=data, admin=admin)
 
 
 @ui_blueprint.route('/admin/editTeam/<team_id>')
@@ -226,12 +229,14 @@ def post_admin_add_team():
                            json=json_data).json()['status']
     return redirect(f'/admin/viewTeams')
 
+
 @ui_blueprint.route('/admin/deleteTeam/<team_id>', methods=['POST'])
 @jwt_required
 def admin_delete_team(team_id):
     status = \
-    requests.delete(f'http://database:5000/db/delete_team/{team_id}').json()[
-        'status']
+        requests.delete(
+            f'http://database:5000/db/delete_team/{team_id}').json()[
+            'status']
     return redirect('/admin/viewTeams')
 
 
@@ -356,8 +361,32 @@ def post_admin_add_match():
 @jwt_optional
 def admin_view_clubs():
     data = setup_nav(dict(), get_jwt_identity())
-    data['clubs'] = [{'name': 'John', 'ID': 0}]
-    return render_template('admin/view_clubs.html', data=data, admin=1)
+    data['clubs'] = get_all_clubs()
+    return render_template('admin/view_clubs.html', data=data)
+
+
+@ui_blueprint.route('/admin/deleteClub/<club_id>', methods=['POST'])
+@jwt_optional
+def admin_delete_club(club_id: int):
+    status = requests.delete(f'http://database:5000/db/delete_club/{club_id}').json()[
+        'status']
+    return redirect('/admin/viewClubs')
+
+
+@ui_blueprint.route('/admin/addClub')
+@jwt_optional
+def admin_add_club():
+    data = setup_nav(dict(), get_jwt_identity())
+    return render_template('admin/add_club.html', data=data)
+
+
+@ui_blueprint.route('/admin/addClub', methods=['POST'])
+@jwt_optional
+def post_admin_add_club():
+    json_data = get_form_data(request)
+    status = requests.post(f'http://database:5000/db/add_club',
+                           json=json_data).json()['status']
+    return redirect('/admin/viewClubs')
 
 
 @ui_blueprint.route('/admin/viewReferees')
@@ -474,14 +503,6 @@ def post_admin_add_user():
         f'http://database:5000/db/update_admin/{user_id}',
         json=json_data).json()['status']
     return redirect('/admin/viewUsers')
-
-
-@ui_blueprint.route('/admin/addClub')
-@jwt_optional
-def admin_add_club():
-    # TODO
-    data = setup_nav(dict(), get_jwt_identity())
-    return render_template('admin/add_club.html', admin=1)
 
 
 @ui_blueprint.route('/admin/viewTeams')

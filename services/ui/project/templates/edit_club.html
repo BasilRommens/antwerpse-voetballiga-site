@@ -96,17 +96,19 @@
                 >
                     <i class="fas fa-save"></i>&nbsp;Save
                 </button>
-                {% if admin %}
-                    <button
-                            type="submit"
-                            class="btn btn-primary btn-custom-red"
-                            value="temp"
-                    >
-                        <i class="fas fa-trash-alt"></i>&nbsp;Delete
-                    </button>
-                {% endif %}
+            </form>
         </div>
-        </form>
+        {% if admin %}
+            <form action="/admin/deleteClub/{{ data.club_info.stamNumber }}" method="POST">
+                <button
+                        type="submit"
+                        class="btn btn-primary btn-custom-red"
+                        value="temp"
+                >
+                    <i class="fas fa-trash-alt"></i>&nbsp;Delete
+                </button>
+            </form>
+        {% endif %}
     </div>
 </div>
 </div>

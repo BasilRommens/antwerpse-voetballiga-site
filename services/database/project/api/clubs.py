@@ -5,16 +5,18 @@ club_blueprint = Blueprint('clubs', __name__)
 
 @club_blueprint.route('/db/add_club', methods=['POST'])
 def add_club():
-    post_data = request.get_json()
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
     name = post_data.get('name')
     address = post_data.get('address')
-    zipCode = post_data.get('zipCode')
+    zipCode = int(post_data.get('zipCode'))
     city = post_data.get('city')
-    stamNumber = post_data.get('stamNumber')
+    stamNumber = int(post_data.get('stamNumber'))
     website = post_data.get('website')
+    if not len(website):
+        website = None
     try:
         db.session.add(Club(name=name, address=address, zipCode=zipCode,
                             city=city, stamNumber=stamNumber, website=website))
@@ -29,7 +31,6 @@ def add_club():
 
 @club_blueprint.route('/db/delete_club/<club_id>', methods=['DELETE'])
 def delete_club(club_id):
-    post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
         # Check for user existence
@@ -38,7 +39,7 @@ def delete_club(club_id):
             response_object['message'] = 'Sorry. Can\'t delete club'
             return jsonify(response_object), 400
         else:
-            Club.query.filter_by(stamNumber=club_id).delete()
+            db.session.delete(club_user)
             db.session.commit()
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
