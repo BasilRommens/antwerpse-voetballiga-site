@@ -35,7 +35,6 @@ class Club(db.Model):
 
     def to_json(self):
         return {
-            'ID': self.ID,
             'name': self.name,
             'address': self.address,
             'zipCode': self.zipCode,

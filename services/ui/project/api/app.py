@@ -191,26 +191,48 @@ def edit_club(club_id=0):
     return render_template('edit_club.html', data=data)
 
 
-@ui_blueprint.route('/editTeam/<team_id>')
-@ui_blueprint.route('/editTeam')
+@ui_blueprint.route('/admin/editTeam/<team_id>')
 @jwt_required
-def edit_team(team_id=0):
-    data = setup_nav(dict(), get_jwt_identity())
-    data['suffix'] = "A"
-    data['home_color'] = "red"
-    data['away_color'] = "green"
-    return render_template('edit_team.html', data=data, admin=0)
+def admin_edit_team(team_id=0):
+    data = get_single_team(team_id)
+    data = setup_nav(data, get_jwt_identity())
+    data['clubs'] = get_all_clubs()
+    return render_template('admin/edit_team.html', data=data)
 
 
-@ui_blueprint.route('/addTeam/<club_id>')
-@ui_blueprint.route('/addTeam')
+@ui_blueprint.route('/admin/editTeam/<team_id>', methods=['POST'])
 @jwt_required
-def add_team(club_id=0):
-    user_id = get_jwt_identity()
-    data = setup_nav(dict(), user_id)
-    data['club_id'] = club_id
-    return render_template('add_team.html', data=data,
-                           admin=get_admin_number(user_id))
+def post_admin_edit_team(team_id=0):
+    json_data = get_form_data(request)
+    status = requests.put(f'http://database:5000/db/update_team/{team_id}',
+                          json=json_data).json()['status']
+    return redirect(f'/admin/editTeam/{team_id}')
+
+
+@ui_blueprint.route('/admin/addTeam')
+@jwt_required
+def admin_add_team():
+    data = dict()
+    data = setup_nav(data, get_jwt_identity())
+    data['clubs'] = get_all_clubs()
+    return render_template(f'admin/add_team.html', data=data)
+
+
+@ui_blueprint.route('/admin/addTeam', methods=['POST'])
+@jwt_required
+def post_admin_add_team():
+    json_data = get_form_data(request)
+    status = requests.post(f'http://database:5000/db/add_team',
+                           json=json_data).json()['status']
+    return redirect(f'/admin/viewTeams')
+
+@ui_blueprint.route('/admin/deleteTeam/<team_id>', methods=['POST'])
+@jwt_required
+def admin_delete_team(team_id):
+    status = \
+    requests.delete(f'http://database:5000/db/delete_team/{team_id}').json()[
+        'status']
+    return redirect('/admin/viewTeams')
 
 
 @ui_blueprint.route('/viewFixtures/<team_id>')
@@ -462,15 +484,12 @@ def admin_add_club():
     return render_template('admin/add_club.html', admin=1)
 
 
-@ui_blueprint.route('/admin/viewTeams/<club_id>')
 @ui_blueprint.route('/admin/viewTeams')
 @jwt_optional
-def admin_view_teams(club_id=0):
-    # TODO
+def admin_view_teams():
     data = setup_nav(dict(), get_jwt_identity())
-    data['teams'] = [{'name': 'A', 'ID': 0}]
-    data['club'] = {'name': 'club 1', 'ID': club_id}
-    return render_template('admin/view_teams.html', data=data, admin=1)
+    data['teams'] = get_all_teams()
+    return render_template('admin/view_teams.html', data=data)
 
 
 @ui_blueprint.route('/admin/assignReferee/<referee_id>')

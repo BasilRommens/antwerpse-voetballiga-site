@@ -324,3 +324,15 @@ def get_single_user(user_id: int) -> dict:
     else:
         user['admin'] = 0
     return user
+
+
+def get_single_team(team_id: int) -> dict:
+    team = requests.get(f'http://database:5000/db/teams/{team_id}').json()[
+        'data']
+    return team
+
+
+def get_all_clubs() -> list:
+    clubs = requests.get(f'http://database:5000/db/all_clubs').json()['data'][
+        'clubs']
+    return clubs

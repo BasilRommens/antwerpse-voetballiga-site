@@ -10,11 +10,11 @@
             <div class="row mt-5">
                 <div class="col-9">
                     <h1>
-                        <strong>View Teams ({{ data.club.name }})</strong>
+                        <strong>View Teams</strong>
                     </h1>
-                    <button href="/addTeam/{{ data.club.ID }}" class="btn btn-primary btn-custom-green">
+                    <a href="/admin/addTeam" class="btn btn-primary btn-custom-green">
                         Add Team
-                    </button>
+                    </a>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -27,9 +27,9 @@
                             {% for team in data.teams %}
                             <tr>
                                 <th scope="row">{{ team.ID }}</th>
-                                <td>{{ team.name }}</td>
+                                <td>{{ team.team_name }}</td>
                                 <td>
-                                    <a href="/editTeam/{{ team.ID }}">edit ></a>
+                                    <a href="/admin/editTeam/{{ team.ID }}">edit ></a>
                                 </td>
                             </tr>
                             {% endfor %}

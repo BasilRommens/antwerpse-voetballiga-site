@@ -1,19 +1,22 @@
 from project.api.config import *
+from sqlalchemy import and_
 
 team_blueprint = Blueprint('teams', __name__)
 
 
-@team_blueprint.route('/db/teams', methods=['POST'])
+@team_blueprint.route('/db/add_team', methods=['POST'])
 def add_team():
-    post_data = request.get_json()
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
     suffix = post_data.get('suffix')
     colors = post_data.get('colors')
-    stamNumber = post_data.get('stamNumber')
+    stamNumber = int(post_data.get('stamNumber'))
+
     try:
-        team = Team.query.filter_by(suffix=suffix).first()
+        team = Team.query.filter(
+            and_(Team.suffix == suffix, Team.stamNumber == stamNumber)).first()
         if not team:
             db.session.add(Team(suffix=suffix, colors=colors,
                                 stamNumber=stamNumber))
@@ -31,7 +34,6 @@ def add_team():
 
 @team_blueprint.route('/db/delete_team/<team_id>', methods=['DELETE'])
 def delete_team(team_id):
-    post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
         # Check for team existence
@@ -40,7 +42,7 @@ def delete_team(team_id):
             response_object['message'] = 'Sorry. Can\'t delete team'
             return jsonify(response_object), 400
         else:
-            team.delete()
+            db.session.delete(team)
             db.session.commit()
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
@@ -48,16 +50,15 @@ def delete_team(team_id):
         return jsonify(response_object), 400
 
 
-@team_blueprint.route('/db/update_team', methods=['UPDATE'])
-def update_team():
-    post_data = request.get_json()
+@team_blueprint.route('/db/update_team/<team_id>', methods=['PUT'])
+def update_team(team_id):
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    team_id = post_data.get('ID')
     suffix = post_data.get('suffix')
     colors = post_data.get('colors')
-    stamNumber = post_data.get('stamNumber')
+    stamNumber = int(post_data.get('stamNumber'))
     try:
         # Check for team existence
         team = Team.query.filter_by(ID=team_id).first()
@@ -65,15 +66,16 @@ def update_team():
             response_object['message'] = 'Sorry. Can\'t update team'
             return jsonify(response_object), 400
         else:
-            team.update({Team.suffix: suffix, Team.colors: colors,
-                         Team.stamNumber: stamNumber})
-
+            team.suffix = suffix
+            team.colors = colors
+            team.stamNumber = stamNumber
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated team {team_id}'
             return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
+        return jsonify(response_object), 400
 
 
 @team_blueprint.route('/db/teams/<team_id>', methods=['GET'])
