@@ -273,3 +273,54 @@ def get_division(division_id: int) -> dict:
     return \
         requests.get(f'http://database:5000/db/divisions/{division_id}').json()[
             'data']
+
+
+def create_badge(badge_class: str, content: str):
+    return {'class': badge_class, 'text': content}
+
+
+def add_admin_badge(user: dict) -> dict:
+    user['tags'].append(create_badge('badge bg-custom-black', 'Admin'))
+    return user
+
+
+def add_super_admin_badge(user: dict) -> dict:
+    user['tags'].append(create_badge('badge bg-custom-blue', 'Super Admin'))
+    return user
+
+
+def add_club_badge(user: dict) -> dict:
+    user['tags'].append(create_badge('badge bg-custom-red', 'Club'))
+    return user
+
+
+def has_club(user_id: int) -> bool:
+    return get_club_id(user_id) is not None
+
+
+def get_all_users() -> list:
+    users = requests.get(f'http://database:5000/db/all_users').json()['data'][
+        'users']
+    for user in users:
+        user['tags'] = list()
+        if is_admin(user['ID']):
+            if is_super_admin(user['ID']):
+                user = add_super_admin_badge(user)
+            else:
+                user = add_admin_badge(user)
+        if has_club(user['ID']):
+            user = add_club_badge(user)
+
+    return users
+
+
+def get_single_user(user_id: int) -> dict:
+    user = requests.get(f'http://database:5000/db/users/{user_id}').json()[
+        'data']
+    if is_super_admin(user_id):
+        user['admin'] = 2
+    elif is_admin(user_id):
+        user['admin'] = 1
+    else:
+        user['admin'] = 0
+    return user

@@ -1,73 +1,112 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Edit User [admin]</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1>
-                        <strong>Edit User</strong>
-                    </h1>
-                    <form
-                        id="editClub"
-                        action="/admin/editUser/{{ data.ID }}"
-                        method="post"
+{% include 'header.html' %}
+<head>
+    <title>Edit User [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-9">
+            <h1>
+                <strong>Edit User</strong>
+            </h1>
+            <form
+                    id="editClub"
+                    action="/admin/editUser/{{ data.id }}"
+                    method="POST"
+            >
+                <div class="mb-3 col-3">
+                    <label for="username" class="form-label"
+                    ><strong>Username</strong></label
                     >
-                        <div class="mb-3 col-3">
-                            <label for="username" class="form-label"
-                                ><strong>Username</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="username"
-                                value="{{ data.username }}"
-                            />
-                        </div>
-
-                        <div class="mb-3 col-3">
-                            <label for="password" class="form-label"
-                                ><strong>Password</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="password"
-                                value="{{ data.password }}"
-                            />
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="email" class="form-label"
-                                ><strong>E-mail</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="email"
-                                value="{{ data.email }}"
-                            />
-                        </div>
-                        <div class="col-12">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-black"
-                            >
-                                Save
-                            </button>
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-red"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </form>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="username"
+                            name="username"
+                            value="{{ data.username }}"
+                    />
                 </div>
-            </div>
+
+                <div class="mb-3 col-3">
+                    <label for="password" class="form-label"
+                    ><strong>Password</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            value="{{ data.password }}"
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="email" class="form-label"
+                    ><strong>E-mail</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            value="{{ data.email }}"
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="team_id" class="form-label"
+                    ><strong>Teams</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="teamID"
+                            name="teamID"
+                            aria-label="Default select example"
+                    >
+                        {% if data.teamID is none %}
+                            <option selected>Choose team</option>
+                        {% endif %}
+                        {% for team in data.teams %}
+                            <option value={{ team.ID }}
+                                            {% if team.ID == data.teamID %}selected{% endif %}>{{ team.team_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="admin" class="form-label"
+                    ><strong>Admin</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="admin"
+                            name="admin"
+                            aria-label="Default select example"
+                    >
+                        <option value=0 {% if data.admin == 0 %}selected{% endif %}>No Admin</option>
+                        <option value=1 {% if data.admin == 1 %}selected{% endif %}>Regular Admin</option>
+                        <option value=2 {% if data.admin == 2 %}selected{% endif %}>Super Admin</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button
+                            type="submit"
+                            class="btn btn-primary btn-custom-black"
+                    >
+                        Save
+                    </button>
+                </div>
+            </form>
+            <form action="/admin/deleteUser/{{ data.id }}" method="POST">
+                <button
+                        type="submit"
+                        class="btn btn-primary btn-custom-red"
+                >
+                    Delete
+                </button>
+            </form>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

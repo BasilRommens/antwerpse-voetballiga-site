@@ -50,7 +50,7 @@ class User(db.Model):
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)
     teamID = db.Column(db.Integer, ForeignKey('club.stamNumber'), nullable=True)
 
     def __init__(self, username, email, password, teamID=None):

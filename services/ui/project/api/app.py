@@ -396,12 +396,62 @@ def delete_admin_edit_referee(referee_id=0):
 @ui_blueprint.route('/admin/viewUsers')
 @jwt_optional
 def admin_view_users():
-    # TODO
     data = setup_nav(dict(), get_jwt_identity())
-    data['users'] = [{'username': 'John Doe', 'email': 'yeet@yeet', 'ID': 0,
-                      'tags': [
-                          {'class': 'badge bg-custom-red', 'text': 'Club'}]}]
-    return render_template('admin/view_users.html', data=data, admin=1)
+    data['users'] = get_all_users()
+    return render_template('admin/view_users.html', data=data)
+
+
+@ui_blueprint.route('/admin/editUser/<user_id>')
+@jwt_required
+def admin_edit_user(user_id=0):
+    data = get_single_user(user_id)
+    data['teams'] = get_all_teams()
+    data = setup_nav(data, get_jwt_identity())
+    return render_template('admin/edit_user.html', data=data)
+
+
+@ui_blueprint.route('/admin/editUser/<user_id>', methods=['POST'])
+@jwt_required
+def post_admin_edit_user(user_id=0):
+    json_data = get_form_data(request)
+    status = requests.put(
+        f'http://database:5000/db/update_user/{user_id}',
+        json=json_data).json()['status']
+    status = requests.put(
+        f'http://database:5000/db/update_admin/{user_id}',
+        json=json_data).json()['status']
+    return redirect(f'/admin/editUser/{user_id}')
+
+
+@ui_blueprint.route('/admin/deleteUser/<user_id>', methods=['POST'])
+@jwt_required
+def admin_delete_user(user_id: int = 0):
+    status = requests.delete(
+        f'http://database:5000/db/delete_user/{user_id}').json()['status']
+    return redirect(f'/admin/viewUsers')
+
+
+@ui_blueprint.route('/admin/addUser')
+@jwt_optional
+def admin_add_user():
+    data = setup_nav(dict(), get_jwt_identity())
+    admin = get_admin_number(get_jwt_identity())
+    data['teams'] = get_all_teams()
+    return render_template('admin/add_user.html', data=data, admin=admin)
+
+
+@ui_blueprint.route('/admin/addUser', methods=['POST'])
+@jwt_optional
+def post_admin_add_user():
+    json_data = get_form_data(request)
+    status = requests.post(
+        f'http://database:5000/db/add_user',
+        json=json_data).json()
+    user_id = int(status['user_id'])
+    status = requests.put(
+        f'http://database:5000/db/update_admin/{user_id}',
+        json=json_data).json()['status']
+    return redirect('/admin/viewUsers')
 
 
 @ui_blueprint.route('/admin/addClub')
@@ -431,27 +481,6 @@ def admin_assign_referee(referee_id=0):
     data = setup_nav(dict(), get_jwt_identity())
     data['matches'] = [{'ID': 0, 'teams': 'Team 1 (h) - Team 2 (a)'}]
     return render_template('admin/assign_referee.html', data=data, admin=1)
-
-
-@ui_blueprint.route('/admin/editUser/<user_id>')
-@ui_blueprint.route('/admin/editUser')
-@jwt_optional
-def admin_edit_user(user_id=0):
-    # TODO
-    data = setup_nav(dict(), get_jwt_identity())
-    data['ID'] = 'ID'
-    data['username'] = 'John Doe'
-    data['password'] = 'password'
-    data['email'] = 'email'
-    return render_template('admin/edit_user.html', data=data)
-
-
-@ui_blueprint.route('/admin/addUser')
-@jwt_optional
-def admin_add_user():
-    # TODO
-    data = setup_nav(dict(), get_jwt_identity())
-    return render_template('admin/add_user.html', data=data)
 
 
 @ui_blueprint.route('/admin/viewSeasons')

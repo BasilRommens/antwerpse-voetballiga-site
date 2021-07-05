@@ -3,26 +3,21 @@ from project.api.config import *
 admin_blueprint = Blueprint('admins', __name__)
 
 
-@admin_blueprint.route('/db/new_admin', methods=['POST'])
-def add_admin():
-    post_data = request.get_json()
+def add_admin(admin_id, admin_number):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
-    if not post_data:
-        return jsonify(response_object), 400
-    userID = post_data.get('userID')
-    isSuper = post_data.get('isSuper')
     try:
         # Check for user existence
-        user = User.query.filter_by(ID=userID).first()
+        user = User.query.filter_by(ID=admin_id).first()
         if not user:
             return jsonify(response_object), 400
 
-        admin_user = Admin.query.filter_by(userID=userID).first()
+        admin_user = Admin.query.filter_by(userID=admin_id).first()
         if not admin_user:
-            db.session.add(Admin(userID, isSuper))
+            isSuper = admin_number == 2
+            db.session.add(Admin(admin_id, isSuper))
             db.session.commit()
             response_object['status'] = 'success'
-            response_object['message'] = f'{userID} was added!'
+            response_object['message'] = f'{admin_id} was added!'
             return jsonify(response_object), 201
         else:
             response_object['message'] = 'Sorry. That user is already admin.'
@@ -32,9 +27,7 @@ def add_admin():
         return jsonify(response_object), 400
 
 
-@admin_blueprint.route('/db/delete_admin/<admin_id>', methods=['DELETE'])
 def delete_admin(admin_id):
-    post_data = request.get_json()
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
         # Check for user existence
@@ -43,7 +36,7 @@ def delete_admin(admin_id):
             response_object['message'] = 'Sorry. Can\'t delete admin'
             return jsonify(response_object), 400
         else:
-            Admin.query.filter_by(userID=admin_id).delete()
+            db.session.delete(admin_user)
             db.session.commit()
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
@@ -51,14 +44,26 @@ def delete_admin(admin_id):
         return jsonify(response_object), 400
 
 
-@admin_blueprint.route('/db/update_admin', methods=['UPDATE'])
-def update_admin():
-    post_data = request.get_json()
+def admin_exists(user_id: int) -> bool:
+    admin_user = Admin.query.filter_by(userID=user_id).first()
+    return admin_user is not None
+
+
+@admin_blueprint.route('/db/update_admin/<admin_id>', methods=['PUT'])
+def update_admin(admin_id):
+    post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    admin_id = post_data.get('userID')
-    isSuper = post_data.get('isSuper')
+    adminNumber = int(post_data.get('admin'))
+    if not admin_exists(admin_id) and adminNumber == 0:
+        response_object['status'] = 'success'
+        response_object['message'] = 'No update required.'
+        return jsonify(response_object), 200
+    elif admin_exists(admin_id) and adminNumber == 0:
+        return delete_admin(admin_id)
+    elif not admin_exists(admin_id) and adminNumber != 0:
+        return add_admin(admin_id, adminNumber)
     try:
         # Check for user existence
         admin_user = Admin.query.filter_by(userID=admin_id).first()
@@ -66,7 +71,8 @@ def update_admin():
             response_object['message'] = 'Sorry. Can\'t update admin'
             return jsonify(response_object), 400
         else:
-            admin_user.update({Admin.isSuper: isSuper})
+            isSuper = adminNumber == 2
+            admin_user.isSuper = isSuper
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Updated admin {admin_id}'

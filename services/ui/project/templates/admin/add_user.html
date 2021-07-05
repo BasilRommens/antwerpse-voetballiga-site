@@ -1,60 +1,97 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Add User [admin]</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1>
-                        <strong>Add User</strong>
-                    </h1>
-                    <form id="editClub" action="/addUser" method="post">
-                        <div class="mb-3 col-3">
-                            <label for="username" class="form-label"
-                                ><strong>Username</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="username"
-                            />
-                        </div>
-
-                        <div class="mb-3 col-3">
-                            <label for="password" class="form-label"
-                                ><strong>Password</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="password"
-                            />
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="email" class="form-label"
-                                ><strong>E-mail</strong></label
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="email"
-                            />
-                        </div>
-                        <div class="col-12">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-black"
-                            >
-                                Add
-                            </button>
-                        </div>
-                    </form>
+{% include 'header.html' %}
+<head>
+    <title>Add User [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-9">
+            <h1>
+                <strong>Add User</strong>
+            </h1>
+            <form id="editClub" action="/admin/addUser" method="POST">
+                <div class="mb-3 col-3">
+                    <label for="username" class="form-label"
+                    ><strong>Username</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="username"
+                            name="username"
+                            required
+                    />
                 </div>
-            </div>
+
+                <div class="mb-3 col-3">
+                    <label for="password" class="form-label"
+                    ><strong>Password</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            required
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="email" class="form-label"
+                    ><strong>E-mail</strong></label
+                    >
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            required
+                    />
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="team_id" class="form-label"
+                    ><strong>Teams</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="teamID"
+                            name="teamID"
+                            aria-label="Default select example"
+                    >
+                        <option selected value=-1>Choose team</option>
+                        {% for team in data.teams %}
+                            <option value={{ team.ID }}>{{ team.team_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 col-3">
+                    <label for="admin" class="form-label"
+                    ><strong>Admin</strong></label
+                    >
+                    <select
+                            class="form-select"
+                            id="admin"
+                            name="admin"
+                            aria-label="Default select example"
+                    >
+                        <option value=0 {% if data.admin == 0 %}selected{% endif %}>No Admin</option>
+                        <option value=1 {% if data.admin == 1 %}selected{% endif %}>Regular Admin</option>
+                        <option value=2 {% if data.admin == 2 %}selected{% endif %}>Super Admin</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button
+                            type="submit"
+                            class="btn btn-primary btn-custom-black"
+                    >
+                        Add
+                    </button>
+                </div>
+            </form>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

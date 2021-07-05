@@ -88,3 +88,11 @@ a:hover {
 .bg-custom-red {
     background-color: var(--custom-red);
 }
+
+.bg-custom-black {
+    background-color: black;
+}
+
+.bg-custom-blue {
+    background-color: #003DB6;
+}
