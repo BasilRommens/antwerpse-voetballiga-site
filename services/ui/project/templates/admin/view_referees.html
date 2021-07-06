@@ -8,7 +8,7 @@
         {% include 'navbar.html' %}
         <div class="container">
             <div class="row mt-5">
-                <div class="col-9">
+                <div class="col">
                     <h1><strong>Referees</strong></h1>
                     <a
                         href="/admin/addReferee"
@@ -22,7 +22,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Referee name</th>
                                 <th scope="col"></th>
-                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -30,12 +29,6 @@
                             <tr>
                                 <th scope="row">{{ referee.ID }}</th>
                                 <td>{{ referee.first_name }} {{ referee.last_name }}</td>
-                                <td>
-                                    <a
-                                        href="/admin/assignReferee/{{ referee.ID }}"
-                                        ><strong>assign</strong></a
-                                    >
-                                </td>
                                 <td>
                                     <a
                                         href="/admin/editReferee/{{ referee.ID }}"

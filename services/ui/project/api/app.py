@@ -368,7 +368,8 @@ def admin_view_clubs():
 @ui_blueprint.route('/admin/deleteClub/<club_id>', methods=['POST'])
 @jwt_optional
 def admin_delete_club(club_id: int):
-    status = requests.delete(f'http://database:5000/db/delete_club/{club_id}').json()[
+    status = \
+    requests.delete(f'http://database:5000/db/delete_club/{club_id}').json()[
         'status']
     return redirect('/admin/viewClubs')
 
@@ -513,14 +514,22 @@ def admin_view_teams():
     return render_template('admin/view_teams.html', data=data)
 
 
-@ui_blueprint.route('/admin/assignReferee/<referee_id>')
-@ui_blueprint.route('/admin/assignReferee')
+@ui_blueprint.route('/admin/assignReferee/<match_id>')
 @jwt_optional
-def admin_assign_referee(referee_id=0):
-    # TODO
+def admin_assign_referee(match_id: int):
     data = setup_nav(dict(), get_jwt_identity())
-    data['matches'] = [{'ID': 0, 'teams': 'Team 1 (h) - Team 2 (a)'}]
-    return render_template('admin/assign_referee.html', data=data, admin=1)
+    data['referees'] = get_all_available_referees(match_id)
+    data['match_id'] = match_id
+    data['ref_id'] = get_match(match_id)['ref_ID']
+    return render_template('admin/assign_referee.html', data=data)
+
+
+@ui_blueprint.route('/admin/assignReferee/<match_id>', methods=['POST'])
+@jwt_optional
+def post_admin_assign_referee(match_id):
+    json_data = get_form_data(request)
+    status = requests.put(f'http://database:5000/db/assign_referee/{match_id}', json=json_data).json()['status']
+    return redirect('/admin/viewMatches')
 
 
 @ui_blueprint.route('/admin/viewSeasons')

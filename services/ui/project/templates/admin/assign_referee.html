@@ -1,60 +1,51 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Assign referee [admin]</title>
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-9">
-                    <h1>
-                        <strong>Assign Referee</strong>
-                    </h1>
-                    <form
-                        id="assignReferee"
-                        action="/assignReferee"
-                        method="post"
+{% include 'header.html' %}
+<head>
+    <title>Assign referee [admin]</title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-9">
+            <h1>
+                <strong>Assign Referee</strong>
+            </h1>
+            <form
+                    id="assignReferee"
+                    action="/admin/assignReferee/{{ data.match_id }}"
+                    method="POST"
+            >
+                <div class="mb-3 col-3">
+                    <label for="referee" class="form-label"
+                    ><strong>Referee</strong></label
                     >
-                        <div class="mb-3 col-3">
-                            <label for="week" class="form-label"
-                                ><strong>Week</strong></label
-                            >
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="week"
-                            />
-                        </div>
-                        <div class="mb-3 col-3">
-                            <label for="match" class="form-label"
-                                ><strong>Match</strong></label
-                            >
-                            <select
-                                class="form-select"
-                                id="match"
-                                aria-label="Default select example"
-                            >
-                                <option selected>Select Match</option>
-                                {% for match in data.matches %}
-                                <option value="{{ match.ID }}">
-                                    {{ match.teams }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-12">
-                            <button
-                                type="submit"
-                                class="btn btn-primary btn-custom-black"
-                            >
-                                Assign
-                            </button>
-                        </div>
-                    </form>
+                    <select
+                            class="form-select"
+                            id="referee"
+                            name="referee"
+                            aria-label="Default select example"
+                    >
+                        <option value="none" {% if data.ref_id == none %}selected{% endif %}>Select Referee</option>
+                        {% for referee in data.referees %}
+                            <option value="{{ referee.ID }}" {% if data.ref_id == referee.ID %}selected{% endif %}>
+                                {{ referee.first_name }} {{ referee.last_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
-            </div>
+                <div class="col-12">
+                    <button
+                            type="submit"
+                            class="btn btn-primary btn-custom-black"
+                    >
+                        Assign
+                    </button>
+                </div>
+            </form>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

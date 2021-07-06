@@ -59,6 +59,31 @@ def delete_match(match_id):
         return jsonify(response_object), 400
 
 
+@match_blueprint.route('/db/assign_referee/<match_id>', methods=['PUT'])
+def assign_referee(match_id=0):
+    post_data = json.loads(request.get_json())
+    response_object = {'status': 'fail', 'message': 'Invalid payload.'}
+    if not post_data:
+        return jsonify(response_object), 400
+    refID = post_data.get('referee')
+    refID = int(refID) if refID != 'none' else None
+    try:
+        # Check for match existence
+        match = Match.query.filter_by(ID=match_id).first()
+        if not match:
+            response_object['message'] = 'Sorry. Can\'t update match'
+            return jsonify(response_object), 400
+        else:
+            match.refID = refID
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Updated match {match_id}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
 @match_blueprint.route('/db/update_match_score/<match_id>', methods=['PUT'])
 def update_match_score(match_id=0):
     post_data = json.loads(request.get_json())

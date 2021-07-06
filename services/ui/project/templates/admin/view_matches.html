@@ -20,6 +20,7 @@
                     <th scope="col">Date</th>
                     <th scope="col">Home team - Away team</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody id="table_body">
@@ -31,6 +32,11 @@
                         <td>
                             <a href="/admin/editMatch/{{ match.ID }}"
                             >edit ></a
+                            >
+                        </td>
+                        <td>
+                            <a href="/admin/assignReferee/{{ match.ID }}"
+                            >assign ></a
                             >
                         </td>
                     </tr>
