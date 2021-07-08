@@ -1793,3 +1793,293 @@ a notion about distributed systems itself in practice.
                     "teamID": 234
                 }
         }
+
+# Fixture Info [/srv/fixture_info/{fixture_id}]
+
++ Parameters
+    + fixture_id (number) - The id of a certain fixture in the database
+
+### Get Fixture Info [GET]
+
++ Response 200 (application/json)
+
+        {
+            "date": "3/3/3",
+            "time": "3:3",
+            "day": "monday",
+            "ref_name": "John Doe",
+            "home_team_name": "home team",
+            "away_team_name": "away team",
+            "weather": "cloudy skies",
+            "head_to_head": {
+                "GP": 0,
+                "W": 3
+            },
+            "last_three": {
+                "home_team": [1,2,3],
+                "away_team": [3,2,1]
+            },
+            "current_form_H": "WWWWW",
+            "current_form_A": "LWLDL",
+            "status": {
+                "text": "forfait",
+                "style": "background-color: black;"
+            },
+            "result": "3-3"
+        }
+
+# League Table [/srv/league_table]
+
+### Get League Table [GET]
+
++ Request (application/json)
+
+        {
+            "season": "23",
+            "division": "3"
+        }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "team_id": 2,
+                "stam_number": 3,
+                "name": "sandwich",
+                "F": 0,
+                "A": 34,
+                "GP": 34,
+                "L": 34,
+                "W": 0,
+                "D": 0,
+                "Pts": 0,
+                "ranking": 8
+            },
+            ...,
+            {
+                "team_id": 2,
+                "stam_number": 3,
+                "name": "sandwich",
+                "F": 0,
+                "A": 34,
+                "GP": 34,
+                "L": 34,
+                "W": 0,
+                "D": 0,
+                "Pts": 0,
+                "ranking": 8
+            }
+        ]
+
+# Team info [/srv/team_info/]
+
+### Get Public Fixtures [GET /srv/team_info/public_fixtures]
+
++ Request (application/json)
+
+        {
+            "week": "32",
+            "season": "2",
+            "division": "32",
+            "team": "8"
+        }
+
++ Response 200
+
+        {
+            "week": 34,
+            "season": 2,
+            "division_id": 32,
+            "team_id": 8,
+            "matches": [
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                },
+                ...,
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                }
+            ]
+        }
+
+### Get Private Fixtures [GET /srv/team_info/private_fixtures/{team_id}]
+
++ Parameters
+    + team_id (number) - The id of the team we want to get all the fixtures of.
+
++ Response 200
+
+        {
+            "team_name": "cheese"
+            "matches": [
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                },
+                ...,
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                }
+            ]
+        }
+
+### Get Info About Team [GET /srv/team_info/info/{team_id}]
+
++ Parameters
+    + team_id (number) - The id of the team we want to get more information about.
+    
++ Response 200
+
+        {
+            "team_name": "sandwich",
+            "last_three": [
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                },
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                },
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                }
+            ],
+            "future_encounters": [
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                },
+                ...,
+                {
+                    "teams": "sandwich - club",
+                    "score": "3-3",
+                    "date": "3/3/3",
+                    "ID": "34"
+                }
+            ]
+        }
+
+# Users [/srv/user]
+
+### Login [POST /srv/user/log_in]
+
++ Request (application/json)
+
+        {
+            "username": "JohnDoe",
+            "password": "sandwich"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "ID": 3,
+            "username": "JohnDoe",
+            "email": "john@sandwich.club",
+            "password": "sandwich",
+            "teamID": 32
+        }
+
++ Response 400 (application/json)
+
+        false
+
+### Get User [GET /srv/user/{user_id}]
+
++ Parameters
+    + user_id (number) - The id of a certain user.
+    
++ Response 200 (application/json)
+
+        {
+            "ID": 3,
+            "username": "JohnDoe",
+            "email": "john@sandwich.club",
+            "password": "sandwich",
+            "teamID": 32
+        }
+
++ Response 400 (application/json)
+
+        This most likely will be something of the db error.
+
+# Weather [/srv/weather]
+
+### Get the weather on certain day [GET /srv/weather/get_weather]
+
++ Request (application/json)
+
+        {
+            "day": "3"
+        }
+
++ Response 200 (application/json)
+
+        "icon temperature symbol"
+        
+# Admin [/srv/admin]
+
+### Get admin info [GET /srv/admin/get_admin/{admin_id}]
+
++ Parameters
+    + admin_id (number) - The admin we want to retrieve
+
++ Response 200 (application/json)
+
+        {
+            some info about from the /db/admin/{admin_id}
+        }
+
+# Best of division [/srv/best_of_division]
+
+### Get best of division information [GET /srv/best_of_division]
+
++ Request (application/json)
+
+        {
+            "season": "2",
+            "division": "3"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "best_of_division": {
+                "best_attack": {
+                    "team_id": 3,
+                    "stam_number": 4,
+                    "name": "sandwich"
+                },
+                "best_defense": {
+                    "team_id": 4,
+                    "stam_number": 1,
+                    "name": "cheese"
+                },
+                "most_clean_sheets": {
+                    "team_id": 3,
+                    "stam_number": 4,
+                    "name": "sandwich"
+                }
+            }
+        }
