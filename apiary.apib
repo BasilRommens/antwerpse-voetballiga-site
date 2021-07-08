@@ -1,0 +1,284 @@
+FORMAT: 1A
+HOST: http://localhost:5000/
+
+# Antwerpse Voetballiga Site
+
+Antwerpse voetballiga site is een site die gemaakt moest worden voor het 
+project van gedistribueerde systemen. Dit project werd gemaakt adhv docker 
+containers met het doel om te leren hoe dat een gedistribueerd systeem 
+er in de praktijk kan uitzien. Deze containers stellen in het project 
+elks een eigen microservice voor.
+
+# Database [/db]
+
+## Admin [/db/admin/{admin_id}]
+
++ Parameter
+    + admin_id (number) - The id of an admin should be the same as the id of an existing user.
+
+### Get an Admin [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "admin_id": 1,
+                "is_super": false
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Admin does not exist"
+        }
+
+### Update an Admin [PUT]
+
++ Request (application/json)
+
+        {
+            "admin": "0"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "No update required."
+        }
+
++ Response 200 (application/json)
+        
+        {
+            "status": "success",
+            "message": "Deleted admin 2"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "2 was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete admin"
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. That user is already admin"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get All Admins [GET /db/all_admin]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "admins": [
+                    {
+                        "admin_id": 4,
+                        "is_super": false
+                    },
+                    ...,
+                    {
+                        "admin_id": 238,
+                        "is_super": true
+                    }
+                ]
+            }
+        }
+
+## Club [/db/club/{club_id}]
+
++ Parameters
+    + club_id (number) - Het id van een club, ook wel gelijk aan het stamgetal.
+
+### Create a New Club [POST /db/club]
+
++ Request (application/json)
+
+        {
+            "name": "sandwich club",
+            "address": "sandwich street 12",
+            "zipCode": "4322",
+            "city": "sandwich",
+            "stamNumber": "34",
+            "website": "sandwich.club"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "sandwich club was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Update a Club [PUT]
+
++ Request (application/json)
+
+        {
+            "name": "sandwich club",
+            "address": "sandwich street 12",
+            "zipCode": "4322",
+            "city": "sandwich",
+            "stamNumber": "34",
+            "website": "sandwich.club"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated club sandwich club"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update club"
+        }
+        
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+      
+### Delete a Club [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "2 deleted."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete club"
+        }
+        
+### Get a Club [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "name": "sandwich club",
+                "address": "sandwich street 12",
+                "zipCode": "4322",
+                "city": "sandwich",
+                "stamNumber": 34,
+                "website": "sandwich.club"
+            }
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Club does not exist"
+        }
+        
+### Get All Clubs [GET /db/all_clubs]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": 
+            [
+                {
+                    "name": "sandwich club",
+                    "address": "sandwich street 12",
+                    "zipCode": "4322",
+                    "city": "sandwich",
+                    "stam_number": "34",
+                    "website": "sandwich.club"
+                },
+                ...,
+                {
+                    "name": "cheese club",
+                    "address": "cheese street 12",
+                    "zipCode": "4322",
+                    "city": "cheese",
+                    "stam_number": "34",
+                    "website": "cheese.club"
+                }
+            ]
+        }
+        
+## Division [/db/division]
+
+###
