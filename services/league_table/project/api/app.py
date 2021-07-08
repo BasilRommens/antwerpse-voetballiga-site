@@ -8,4 +8,4 @@ league_table_blueprint = Blueprint('league_table', __name__)
 def get_league_table():
     season = int(request.args.get('season'))
     division = int(request.args.get('division'))
-    return jsonify(generate_league_table(season, division))
+    return jsonify(generate_league_table(season, division)), 200

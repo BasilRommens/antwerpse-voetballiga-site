@@ -184,12 +184,12 @@ def get_team_names(all_fixture_info: dict, fixture_info: dict) -> dict:
                     ('team_away_id', 'away_team_name')]:
         team = \
             requests.get(
-                f'http://database:5000/db/teams/{all_fixture_info[call_id[0]]}').json()[
+                f'http://database:5000/db/team/{all_fixture_info[call_id[0]]}').json()[
                 'data']
         team_suffix = team['suffix']
         stam_number = team['stamNumber']
         club_name = requests.get(
-            f'http://database:5000/db/clubs/{stam_number}').json()[
+            f'http://database:5000/db/club/{stam_number}').json()[
             'data']['name']
         fixture_info[call_id[1]] = f'{club_name} {team_suffix}'
     return fixture_info
@@ -201,7 +201,7 @@ def get_referee(all_fixture_info: dict, fixture_info: dict) -> dict:
         return fixture_info
     ref_id = int(ref_id)
     ref_info = \
-        requests.get(f'http://database:5000/db/referees/{ref_id}').json()[
+        requests.get(f'http://database:5000/db/referee/{ref_id}').json()[
             'data']
     fixture_info['ref_name'] = f'{ref_info["firstName"]} {ref_info["lastName"]}'
     return fixture_info
@@ -273,7 +273,7 @@ def get_result(all_fixture_info: dict, fixture_info: dict) -> dict:
 
 def get_fixture_info(fixture_id: int) -> dict:
     all_fixture_info = requests.get(
-        f'http://database:5000/db/matches/{fixture_id}').json()['data']
+        f'http://database:5000/db/match/{fixture_id}').json()['data']
     fixture_info = get_default_fixture()
     fixture_info = get_date_time(all_fixture_info, fixture_info)
     fixture_info = get_referee(all_fixture_info, fixture_info)

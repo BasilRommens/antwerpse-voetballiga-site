@@ -12,13 +12,13 @@ def log_in():
     for user in users['users']:
         if user['username'] != username:
             continue
-        return jsonify(user) if user['password'] == password else jsonify(False)
-    return jsonify(False)
+        return jsonify(user), 200 if user['password'] == password else jsonify(False), 400
+    return jsonify(False), 400
 
 
 @user_blueprint.route('/srv/user/<user_id>', methods=['GET'])
 def get_user(user_id=1):
-    user = requests.get(f'http://database:5000/db/users/{user_id}')
+    user = requests.get(f'http://database:5000/db/user/{user_id}')
     user = user.json()
     if user['status'] == 'fail':
         return jsonify(user), 404

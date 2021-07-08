@@ -21,9 +21,9 @@ def get_public_fixtures_data():
 @team_info_blueprint.route('/srv/team_info/private_fixtures/<team_id>',
                            methods=['GET'])
 def get_private_fixtures_data(team_id=0):
-    return jsonify(get_private_fixtures(team_id))
+    return jsonify(get_private_fixtures(team_id)), 200
 
 
 @team_info_blueprint.route('/srv/team_info/info/<team_id>', methods=['GET'])
 def get_info(team_id=0):
-    return jsonify(get_team_info(team_id))
+    return jsonify(get_team_info(team_id)), 200

@@ -3,7 +3,7 @@ from project.api.config import *
 club_blueprint = Blueprint('clubs', __name__)
 
 
-@club_blueprint.route('/db/add_club', methods=['POST'])
+@club_blueprint.route('/db/club', methods=['POST'])
 def add_club():
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -29,7 +29,7 @@ def add_club():
         return jsonify(response_object), 400
 
 
-@club_blueprint.route('/db/delete_club/<club_id>', methods=['DELETE'])
+@club_blueprint.route('/db/club/<club_id>', methods=['DELETE'])
 def delete_club(club_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -41,13 +41,14 @@ def delete_club(club_id):
         else:
             db.session.delete(club_user)
             db.session.commit()
-            return jsonify(response_object), 400
+            response_object = {'status': 'success', 'message': f'{club_id} deleted.'}
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@club_blueprint.route('/db/update_club/<club_id>', methods=['PUT'])
+@club_blueprint.route('/db/club/<club_id>', methods=['PUT'])
 def update_club(club_id=0):
     post_data = json.loads(request.get_json())
 
@@ -82,7 +83,7 @@ def update_club(club_id=0):
         return jsonify(response_object), 400
 
 
-@club_blueprint.route('/db/clubs/<club_id>', methods=['GET'])
+@club_blueprint.route('/db/club/<club_id>', methods=['GET'])
 def get_single_club(club_id):
     """Get single user details"""
     response_object = {

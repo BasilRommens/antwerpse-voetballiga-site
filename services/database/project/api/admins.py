@@ -38,7 +38,9 @@ def delete_admin(admin_id):
         else:
             db.session.delete(admin_user)
             db.session.commit()
-            return jsonify(response_object), 400
+            response_object = {'status': 'success',
+                               'message': f'Delete admin {admin_id}'}
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
@@ -49,7 +51,7 @@ def admin_exists(user_id: int) -> bool:
     return admin_user is not None
 
 
-@admin_blueprint.route('/db/update_admin/<admin_id>', methods=['PUT'])
+@admin_blueprint.route('/db/admin/<admin_id>', methods=['PUT'])
 def update_admin(admin_id):
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}

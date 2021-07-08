@@ -3,7 +3,7 @@ from project.api.config import *
 user_blueprint = Blueprint('users', __name__)
 
 
-@user_blueprint.route('/db/add_user', methods=['POST'])
+@user_blueprint.route('/db/user', methods=['POST'])
 def add_user():
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -19,7 +19,7 @@ def add_user():
             if teamID == -1:
                 teamID = None
             new_user = User(username=username, email=email,
-                 password=password, teamID=teamID)
+                            password=password, teamID=teamID)
             db.session.add(new_user)
             db.session.commit()
             response_object['status'] = 'success'
@@ -34,7 +34,7 @@ def add_user():
         return jsonify(response_object), 400
 
 
-@user_blueprint.route('/db/delete_user/<user_id>', methods=['DELETE'])
+@user_blueprint.route('/db/user/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -46,13 +46,14 @@ def delete_user(user_id):
         else:
             db.session.delete(user)
             db.session.commit()
-            return jsonify(response_object), 400
+            response_object = {'status': 'success', 'message': 'User deleted.'}
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@user_blueprint.route('/db/update_user/<user_id>', methods=['PUT'])
+@user_blueprint.route('/db/user/<user_id>', methods=['PUT'])
 def update_user(user_id):
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -82,7 +83,7 @@ def update_user(user_id):
         return jsonify(response_object), 400
 
 
-@user_blueprint.route('/db/users/<user_id>', methods=['GET'])
+@user_blueprint.route('/db/user/<user_id>', methods=['GET'])
 def get_single_user(user_id):
     """Get single user details"""
     response_object = {

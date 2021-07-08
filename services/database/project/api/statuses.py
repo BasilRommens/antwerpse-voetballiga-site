@@ -3,7 +3,7 @@ from project.api.config import *
 status_blueprint = Blueprint('status', __name__)
 
 
-@status_blueprint.route('/db/add_status', methods=['POST'])
+@status_blueprint.route('/db/status', methods=['POST'])
 def add_status():
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -21,7 +21,7 @@ def add_status():
         return jsonify(response_object), 400
 
 
-@status_blueprint.route('/db/delete_status/<status_id>', methods=['DELETE'])
+@status_blueprint.route('/db/status/<status_id>', methods=['DELETE'])
 def delete_status(status_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -35,13 +35,13 @@ def delete_status(status_id):
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Status was deleted!'
-            return jsonify(response_object), 400
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@status_blueprint.route('/db/update_status/<status_id>', methods=['PUT'])
+@status_blueprint.route('/db/status/<status_id>', methods=['PUT'])
 def update_status(status_id):
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}

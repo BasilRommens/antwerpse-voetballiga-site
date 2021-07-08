@@ -39,7 +39,7 @@ def create_default_team():
 
 def get_club(stam_number: int) -> dict:
     club = requests.get(
-        f'http://database:5000/db/clubs/{stam_number}').json()[
+        f'http://database:5000/db/club/{stam_number}').json()[
         'data']
     return club
 
@@ -50,7 +50,7 @@ def add_teams(league_table: dict, matches: list):
         for team_id_name in ["team_home_ID", "team_away_ID"]:
             team = \
                 requests.get(
-                    f'http://database:5000/db/teams/{match[team_id_name]}').json()[
+                    f'http://database:5000/db/team/{match[team_id_name]}').json()[
                     'data']
             team_id = team['id']
             stam_number = team['stamNumber']

@@ -3,7 +3,7 @@ from project.api.config import *
 season_blueprint = Blueprint('seasons', __name__)
 
 
-@season_blueprint.route('/db/add_season')
+@season_blueprint.route('/db/season')
 def add_season():
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -17,7 +17,7 @@ def add_season():
         return jsonify(response_object), 400
 
 
-@season_blueprint.route('/db/delete_season/<season_id>')
+@season_blueprint.route('/db/season/<season_id>')
 def delete_season(season_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -29,6 +29,8 @@ def delete_season(season_id):
         else:
             db.session.delete(season)
             db.session.commit()
+            response_object = {'status': 'success',
+                               'message': f'Season {season_id} deleted.'}
             return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
@@ -38,7 +40,7 @@ def delete_season(season_id):
 @season_blueprint.route('/seasons/<season_id>', methods=['GET'])
 def get_single_season(season_id):
     """Get single user details"""
-    response_object = {'status': 'fail', 'message': 'User does not exist'}
+    response_object = {'status': 'fail', 'message': 'Seaason does not exist'}
     try:
         season = Season.query.filter_by(season=int(season)).first()
         if not season:

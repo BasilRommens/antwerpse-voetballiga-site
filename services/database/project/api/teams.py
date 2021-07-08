@@ -4,7 +4,7 @@ from sqlalchemy import and_
 team_blueprint = Blueprint('teams', __name__)
 
 
-@team_blueprint.route('/db/add_team', methods=['POST'])
+@team_blueprint.route('/db/team', methods=['POST'])
 def add_team():
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -32,7 +32,7 @@ def add_team():
         return jsonify(response_object), 400
 
 
-@team_blueprint.route('/db/delete_team/<team_id>', methods=['DELETE'])
+@team_blueprint.route('/db/team/<team_id>', methods=['DELETE'])
 def delete_team(team_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -44,13 +44,14 @@ def delete_team(team_id):
         else:
             db.session.delete(team)
             db.session.commit()
+            response_object = {'status': 'success', 'message': 'Team deleted.'}
             return jsonify(response_object), 400
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@team_blueprint.route('/db/update_team/<team_id>', methods=['PUT'])
+@team_blueprint.route('/db/team/<team_id>', methods=['PUT'])
 def update_team(team_id):
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -78,7 +79,7 @@ def update_team(team_id):
         return jsonify(response_object), 400
 
 
-@team_blueprint.route('/db/teams/<team_id>', methods=['GET'])
+@team_blueprint.route('/db/team/<team_id>', methods=['GET'])
 def get_single_team(team_id):
     """Get single team details"""
     response_object = {

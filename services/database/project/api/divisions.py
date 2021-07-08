@@ -3,7 +3,7 @@ from project.api.config import *
 division_blueprint = Blueprint('divisions', __name__)
 
 
-@division_blueprint.route('/db/add_division', methods=['POST'])
+@division_blueprint.route('/db/division', methods=['POST'])
 def add_division():
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -21,7 +21,7 @@ def add_division():
         return jsonify(response_object), 400
 
 
-@division_blueprint.route('/db/divisions/<division_id>', methods=['GET'])
+@division_blueprint.route('/db/division/<division_id>', methods=['GET'])
 def get_single_division(division_id):
     """Get single division details"""
     response_object = {
@@ -45,8 +45,7 @@ def get_single_division(division_id):
         return jsonify(response_object), 404
 
 
-@division_blueprint.route('/db/delete_division/<division_id>',
-                          methods=['DELETE'])
+@division_blueprint.route('/db/division/<division_id>', methods=['DELETE'])
 def delete_division(division_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -58,6 +57,8 @@ def delete_division(division_id):
         else:
             db.session.delete(division)
             db.session.commit()
+            response_object = {'status': 'success',
+                               'message': f'{division_id} deleted.'}
             return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
@@ -86,6 +87,7 @@ def update_division(division_id):
             return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
+        return jsonify(response_object), 400
 
 
 @division_blueprint.route('/db/all_divisions', methods=['GET'])

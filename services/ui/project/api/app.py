@@ -177,7 +177,7 @@ def post_edit_club(club_id=0):
         abort(403)
     json_data = get_form_data(request)
     requests.put(
-        f'http://database:5000/db/update_club/{club_id}',
+        f'http://database:5000/db/club/{club_id}',
         json=json_data)
     return redirect(f'/editClub/{club_id}')
 
@@ -189,7 +189,7 @@ def edit_club(club_id=0):
     user_id = get_jwt_identity()
     data = setup_nav(dict(), user_id)
     data['club_info'] = requests.get(
-        f'http://database:5000/db/clubs/{club_id}').json()['data']
+        f'http://database:5000/db/club/{club_id}').json()['data']
     admin = get_admin_number(user_id)
     return render_template('edit_club.html', data=data, admin=admin)
 
@@ -207,7 +207,7 @@ def admin_edit_team(team_id=0):
 @jwt_required
 def post_admin_edit_team(team_id=0):
     json_data = get_form_data(request)
-    status = requests.put(f'http://database:5000/db/update_team/{team_id}',
+    status = requests.put(f'http://database:5000/db/team/{team_id}',
                           json=json_data).json()['status']
     return redirect(f'/admin/editTeam/{team_id}')
 
@@ -225,7 +225,7 @@ def admin_add_team():
 @jwt_required
 def post_admin_add_team():
     json_data = get_form_data(request)
-    status = requests.post(f'http://database:5000/db/add_team',
+    status = requests.post(f'http://database:5000/db/team',
                            json=json_data).json()['status']
     return redirect(f'/admin/viewTeams')
 
@@ -235,7 +235,7 @@ def post_admin_add_team():
 def admin_delete_team(team_id):
     status = \
         requests.delete(
-            f'http://database:5000/db/delete_team/{team_id}').json()[
+            f'http://database:5000/db/team/{team_id}').json()[
             'status']
     return redirect('/admin/viewTeams')
 
@@ -295,7 +295,7 @@ def admin_edit_match(match_id):
     user_id = get_jwt_identity()
     data = \
         requests.get(
-            f'http://database:5000/db/matches/{match_id}').json()[
+            f'http://database:5000/db/match/{match_id}').json()[
             'data']
     if data['team_home_ID'] is not None:
         data['team_home_ID'] = int(data['team_home_ID'])
@@ -319,7 +319,7 @@ def admin_edit_match(match_id):
 @jwt_required
 def post_admin_edit_match(match_id):
     json_data = get_form_data(request)
-    status = requests.put(f'http://database:5000/db/update_match/{match_id}',
+    status = requests.put(f'http://database:5000/db/match/{match_id}',
                           json=json_data).json()['status']
     return redirect(f'/admin/editMatch/{match_id}')
 
@@ -329,7 +329,7 @@ def post_admin_edit_match(match_id):
 def admin_delete_match(match_id):
     status = \
         requests.delete(
-            f'http://database:5000/db/delete_match/{match_id}').json()[
+            f'http://database:5000/db/match/{match_id}').json()[
             'status']
     return redirect(f'/admin/viewMatches')
 
@@ -352,7 +352,7 @@ def admin_add_match():
 @jwt_required
 def post_admin_add_match():
     json_data = get_form_data(request)
-    status = requests.post(f'http://database:5000/db/add_match',
+    status = requests.post(f'http://database:5000/db/match',
                            json=json_data).json()['status']
     return redirect('/admin/viewMatches')
 
@@ -369,8 +369,8 @@ def admin_view_clubs():
 @jwt_optional
 def admin_delete_club(club_id: int):
     status = \
-    requests.delete(f'http://database:5000/db/delete_club/{club_id}').json()[
-        'status']
+        requests.delete(f'http://database:5000/db/club/{club_id}').json()[
+            'status']
     return redirect('/admin/viewClubs')
 
 
@@ -385,7 +385,7 @@ def admin_add_club():
 @jwt_optional
 def post_admin_add_club():
     json_data = get_form_data(request)
-    status = requests.post(f'http://database:5000/db/add_club',
+    status = requests.post(f'http://database:5000/db/club',
                            json=json_data).json()['status']
     return redirect('/admin/viewClubs')
 
@@ -411,7 +411,7 @@ def admin_add_referee():
 def post_admin_add_referee():
     json_data = get_form_data(request)
     status = requests.post(
-        f'http://database:5000/db/add_referee',
+        f'http://database:5000/db/referee',
         json=json_data).json()['status']
     return redirect('/admin/viewReferees')
 
@@ -430,7 +430,7 @@ def admin_edit_referee(referee_id=0):
 def post_admin_edit_referee(referee_id=0):
     json_data = get_form_data(request)
     status = requests.put(
-        f'http://database:5000/db/update_referee/{referee_id}',
+        f'http://database:5000/db/referee/{referee_id}',
         json=json_data).json()['status']
     return redirect(f'/admin/editReferee/{referee_id}')
 
@@ -440,7 +440,7 @@ def post_admin_edit_referee(referee_id=0):
 def delete_admin_edit_referee(referee_id=0):
     json_data = get_form_data(request)
     status = requests.delete(
-        f'http://database:5000/db/delete_referee/{referee_id}',
+        f'http://database:5000/db/referee/{referee_id}',
         json=json_data).json()['status']
     return redirect(f'/admin/viewReferees')
 
@@ -467,10 +467,10 @@ def admin_edit_user(user_id=0):
 def post_admin_edit_user(user_id=0):
     json_data = get_form_data(request)
     status = requests.put(
-        f'http://database:5000/db/update_user/{user_id}',
+        f'http://database:5000/db/user/{user_id}',
         json=json_data).json()['status']
     status = requests.put(
-        f'http://database:5000/db/update_admin/{user_id}',
+        f'http://database:5000/db/admin/{user_id}',
         json=json_data).json()['status']
     return redirect(f'/admin/editUser/{user_id}')
 
@@ -479,7 +479,7 @@ def post_admin_edit_user(user_id=0):
 @jwt_required
 def admin_delete_user(user_id: int = 0):
     status = requests.delete(
-        f'http://database:5000/db/delete_user/{user_id}').json()['status']
+        f'http://database:5000/db/user/{user_id}').json()['status']
     return redirect(f'/admin/viewUsers')
 
 
@@ -497,11 +497,11 @@ def admin_add_user():
 def post_admin_add_user():
     json_data = get_form_data(request)
     status = requests.post(
-        f'http://database:5000/db/add_user',
+        f'http://database:5000/db/user',
         json=json_data).json()
     user_id = int(status['user_id'])
     status = requests.put(
-        f'http://database:5000/db/update_admin/{user_id}',
+        f'http://database:5000/db/admin/{user_id}',
         json=json_data).json()['status']
     return redirect('/admin/viewUsers')
 
@@ -528,7 +528,8 @@ def admin_assign_referee(match_id: int):
 @jwt_optional
 def post_admin_assign_referee(match_id):
     json_data = get_form_data(request)
-    status = requests.put(f'http://database:5000/db/assign_referee/{match_id}', json=json_data).json()['status']
+    status = requests.put(f'http://database:5000/db/assign_referee/{match_id}',
+                          json=json_data).json()['status']
     return redirect('/admin/viewMatches')
 
 
@@ -544,7 +545,7 @@ def admin_view_season():
 @jwt_required
 def admin_delete_season(season):
     status = \
-        requests.get(f'http://database:5000/db/delete_season/{season}').json()[
+        requests.get(f'http://database:5000/db/season/{season}').json()[
             'status']
     return redirect('/admin/viewSeasons')
 
@@ -552,7 +553,7 @@ def admin_delete_season(season):
 @ui_blueprint.route('/admin/addSeason')
 @jwt_required
 def admin_add_season():
-    status = requests.get(f'http://database:5000/db/add_season').json()[
+    status = requests.get(f'http://database:5000/db/season').json()[
         'status']
     return redirect('/admin/viewSeasons')
 
@@ -577,7 +578,7 @@ def admin_edit_status(status_id):
 @jwt_required
 def post_admin_edit_status(status_id):
     json_data = get_form_data(request)
-    status = requests.put(f'http://database:5000/db/update_status/{status_id}',
+    status = requests.put(f'http://database:5000/db/status/{status_id}',
                           json=json_data).json()['status']
     return redirect(f'/admin/editStatus/{status_id}')
 
@@ -587,7 +588,7 @@ def post_admin_edit_status(status_id):
 def admin_delete_status(status_id):
     status = \
         requests.delete(
-            f'http://database:5000/db/delete_status/{status_id}').json()[
+            f'http://database:5000/db/status/{status_id}').json()[
             'status']
     return redirect('/admin/viewStatuses')
 
@@ -604,7 +605,7 @@ def admin_add_status():
 def post_admin_add_status():
     json_data = get_form_data(request)
     status = \
-        requests.post(f'http://database:5000/db/add_status',
+        requests.post(f'http://database:5000/db/status',
                       json=json_data).json()['status']
     return redirect('/admin/viewStatuses')
 
@@ -629,7 +630,7 @@ def admin_add_division():
 @jwt_optional
 def post_admin_add_division():
     json_data = get_form_data(request)
-    status = requests.post(f'http://database:5000/db/add_division',
+    status = requests.post(f'http://database:5000/db/division',
                            json=json_data).json()['status']
     return redirect('/admin/viewDivisions')
 
@@ -657,7 +658,7 @@ def post_admin_edit_division(division_id=0):
 def admin_delete_division(division_id=0):
     status = \
         requests.delete(
-            f'http://database:5000/db/delete_division/{division_id}').json()[
+            f'http://database:5000/db/division/{division_id}').json()[
             'status']
     return redirect(f'/admin/viewDivisions')
 

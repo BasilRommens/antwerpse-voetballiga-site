@@ -3,7 +3,7 @@ from project.api.config import *
 referee_blueprint = Blueprint('referees', __name__)
 
 
-@referee_blueprint.route('/db/add_referee', methods=['POST'])
+@referee_blueprint.route('/db/referee', methods=['POST'])
 def add_referee():
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -13,7 +13,7 @@ def add_referee():
     lastName = post_data.get('lastName')
     address = post_data.get('address')
     zipCode = post_data.get('zipCode')
-    city = post_data.get('email')
+    city = post_data.get('city')
     phoneNumber = post_data.get('phoneNumber')
     email = post_data.get('email')
     dateOfBirth = post_data.get('dateOfBirth')
@@ -36,7 +36,7 @@ def add_referee():
         return jsonify(response_object), 400
 
 
-@referee_blueprint.route('/db/referees/<referee_id>', methods=['GET'])
+@referee_blueprint.route('/db/referee/<referee_id>', methods=['GET'])
 def get_single_referee(referee_id):
     """Get single referee details"""
     response_object = {
@@ -58,7 +58,7 @@ def get_single_referee(referee_id):
         return jsonify(response_object), 404
 
 
-@referee_blueprint.route('/db/delete_referee/<referee_id>', methods=['DELETE'])
+@referee_blueprint.route('/db/referee/<referee_id>', methods=['DELETE'])
 def delete_referee(referee_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -70,13 +70,15 @@ def delete_referee(referee_id):
         else:
             db.session.delete(referee)
             db.session.commit()
-            return jsonify(response_object), 400
+            response_object = {'status': 'success',
+                               'message': 'Referee deleted.'}
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
 
 
-@referee_blueprint.route('/db/update_referee/<referee_id>', methods=['PUT'])
+@referee_blueprint.route('/db/referee/<referee_id>', methods=['PUT'])
 def update_referee(referee_id=0):
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}

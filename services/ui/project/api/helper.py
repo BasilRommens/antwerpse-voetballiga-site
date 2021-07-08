@@ -10,7 +10,7 @@ def get_club_id(user_id: int) -> int:
                 'teamID'])
     except Exception:
         return None
-    return int(requests.get(f'http://database:5000/db/teams/{team_id}').json()[
+    return int(requests.get(f'http://database:5000/db/team/{team_id}').json()[
                    'data']['stamNumber'])
 
 
@@ -60,7 +60,7 @@ def setup_nav(data_dict: dict, user_id: int) -> dict:
 
 def get_division_name(data: dict, division: int):
     data['division_name'] = \
-        requests.get(f'http://database:5000/db/divisions/{division}').json()[
+        requests.get(f'http://database:5000/db/division/{division}').json()[
             'data']['name']
     return data
 
@@ -106,11 +106,11 @@ def get_best_of_division_data(season: int, division: int):
 
 def get_team_name(team_id: int):
     team = requests.get(
-        f'http://database:5000/db/teams/{team_id}').json()['data']
+        f'http://database:5000/db/team/{team_id}').json()['data']
     team_suffix = team['suffix']
     stam_number = int(team['stamNumber'])
     club_name = requests.get(
-        f'http://database:5000/db/clubs/{stam_number}').json()[
+        f'http://database:5000/db/club/{stam_number}').json()[
         'data']['name']
     team_name = f'{club_name} {team_suffix}'
     return team_name
@@ -170,14 +170,14 @@ def get_teams(division: int, season: int):
         for team_id_name in ["team_home_ID", "team_away_ID"]:
             team = \
                 requests.get(
-                    f'http://database:5000/db/teams/{match[team_id_name]}').json()[
+                    f'http://database:5000/db/team/{match[team_id_name]}').json()[
                     'data']
             team_id = team['id']
             stam_number = team['stamNumber']
             if not is_team_in_here(teams, team_id):
                 team_suffix = team['suffix']
                 club_name = requests.get(
-                    f'http://database:5000/db/clubs/{stam_number}').json()[
+                    f'http://database:5000/db/club/{stam_number}').json()[
                     'data']['name']
                 team = create_default_team()
                 team['team_id'] = team_id
@@ -189,7 +189,7 @@ def get_teams(division: int, season: int):
 
 def get_club_id_from_team_id(team_id: int) -> int:
     team_info = requests.get(
-        f'http://database:5000/db/teams/{team_id}').json()['data']
+        f'http://database:5000/db/team/{team_id}').json()['data']
     return int(team_info['stamNumber'])
 
 
@@ -209,7 +209,7 @@ def remove_redundant_array(json_dict: dict):
 
 def get_fixture(match_id: int) -> dict:
     match = \
-        requests.get(f'http://database:5000/db/matches/{match_id}').json()[
+        requests.get(f'http://database:5000/db/match/{match_id}').json()[
             'data']
 
     data = set_match_team_names(match)
@@ -230,7 +230,7 @@ def get_all_referees() -> list:
 
 def get_referee(ref_id: int) -> list:
     referee = \
-        requests.get(f'http://database:5000/db/referees/{ref_id}').json()[
+        requests.get(f'http://database:5000/db/referee/{ref_id}').json()[
             'data']
     return referee
 
@@ -271,7 +271,7 @@ def get_status(status_id: int) -> dict:
 
 def get_division(division_id: int) -> dict:
     return \
-        requests.get(f'http://database:5000/db/divisions/{division_id}').json()[
+        requests.get(f'http://database:5000/db/division/{division_id}').json()[
             'data']
 
 
@@ -315,7 +315,7 @@ def get_all_users() -> list:
 
 
 def get_single_user(user_id: int) -> dict:
-    user = requests.get(f'http://database:5000/db/users/{user_id}').json()[
+    user = requests.get(f'http://database:5000/db/user/{user_id}').json()[
         'data']
     if is_super_admin(user_id):
         user['admin'] = 2
@@ -327,7 +327,7 @@ def get_single_user(user_id: int) -> dict:
 
 
 def get_single_team(team_id: int) -> dict:
-    team = requests.get(f'http://database:5000/db/teams/{team_id}').json()[
+    team = requests.get(f'http://database:5000/db/team/{team_id}').json()[
         'data']
     return team
 
@@ -382,7 +382,7 @@ def get_all_matches() -> list:
 
 
 def get_match(match_id: int) -> dict:
-    match = requests.get(f'http://database:5000/db/matches/{match_id}').json()[
+    match = requests.get(f'http://database:5000/db/match/{match_id}').json()[
         'data']
     return match
 

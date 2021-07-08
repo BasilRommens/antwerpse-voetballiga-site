@@ -40,11 +40,11 @@ def sort_matches_date(vs_matches: list):
 
 def get_team_name(team_id: int):
     team = requests.get(
-        f'http://database:5000/db/teams/{team_id}').json()['data']
+        f'http://database:5000/db/team/{team_id}').json()['data']
     team_suffix = team['suffix']
     stam_number = int(team['stamNumber'])
     club_name = requests.get(
-        f'http://database:5000/db/clubs/{stam_number}').json()[
+        f'http://database:5000/db/club/{stam_number}').json()[
         'data']['name']
     team_name = f'{club_name} {team_suffix}'
     return team_name
@@ -147,14 +147,14 @@ def get_teams(division: int, season: int):
         for team_id_name in ["team_home_ID", "team_away_ID"]:
             team = \
                 requests.get(
-                    f'http://database:5000/db/teams/{match[team_id_name]}').json()[
+                    f'http://database:5000/db/team/{match[team_id_name]}').json()[
                     'data']
             team_id = team['id']
             stam_number = team['stamNumber']
             if not is_team_in_here(teams, team_id):
                 team_suffix = team['suffix']
                 club_name = requests.get(
-                    f'http://database:5000/db/clubs/{stam_number}').json()[
+                    f'http://database:5000/db/club/{stam_number}').json()[
                     'data']['name']
                 team = create_default_team()
                 team['team_id'] = team_id

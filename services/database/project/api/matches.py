@@ -4,7 +4,7 @@ from sqlalchemy import and_
 match_blueprint = Blueprint('matches', __name__)
 
 
-@match_blueprint.route('/db/add_match', methods=['POST'])
+@match_blueprint.route('/db/match', methods=['POST'])
 def add_match():
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -39,7 +39,7 @@ def add_match():
         return jsonify(response_object), 400
 
 
-@match_blueprint.route('/db/delete_match/<match_id>', methods=['DELETE'])
+@match_blueprint.route('/db/match/<match_id>', methods=['DELETE'])
 def delete_match(match_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     try:
@@ -53,7 +53,7 @@ def delete_match(match_id):
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Match was deleted!'
-            return jsonify(response_object), 400
+            return jsonify(response_object), 200
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
@@ -110,7 +110,7 @@ def update_match_score(match_id=0):
         return jsonify(response_object), 400
 
 
-@match_blueprint.route('/db/update_match/<match_id>', methods=['PUT'])
+@match_blueprint.route('/db/match/<match_id>', methods=['PUT'])
 def update_match(match_id):
     post_data = json.loads(request.get_json())
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
@@ -155,7 +155,7 @@ def update_match(match_id):
         return jsonify(response_object), 400
 
 
-@match_blueprint.route('/db/matches/<match_id>', methods=['GET'])
+@match_blueprint.route('/db/match/<match_id>', methods=['GET'])
 def get_single_match(match_id):
     """Get single match details"""
     response_object = {

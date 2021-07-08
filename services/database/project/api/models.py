@@ -8,6 +8,8 @@ class Status(db.Model):
     __tablename__ = 'state'
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False)
+    matches = db.relationship("Match", back_populates="state",
+                              cascade='all, delete', passive_deletes=True)
 
     def __init__(self, name):
         self.name = name
@@ -24,6 +26,8 @@ class Club(db.Model):
     city = db.Column(db.String(128), nullable=False)
     stamNumber = db.Column(db.Integer, primary_key=True, nullable=False)
     website = db.Column(db.String(128), nullable=False)
+    teams = db.relationship("Team", back_populates="club",
+                            cascade='all, delete', passive_deletes=True)
 
     def __init__(self, name, address, zipCode, city, stamNumber, website):
         self.name = name
@@ -50,7 +54,12 @@ class User(db.Model):
     username = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
-    teamID = db.Column(db.Integer, ForeignKey('club.stamNumber'), nullable=True)
+    teamID = db.Column(db.Integer,
+                       ForeignKey('team.ID', ondelete='CASCADE'),
+                       nullable=True)
+    admin = db.relationship('Admin', back_populates='user',
+                            cascade='all, delete', passive_deletes=True)
+    team = db.relationship('Team', back_populates='users')
 
     def __init__(self, username, email, password, teamID=None):
         self.username = username
@@ -70,8 +79,10 @@ class User(db.Model):
 
 class Admin(db.Model):
     __tablename__ = 'admin'
-    userID = db.Column(db.Integer, primary_key=True)
+    userID = db.Column(db.Integer, ForeignKey('users.ID', ondelete='CASCADE'),
+                       primary_key=True)
     isSuper = db.Column(db.Boolean, nullable=False)
+    user = db.relationship('User', back_populates='admin')
 
     def __init__(self, userID, isSuper):
         self.userID = userID
@@ -84,6 +95,8 @@ class Admin(db.Model):
 class Season(db.Model):
     __tablename__ = "season"
     season = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    matches = db.relationship("Match", back_populates="season",
+                              cascade='all, delete', passive_deletes=True)
 
     def __init__(self):
         pass
@@ -103,6 +116,8 @@ class Referee(db.Model):
     phoneNumber = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(128), nullable=False)
     dateOfBirth = db.Column(db.Date, nullable=False)
+    matches = db.relationship("Match", back_populates="referee",
+                              cascade='all, delete', passive_deletes=True)
 
     def __init__(self, firstName, lastName, address, zipCode, city,
                  phoneNumber, email, dateOfBirth):
@@ -134,19 +149,34 @@ class Match(db.Model):
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     goalsHome = db.Column(db.Integer, nullable=True)
     goalsAway = db.Column(db.Integer, nullable=True)
-    matchStatus = db.Column(db.Integer, ForeignKey('state.ID'), nullable=True)
+    matchStatus = db.Column(db.Integer,
+                            ForeignKey('state.ID', ondelete='SET NULL'),
+                            nullable=True)
     mDate = db.Column(db.Date, nullable=False)
     mTime = db.Column(db.Time, nullable=False)
     week = db.Column(db.Integer, nullable=True)
-    teamHomeID = db.Column(db.Integer, ForeignKey('team.ID'), nullable=False)
-    teamAwayID = db.Column(db.Integer, ForeignKey('team.ID'), nullable=False)
+    teamHomeID = db.Column(db.Integer,
+                           ForeignKey('team.ID', ondelete='CASCADE'),
+                           nullable=False)
+    teamAwayID = db.Column(db.Integer,
+                           ForeignKey('team.ID', ondelete='CASCADE'),
+                           nullable=False)
     divisionID = db.Column(db.Integer,
-                           ForeignKey('division.ID'),
+                           ForeignKey('division.ID', ondelete='CASCADE'),
                            nullable=False)
     seasonID = db.Column(db.Integer,
-                         ForeignKey('season.season'),
+                         ForeignKey('season.season', ondelete="CASCADE"),
                          nullable=False)
-    refID = db.Column(db.Integer, ForeignKey('referee.ID'), nullable=True)
+    refID = db.Column(db.Integer, ForeignKey('referee.ID', ondelete='SET NULL'),
+                      nullable=True)
+    division = db.relationship('Division', back_populates='matches')
+    referee = db.relationship('Referee', back_populates='matches')
+    season = db.relationship('Season', back_populates='matches')
+    state = db.relationship('Status', back_populates='matches')
+    home_team = db.relationship('Team', back_populates='home_matches',
+                                foreign_keys=[teamHomeID])
+    away_team = db.relationship('Team', back_populates='away_matches',
+                                foreign_keys=[teamAwayID])
 
     def __init__(self, goalsHome, goalsAway, matchStatus, mDate, mTime, week,
                  teamHomeID, teamAwayID, divisionID, seasonID, refID):
@@ -185,8 +215,15 @@ class Team(db.Model):
     suffix = db.Column(db.String(128), nullable=False)
     colors = db.Column(db.String(128), nullable=False)
     stamNumber = db.Column(db.Integer,
-                           ForeignKey('club.stamNumber'),
+                           ForeignKey('club.stamNumber', ondelete='CASCADE'),
                            nullable=False)
+    home_matches = db.relationship('Match', back_populates='home_team',
+                                   cascade='all, delete', passive_deletes=True)
+    away_matches = db.relationship('Match', back_populates='away_team',
+                                   cascade='all, delete', passive_deletes=True)
+    users = db.relationship('User', back_populates='team',
+                            cascade='all, delete', passive_deletes=True)
+    club = db.relationship('Club', back_populates='teams')
 
     def __init__(self, suffix, colors, stamNumber):
         self.suffix = suffix
@@ -206,6 +243,8 @@ class Division(db.Model):
     __tablename__ = 'division'
     ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(128), nullable=False)
+    matches = db.relationship("Match", back_populates="division",
+                              cascade='all, delete', passive_deletes=True)
 
     def __init__(self, name):
         self.name = name
