@@ -3,13 +3,12 @@ HOST: http://localhost:5000/
 
 # Antwerpse Voetballiga Site
 
-Antwerpse voetballiga site is een site die gemaakt moest worden voor het 
-project van gedistribueerde systemen. Dit project werd gemaakt adhv docker 
-containers met het doel om te leren hoe dat een gedistribueerd systeem 
-er in de praktijk kan uitzien. Deze containers stellen in het project 
-elks een eigen microservice voor.
+The antwerp football league site is a project made for the course distributed
+systems. This must be made with docker containers in order to simulate
+microservices on a local machine. The goal of this project was to create
+a notion about distributed systems itself in practice.
 
-# Database [/db]
+# Database
 
 ## Admin [/db/admin/{admin_id}]
 
@@ -120,7 +119,7 @@ elks een eigen microservice voor.
 ## Club [/db/club/{club_id}]
 
 + Parameters
-    + club_id (number) - Het id van een club, ook wel gelijk aan het stamgetal.
+    + club_id (number) - The ID of a club, which is equal to the stam number.
 
 ### Create a New Club [POST /db/club]
 
@@ -244,7 +243,7 @@ elks een eigen microservice voor.
             }
         }
         
-+ Response 400 (application/json)
++ Response 404 (application/json)
 
         {
             "status": "fail",
@@ -257,7 +256,8 @@ elks een eigen microservice voor.
 
         {
             "status": "success",
-            "data": 
+            "data": {
+            "clubs":
             [
                 {
                     "name": "sandwich club",
@@ -277,8 +277,1519 @@ elks een eigen microservice voor.
                     "website": "cheese.club"
                 }
             ]
+            }
         }
         
-## Division [/db/division]
+## Division [/db/division/{division_id}]
 
-###
++ Parameters
+    + division_id (number) - The id of a division.
+
+### Create a New Division [POST /db/division]
+
++ Request (application/json)
+
+        {
+            "name": "sandwich division"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "sandwich division was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get a Division [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "ID": 23,
+                "name": "sandwich division"
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Division does not exist"
+        }
+
+### Delete a Division [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "2 deleted."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete division"
+        }
+
+### Update Division [PUT]
+
++ Request (application/json)
+
+        {
+            "name": "sandwich division"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated division 23"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update division"
+        }
+        
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Get All Divisions [GET /db/all_divisions]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "divisions":
+            [
+                {
+                    "name": "sandwich division"
+                    "ID": 23
+                },
+                ...,
+                {
+                    "name": "cheese division",
+                    "ID": 12
+                }
+            ]
+                        }
+        }
+        
+## Match [/db/match/{match_id}]
+
++ Parameters
+    + match_id (number) - The id of a match.
+
+### Create a New Match [POST /db/match]
+
++ Request (application/json)
+
+        {
+            "goalsHome": "3",
+            "goalsAway": "1",
+            "matchStatus": "None",
+            "date": "12/5/2020",
+            "time": "14:00",
+            "teamHomeID": "34",
+            "teamAwayID": "3",
+            "divisionID": "56",
+            "seasonID": "1",
+            "refID": "8",
+            "week": "12"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "Match was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get a Match [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "goalsHome": 3,
+                "goalsAway": 1,
+                "matchStatus": none,
+                "date": "12/5/2020",
+                "time": "14:00",
+                "teamHomeID": 34,
+                "teamAwayID": 3,
+                "divisionID": 56,
+                "seasonID": 1,
+                "refID": 8,
+                "week": 12
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Match does not exist"
+        }
+
+### Delete a Match [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Match waas deleted!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete match"
+        }
+
+### Update Match [PUT]
+
++ Request (application/json)
+
+        {
+            "goalsHome": "3",
+            "goalsAway": "1",
+            "matchStatus": "None",
+            "date": "12/5/2020",
+            "time": "14:00",
+            "teamHomeID": "34",
+            "teamAwayID": "3",
+            "divisionID": "56",
+            "seasonID": "1",
+            "refID": "8",
+            "week": "12"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated match 23"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update match"
+        }
+        
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Get All Matches [GET /db/all_matches]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "matches":
+            [
+                {
+                    "ID": 12,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 34,
+                    "teamAwayID": 3,
+                    "divisionID": 56,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 12
+                },
+                ...,
+                {
+                    "ID": 45,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 34,
+                    "teamAwayID": 3,
+                    "divisionID": 56,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 12
+                }
+            ]
+                        }
+        }
+
+### Assign referee [PUT /db/assign_referee/{match_id}]
+
++ Parameters
+    + match_id (number) - The id of the match to which we need to assign a referee.
+  
++ Request (application/json)
+
+        {
+            "referee": "324"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated match 23"
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update match"
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Update match score [PUT /db/update_match_score/{match_id}]
+
++ Parameters
+    + match_id (number) - The id of the match to which we need to assign a referee.
+
++ Request (application/json)
+
+        {
+            "goalsHome": "1",
+            "goalsAway": "1"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated match 23"
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update match"
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Get Matches For Team in Week [GET /db/matches_team_week]
+
++ Request (application/json)
+
+        {
+            "division": "1",
+            "season": "1",
+            "week": "1",
+            "team": "1"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "matches":
+            [
+                {
+                    "ID": 43,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 1,
+                    "teamAwayID": 3,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                },
+                ...,
+                {
+                    "ID": 234,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 34,
+                    "teamAwayID": 1,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                }
+            ]
+                        }
+        }
+        
+### Get All Matches In Certain Division And Season [GET /db/all_matches_div_season]
+
++ Request (application/json)
+
+        {
+            "division": "1",
+            "season": "1"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "matches":
+            [
+                {
+                    "ID": 312,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 1,
+                    "teamAwayID": 3,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                },
+                ...,
+                {
+                    "ID": 346,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 34,
+                    "teamAwayID": 1,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                }
+            ]
+                        }
+        }
+
+### Get All Matches In Certain Week [GET /db/matches_week_all]
+
++ Request (application/json)
+
+        {
+            "division": "1",
+            "season": "1",
+            "week": "1"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "matches":
+            [
+                {
+                    "ID": 6,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 1,
+                    "teamAwayID": 3,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                },
+                ...,
+                {
+                    "ID": 658,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 34,
+                    "teamAwayID": 1,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                }
+            ]
+                        }
+        }
+
+### Get All Home Matches Of a Team [GET /db/all_team_home_matches/{team_id}]
+
++ Parameters
+    + team_id (number) - The id of the team for which we need to fetch all their home matches.
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "matches":
+            [
+                {
+                    "ID": 345,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 12,
+                    "teamAwayID": 3,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                },
+                ...,
+                {
+                    "ID": 432,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 12,
+                    "teamAwayID": 1,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                }
+            ]
+                        }
+        }
+
++ Response 400 (application/json)
+    
+        {
+            "status": "fail"
+            "message": "No team with such an ID found"
+        }
+
+### Get All Team Matches Played [GET /db/all_team_matches/{team_id}]
+
++ Parameters
+    + team_id (number) - The id of the team for which we need to fetch all their home matches.
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data":{
+            "matches":
+            [
+                {
+                    "ID": 56,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 1,
+                    "teamAwayID": 3,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                },
+                ...,
+                {
+                    "ID": 65,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 12,
+                    "teamAwayID": 1,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                }
+            ]
+                        }
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail"
+            "message": "No team with such an ID found"
+        }
+
+### Get All VS Matches For Two Teams [GET /db/all_vs_matches]
+
++ Request (application/json)
+
+        {
+            "team1": "34",
+            "team2": "23"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data":{
+            "matches":
+            [
+                {
+                    "ID": 423,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 34,
+                    "teamAwayID": 23,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                },
+                ...,
+                {
+                    "ID": 34,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 23,
+                    "teamAwayID": 34,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                }
+            ]
+                        }
+        }
+
+### Get All Matches In A range [GET /db/all_matches_in_range]
+
++ Request (application/json)
+
+        {
+            "min": "423",
+            "max": "500"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "matches":
+            [
+                {
+                    "ID": 423,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 34,
+                    "teamAwayID": 23,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                },
+                ...,
+                {
+                    "ID": 500,
+                    "goalsHome": 3,
+                    "goalsAway": 1,
+                    "matchStatus": none,
+                    "date": "12/5/2020",
+                    "time": "14:00",
+                    "teamHomeID": 23,
+                    "teamAwayID": 34,
+                    "divisionID": 1,
+                    "seasonID": 1,
+                    "refID": 8,
+                    "week": 1
+                }
+            ]
+                        }
+        }
+        
+## Referee [/db/referee/{referee_id}]
+
++ Parameters
+    + referee_id (number) - The id of a division.
+
+### Create a New Referee [POST /db/referee]
+
++ Request (application/json)
+
+        {
+            "firstName": "John",
+            "lastName": "Doe",
+            "address": "sandwich street 66",
+            "zipCode": "3247",
+            "city": "sandwich",
+            "phoneNumber": "348792347",
+            "email": "john@sandwich.club",
+            "dateOfBirth": "22/12/1930"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "john@sandwich.club was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get a Referee [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "ID": 34,
+                "first_name": "John",
+                "last_name": "Doe",
+                "address": "sandwich street 66",
+                "zipCode": 3247,
+                "city": "sandwich",
+                "phone_number": 348792347,
+                "email": "john@sandwich.club",
+                "date_of_birth": "22/12/1930"
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "refereee does not exist"
+        }
+
+### Delete a Referee [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Referee deleted."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete referee"
+        }
+
+### Update Referee [PUT]
+
++ Request (application/json)
+
+        {
+            "firstName": "John",
+            "lastName": "Doe",
+            "address": "sandwich street 66",
+            "zipCode": "3247",
+            "city": "sandwich",
+            "phoneNumber": "348792347",
+            "email": "john@sandwich.club",
+            "dateOfBirth": "22/12/1930"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated referee John Doe"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update referee"
+        }
+        
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Get All Referees [GET /db/all_referees]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": { 
+            "referees": [
+                    {
+                        "ID": 34,
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "address": "sandwich street 66",
+                        "zipCode": 3247,
+                        "city": "sandwich",
+                        "phone_number": 348792347,
+                        "email": "john@sandwich.club",
+                        "date_of_birth": "22/12/1930"
+                    },
+                    ...,
+                    {
+                        "ID": 33,
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "address": "sandwich street 66",
+                        "zipCode": 3247,
+                        "city": "sandwich",
+                        "phone_number": 348792347,
+                        "email": "john@sandwich.club",
+                        "date_of_birth": "22/12/1930"
+                    }
+                ]
+            }
+        }
+
+## Season [/db/season/{season_id}]
+
++ Parameters
+    + season_id (number) - The id of a season.
+
+### Create a New Season [POST /db/season]
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "Season was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get a Season [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "season": 2,
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Season does not exist"
+        }
+
+### Delete a Season [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Season 2 deleted."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete division"
+        }
+
+### Get All Seasons [GET /db/all_seasons]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "seasons":
+                    [
+                        {
+                            "season": 1
+                        },
+                        ...,
+                        {
+                            "season": 12
+                        }
+                    ]
+            }
+        }
+
+## Status [/db/status/{status_id}]
+
++ Parameters
+    + status_id (number) - The id of a status of a certain match.
+
+### Create a New Status [POST /db/status]
+
++ Request (application/json)
+
+        {
+            "name": "sandwich"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "Status was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get a Status [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "ID": 23,
+                "name": "sandwich"
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Status does not exist"
+        }
+
+### Delete a Status [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Status was deleted!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete status"
+        }
+
+### Update Division [PUT]
+
++ Request (application/json)
+
+        {
+            "name": "sandwich"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated status 23"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update status"
+        }
+        
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Get All Statuses [GET /db/all_statuses]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "divisions":
+                    [
+                        {
+                            "name": "sandwich"
+                            "ID": 23
+                        },
+                        ...,
+                        {
+                            "name": "cheese",
+                            "ID": 12
+                        }
+                    ]
+            }
+        }
+        
+## Team [/db/team/{team_id}]
+
++ Parameters
+    + team_id (number) - The id of a team.
+
+### Create a New Team [POST /db/team]
+
++ Request (application/json)
+
+        {
+            "suffix": "A",
+            "colors": "red/yellow/blue",
+            "stamNumber": "34"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "Team was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. That team already exists."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get a Team [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": 23,
+                "suffix": "A",
+                "colors": "red/yellow/blue",
+                "stamNumber": 34
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Team does not exist"
+        }
+
+### Delete a Team [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Team deleted."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete team"
+        }
+
+### Update Team [PUT]
+
++ Request (application/json)
+
+        {
+            "suffix": "A",
+            "colors": "red/yellow/blue",
+            "stamNumber": "34"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated team 76"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update team"
+        }
+        
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Get All Teams [GET /db/all_teams]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "divisions":
+                    [
+                        {
+                            "id": 23,
+                            "suffix": "A",
+                            "colors": "red/yellow/blue",
+                            "stamNumber": 34
+                        },
+                        ...,
+                        {
+                            "id": 6345,
+                            "suffix": "A",
+                            "colors": "red/yellow/black",
+                            "stamNumber": 23
+                        }
+                    ]
+            }
+        }
+
+## User [/db/user/{user_id}]
+
++ Parameters
+    + user_id (number) - The id of an user.
+
+### Create a New User [POST /db/user]
+
++ Request (application/json)
+
+        {
+            "username": "JohnDoe",
+            "email": "sandwich",
+            "password": "cheese",
+            "teamID": "234"
+        }
+
++ Response 201 (application/json)
+
+        {
+            "status": "success",
+            "message": "JohnDoe was added!"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. That email already exists."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+        
+### Get an User [GET]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+                "id": 347
+                "username": "JohnDoe",
+                "email": "sandwich",
+                "password": "cheese",
+                "teamID": 234
+            }
+        }
+        
++ Response 404 (application/json)
+
+        {
+            "status": "fail",
+            "message": "User does not exist"
+        }
+
+### Delete an User [DELETE]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "User deleted."
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't delete user"
+        }
+
+### Update User [PUT]
+
++ Request (application/json)
+
+        {
+            "username": "JohnDoe",
+            "email": "sandwich",
+            "password": "cheese",
+            "teamID": "234"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "message": "Updated user JohnDoe"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+   
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Sorry. Can't update user"
+        }
+        
++ Request (application/json)
+
+        Empty request
+
++ Response 400 (application/json)
+
+        {
+            "status": "fail",
+            "message": "Invalid payload."
+        }
+
+### Get All Users [GET /db/all_users]
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": {
+            "divisions":
+            [
+                {
+                    "id": 347
+                    "username": "JohnDoe",
+                    "email": "sandwich",
+                    "password": "cheese",
+                    "teamID": 234
+                },
+                ...,
+                {
+                    "id": 347
+                    "username": "JohnDoe",
+                    "email": "sandwich",
+                    "password": "cheese",
+                    "teamID": 234
+                }
+            ]
+        }
+        }
+
+### Get User ID [GET /db/user_id/{email}]
+
++ Parameters
+    + email (string) - The email of a user in the database.
+
++ Response 200 (application/json)
+
+        {
+            "status": "success",
+            "data": 
+                {
+                    "id": 347
+                    "username": "JohnDoe",
+                    "email": "sandwich",
+                    "password": "cheese",
+                    "teamID": 234
+                }
+        }
