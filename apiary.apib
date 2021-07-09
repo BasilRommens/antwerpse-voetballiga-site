@@ -1980,7 +1980,7 @@ a notion about distributed systems itself in practice.
             ]
         }
 
-# Users [/srv/user]
+# Login [/srv/user]
 
 ### Login [POST /srv/user/log_in]
 
@@ -2037,19 +2037,6 @@ a notion about distributed systems itself in practice.
 + Response 200 (application/json)
 
         "icon temperature symbol"
-        
-# Admin [/srv/admin]
-
-### Get admin info [GET /srv/admin/get_admin/{admin_id}]
-
-+ Parameters
-    + admin_id (number) - The admin we want to retrieve
-
-+ Response 200 (application/json)
-
-        {
-            some info about from the /db/admin/{admin_id}
-        }
 
 # Best of division [/srv/best_of_division]
 
@@ -2083,3 +2070,36 @@ a notion about distributed systems itself in practice.
                 }
             }
         }
+
+# Assign Referee [/srv/assign_referee/{match_id}]
+
++ Parameters
+    + match_id (number) - The id of a certain match for which we call the referee assignment
+
+### Get available referees per match [GET]
+
++ Response 200 (application/json)
+
+        {
+            "referees": [
+                {
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "ID": 23
+                },
+                ...,
+                {
+                    "first_name": "Jane",
+                    "last_name": "Doe",
+                    "ID": 12
+                }
+            ],
+            "match_id": 1,
+            "ref_id": 1
+        }
+
+### Assign referee for a match [PUT]
+
++ Response 200 (application/json)
+
+        response is dependent on the response of the assignment in the database
