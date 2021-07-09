@@ -39,30 +39,21 @@ services:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
     depends_on:
-      - users
-      - admin
-  users:
+      - login
+      - weather
+      - database
+      - league_table
+      - best_of_division
+      - fixture_info
+      - team_info
+  login:
     build:
-      context: ./services/users
+      context: services/login
       dockerfile: Dockerfile-dev
     volumes:
-      - './services/users:/usr/src/app'
+      - './services/login:/usr/src/app'
     ports:
       - 5014:5000
-    environment:
-      - FLASK_APP=project/__init__.py
-      - FLASK_ENV=development
-      - APP_SETTINGS=project.config.DevelopmentConfig
-    depends_on:
-      - database
-  admin:
-    build:
-      context: ./services/admin
-      dockerfile: Dockerfile-dev
-    volumes:
-      - './services/admin:/usr/src/app'
-    ports:
-      - 5013:5000
     environment:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development
@@ -125,6 +116,18 @@ services:
       - './services/team_info:/usr/src/app'
     ports:
       - 5020:5000
+    environment:
+      - FLASK_APP=project/__init__.py
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+  assign_referee:
+    build:
+      context: ./services/assign_referee
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/assign_referee:/usr/src/app'
+    ports:
+      - 5021:5000
     environment:
       - FLASK_APP=project/__init__.py
       - FLASK_ENV=development

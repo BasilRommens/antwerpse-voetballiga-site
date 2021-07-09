@@ -12,8 +12,8 @@ def create_app(script_info=None):
     app.config.from_object(app_settings)
 
     # register blueprints
-    from project.api.app import admin_blueprint
-    app.register_blueprint(admin_blueprint)
+    from project.api.app import assign_referee_blueprint
+    app.register_blueprint(assign_referee_blueprint)
 
     # shell context for flask cli
     @app.shell_context_processor

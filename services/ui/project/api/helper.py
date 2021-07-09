@@ -6,7 +6,7 @@ from flask_jwt_extended import get_jwt_identity
 def get_club_id(user_id: int) -> int:
     try:
         team_id = int(
-            requests.get(f'http://users:5000/srv/user/{user_id}').json()[
+            requests.get(f'http://login:5000/srv/user/{user_id}').json()[
                 'teamID'])
     except Exception:
         return None
@@ -15,7 +15,7 @@ def get_club_id(user_id: int) -> int:
 
 
 def get_team_id(user_id: int) -> int:
-    resp = requests.get(f'http://users:5000/srv/user/{user_id}')
+    resp = requests.get(f'http://login:5000/srv/user/{user_id}')
     if resp.status_code == 404:
         return -1
     return resp.json()['teamID']
@@ -23,7 +23,7 @@ def get_team_id(user_id: int) -> int:
 
 def get_admin_data(user_id: int) -> dict:
     admin_data = requests.get(
-        f'http://admin:5000/srv/admin/get_admin/{user_id}').json()
+        f'http://database:5000/db/admin/{user_id}').json()
     if admin_data['status'] == 'fail':
         return None
     return admin_data
@@ -300,7 +300,7 @@ def has_club(user_id: int) -> bool:
 
 def get_all_users() -> list:
     users = requests.get(f'http://database:5000/db/all_users').json()['data'][
-        'users']
+        'login']
     for user in users:
         user['tags'] = list()
         if is_admin(user['ID']):
@@ -397,9 +397,4 @@ def get_ref_matches(matches: list, ref_id: int) -> list:
     return ref_matches
 
 
-def get_all_available_referees(match_id: int) -> list:
-    referees = get_all_referees()
-    match = get_match(match_id)
-    matches = get_all_matches()
-    return [referee for referee in referees if
-            is_available(match, int(referee['ID']), matches)]
+

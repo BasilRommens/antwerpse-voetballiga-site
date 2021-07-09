@@ -39,7 +39,7 @@ def login():
     password = str(request.form.get('Password'))
     # Check login over network
     data = {'username': username, 'password': password}
-    login_response = requests.post('http://users:5000/srv/user/log_in',
+    login_response = requests.post('http://login:5000/srv/user/log_in',
                                    json=data)
     print(login_response)
     login_response = login_response.json()
@@ -132,24 +132,6 @@ def team(team_id=0):
     data['team_info'] = requests.get(
         f'http://team_info:5000/srv/team_info/info/{team_id}').json()
     return render_template('team.html', data=data, admin=0)
-
-
-@ui_blueprint.route('/viewClub/<club_id>')
-@ui_blueprint.route('/viewClub')
-@jwt_optional
-def view_club(club_id=0):
-    data = dict()
-    data = setup_nav(dict(), get_jwt_identity())
-    data['club_name'] = club_id
-    data['club_id'] = club_id
-    data['home_matches'] = [{
-        "id": 0,
-        "date": "20/12/2020",
-        "teams": "team 1 (h) - team 2 (a)",
-        "score": "2 - 2"
-    }]
-    data['teams'] = [{"id": 0, "name": "A"}]
-    return render_template('view_club.html', data=data, admin=0)
 
 
 @ui_blueprint.route('/editFixture/<match_id>')
@@ -450,7 +432,7 @@ def delete_admin_edit_referee(referee_id=0):
 @jwt_optional
 def admin_view_users():
     data = setup_nav(dict(), get_jwt_identity())
-    data['users'] = get_all_users()
+    data['login'] = get_all_users()
     return render_template('admin/view_users.html', data=data)
 
 
@@ -518,10 +500,9 @@ def admin_view_teams():
 @ui_blueprint.route('/admin/assignReferee/<match_id>')
 @jwt_required
 def admin_assign_referee(match_id: int):
-    data = setup_nav(dict(), get_jwt_identity())
-    data['referees'] = get_all_available_referees(match_id)
-    data['match_id'] = match_id
-    data['ref_id'] = get_match(match_id)['ref_ID']
+    data = requests.get(
+        f'http://assign_referee:5000/srv/assign_referee/{match_id}').json()
+    data = setup_nav(data, get_jwt_identity())
     return render_template('admin/assign_referee.html', data=data)
 
 
@@ -529,8 +510,9 @@ def admin_assign_referee(match_id: int):
 @jwt_required
 def post_admin_assign_referee(match_id):
     json_data = get_form_data(request)
-    status = requests.put(f'http://database:5000/db/assign_referee/{match_id}',
-                          json=json_data).json()['status']
+    status = \
+        requests.put(f'http://assign_referee:5000/srv/assign_referee/{match_id}',
+                     json=json_data).json()['status']
     return redirect('/admin/viewMatches')
 
 
