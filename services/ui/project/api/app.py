@@ -41,6 +41,7 @@ def login():
     data = {'username': username, 'password': password}
     login_response = requests.post('http://users:5000/srv/user/log_in',
                                    json=data)
+    print(login_response)
     login_response = login_response.json()
     # The user does not have an email or password
     if not login_response:
@@ -484,7 +485,7 @@ def admin_delete_user(user_id: int = 0):
 
 
 @ui_blueprint.route('/admin/addUser')
-@jwt_optional
+@jwt_required
 def admin_add_user():
     data = setup_nav(dict(), get_jwt_identity())
     admin = get_admin_number(get_jwt_identity())
@@ -493,7 +494,7 @@ def admin_add_user():
 
 
 @ui_blueprint.route('/admin/addUser', methods=['POST'])
-@jwt_optional
+@jwt_required
 def post_admin_add_user():
     json_data = get_form_data(request)
     status = requests.post(
@@ -507,7 +508,7 @@ def post_admin_add_user():
 
 
 @ui_blueprint.route('/admin/viewTeams')
-@jwt_optional
+@jwt_required
 def admin_view_teams():
     data = setup_nav(dict(), get_jwt_identity())
     data['teams'] = get_all_teams()
@@ -515,7 +516,7 @@ def admin_view_teams():
 
 
 @ui_blueprint.route('/admin/assignReferee/<match_id>')
-@jwt_optional
+@jwt_required
 def admin_assign_referee(match_id: int):
     data = setup_nav(dict(), get_jwt_identity())
     data['referees'] = get_all_available_referees(match_id)
@@ -525,7 +526,7 @@ def admin_assign_referee(match_id: int):
 
 
 @ui_blueprint.route('/admin/assignReferee/<match_id>', methods=['POST'])
-@jwt_optional
+@jwt_required
 def post_admin_assign_referee(match_id):
     json_data = get_form_data(request)
     status = requests.put(f'http://database:5000/db/assign_referee/{match_id}',

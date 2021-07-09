@@ -12,7 +12,10 @@ def log_in():
     for user in users['users']:
         if user['username'] != username:
             continue
-        return jsonify(user), 200 if user['password'] == password else jsonify(False), 400
+        if user['password'] == password:
+            return jsonify(user), 200
+        else:
+            jsonify(False), 400
     return jsonify(False), 400
 
 

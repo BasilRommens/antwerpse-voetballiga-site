@@ -173,10 +173,8 @@ class Match(db.Model):
     referee = db.relationship('Referee', back_populates='matches')
     season = db.relationship('Season', back_populates='matches')
     state = db.relationship('Status', back_populates='matches')
-    home_team = db.relationship('Team', back_populates='home_matches',
-                                foreign_keys=[teamHomeID])
-    away_team = db.relationship('Team', back_populates='away_matches',
-                                foreign_keys=[teamAwayID])
+    home_team = db.relationship('Team', foreign_keys=[teamHomeID])
+    away_team = db.relationship('Team', foreign_keys=[teamAwayID])
 
     def __init__(self, goalsHome, goalsAway, matchStatus, mDate, mTime, week,
                  teamHomeID, teamAwayID, divisionID, seasonID, refID):
@@ -217,10 +215,6 @@ class Team(db.Model):
     stamNumber = db.Column(db.Integer,
                            ForeignKey('club.stamNumber', ondelete='CASCADE'),
                            nullable=False)
-    home_matches = db.relationship('Match', back_populates='home_team',
-                                   cascade='all, delete', passive_deletes=True)
-    away_matches = db.relationship('Match', back_populates='away_team',
-                                   cascade='all, delete', passive_deletes=True)
     users = db.relationship('User', back_populates='team',
                             cascade='all, delete', passive_deletes=True)
     club = db.relationship('Club', back_populates='teams')
