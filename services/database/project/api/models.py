@@ -55,7 +55,7 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     teamID = db.Column(db.Integer,
-                       ForeignKey('team.ID', ondelete='CASCADE'),
+                       ForeignKey('team.ID', ondelete='SET NULL'),
                        nullable=True)
     admin = db.relationship('Admin', back_populates='user',
                             cascade='all, delete', passive_deletes=True)
