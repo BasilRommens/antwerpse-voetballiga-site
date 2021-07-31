@@ -116,8 +116,9 @@ def update_match(match_id):
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    goalsHome = post_data.get('goalsHome')
-    goalsAway = post_data.get('goalsAway')
+
+    goalsHome = int(post_data.get('goalsHome'))
+    goalsAway = int(post_data.get('goalsAway'))
     matchStatus = post_data.get('status')
     mDate = post_data.get('date')
     mTime = post_data.get('time')

@@ -1,6 +1,8 @@
 import requests, json
 import datetime
 from flask_jwt_extended import get_jwt_identity
+from flask import flash
+from project.api.constants import *
 
 
 def get_club_id(user_id: int) -> int:
@@ -49,6 +51,10 @@ def setup_nav(data_dict: dict, user_id: int) -> dict:
     data_dict['nav']['user_club'] = get_club_id(user_id)
     data_dict['nav']['user_team'] = get_team_id(user_id)
     admin_data = get_admin_data(user_id)
+    if not admin_data:
+        data_dict['nav']['admin'] = 0
+        data_dict['nav']['super_admin'] = False
+        return data_dict
     if admin_data['status'] == 'fail':
         data_dict['nav']['admin'] = 0
         data_dict['nav']['super_admin'] = False
@@ -117,9 +123,9 @@ def get_team_name(team_id: int):
 
 
 def set_match_team_names(match: dict):
-    home_team_id = int(match['team_home_ID'])
+    home_team_id = int(match['team_home_id'])
     home_team_name = get_team_name(home_team_id)
-    away_team_id = int(match['team_away_ID'])
+    away_team_id = int(match['team_away_id'])
     away_team_name = get_team_name(away_team_id)
     match['teams'] = f'{home_team_name} (H) - {away_team_name} (A)'
     return match
@@ -167,7 +173,7 @@ def get_teams(division: int, season: int):
     matches = get_matches(season, division)
     teams = list()
     for match in matches:
-        for team_id_name in ["team_home_ID", "team_away_ID"]:
+        for team_id_name in ["team_home_id", "team_away_id"]:
             team = \
                 requests.get(
                     f'http://database:5000/db/team/{match[team_id_name]}').json()[
@@ -213,8 +219,8 @@ def get_fixture(match_id: int) -> dict:
             'data']
 
     data = set_match_team_names(match)
-    data['home_team'] = get_team_name(match['team_home_ID'])
-    data['away_team'] = get_team_name(match['team_away_ID'])
+    data['home_team'] = get_team_name(match['team_home_id'])
+    data['away_team'] = get_team_name(match['team_away_id'])
     data['home_score'] = match['goals_home']
     data['away_score'] = match['goals_away']
     data['match_id'] = match_id
@@ -300,7 +306,8 @@ def has_club(user_id: int) -> bool:
 
 def get_all_users() -> list:
     users = requests.get(f'http://database:5000/db/all_users').json()['data'][
-        'login']
+        'users']
+    print(users)
     for user in users:
         user['tags'] = list()
         if is_admin(user['ID']):
@@ -397,4 +404,16 @@ def get_ref_matches(matches: list, ref_id: int) -> list:
     return ref_matches
 
 
+def response_flash(response):
+    if not response:
+        return
+    status = response['status']
+    message = response['message']
+    if status == 'fail':
+        flash((message, ALERT_ERROR))
+    else:
+        flash((message, ALERT_SUCCESS))
 
+
+def is_failed_response(response) -> bool:
+    return response == 'fail'

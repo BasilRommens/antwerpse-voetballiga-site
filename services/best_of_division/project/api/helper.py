@@ -35,7 +35,7 @@ def create_default_team():
 def add_teams(league_table: dict, matches: list):
     league_table['teams'] = list()
     for match in matches:
-        for team_id_name in ["team_home_ID", "team_away_ID"]:
+        for team_id_name in ["team_home_id", "team_away_id"]:
             team = \
                 requests.get(
                     f'http://database:5000/db/team/{match[team_id_name]}').json()[
@@ -80,10 +80,10 @@ def count_clean_sheets(teams: list, matches: list):
             continue
         goals_home = match['goals_home']
         goals_against = match['goals_away']
-        home_team_id = match['team_home_ID']
+        home_team_id = match['team_home_id']
         if goals_against == 0:
             add_clean_sheet(teams, home_team_id)
-        away_team_id = match['team_away_ID']
+        away_team_id = match['team_away_id']
         if goals_home == 0:
             teams = add_clean_sheet(teams, away_team_id)
     league_table = clean_up_goals(teams)

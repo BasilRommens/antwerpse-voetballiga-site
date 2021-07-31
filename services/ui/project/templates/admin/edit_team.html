@@ -6,70 +6,72 @@
 </head>
 <body>
 {% include 'navbar.html' %}
-<div class="container">
-    <div class="row mt-5">
-        <div class="col-9">
-            <h1><strong>Edit team</strong></h1>
-            <form id="editClub" action="/admin/editTeam/{{ data.id }}" method="post">
-                <div class="mb-3 col-3">
-                    <label for="teamSuffix" class="form-label"
-                    ><strong>Team Suffix</strong></label
-                    >
-                    <input
-                            type="text"
-                            class="form-control"
-                            id="teamSuffix"
-                            name="suffix"
-                            value={{ data.suffix }}
-                    >
-                </div>
-                <div class="mb-3 col-3">
-                    <label for="homeOutfitColor" class="form-label"
-                    ><strong>shirt colors</strong></label
-                    >
-                    <input
-                            type="text"
-                            class="form-control"
-                            id="homeOutfitColor"
-                            name="colors"
-                            value={{ data.colors }}
-                    />
-                </div>
-                <div class="mb-3 col-3">
-                    <label for="clubs" class="form-label"
-                    ><strong>clubs</strong></label
-                    >
-                    <select
-                            class="form-select"
-                            id="club"
-                            name="stamNumber"
-                            aria-label="Default select example"
-                    >
-                        {% for club in data.clubs %}
-                            <option value={{ club.stam_number }}
-                                            {% if club.stam_number == data.stamNumber %}selected{% endif %}>{{ club.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-12">
+{% if data.clubs %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-9">
+                <h1><strong>Edit team</strong></h1>
+                <form id="editClub" action="/admin/editTeam/{{ data.id }}" method="post">
+                    <div class="mb-3 col-3">
+                        <label for="teamSuffix" class="form-label"
+                        ><strong>Team Suffix</strong></label
+                        >
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="teamSuffix"
+                                name="suffix"
+                                value={{ data.suffix }}
+                        >
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="homeOutfitColor" class="form-label"
+                        ><strong>shirt colors</strong></label
+                        >
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="homeOutfitColor"
+                                name="colors"
+                                value={{ data.colors }}
+                        />
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label for="clubs" class="form-label"
+                        ><strong>clubs</strong></label
+                        >
+                        <select
+                                class="form-select"
+                                id="club"
+                                name="stamNumber"
+                                aria-label="Default select example"
+                        >
+                            {% for club in data.clubs %}
+                                <option value={{ club.stam_number }}
+                                                {% if club.stam_number == data.stamNumber %}selected{% endif %}>{{ club.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button
+                                type="submit"
+                                class="btn btn-primary btn-custom-black"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </form>
+                <form action="/admin/deleteTeam/{{ data.id }}" method="POST">
                     <button
                             type="submit"
-                            class="btn btn-primary btn-custom-black"
+                            class="btn btn-primary btn-custom-red"
                     >
-                        Save
+                        Delete
                     </button>
-                </div>
-            </form>
-        <form action="/admin/deleteTeam/{{ data.id }}" method="POST">
-            <button
-                    type="submit"
-                    class="btn btn-primary btn-custom-red"
-            >
-                Delete
-            </button>
-        </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 </body>
 </html>

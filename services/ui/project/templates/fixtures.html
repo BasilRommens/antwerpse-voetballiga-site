@@ -43,7 +43,7 @@
             {% endfor %}
             <h2><strong>Seasons</strong></h2>
             {% for season in data.seasons %}
-                <a href="/fixtures?division={{ data.division_id }}&team={{ data.team_id }}&week={{ data.week }}&season={{ data.season }}">Season {{ season.season }}</a>
+                <a href="/fixtures?division={{ data.division_id }}&team={{ data.team_id }}&week={{ data.week }}&season={{ season.season }}">Season {{ season.season }}</a>
                 <br/>
             {% endfor %}
             <h2 class="mt-2 mb-2">

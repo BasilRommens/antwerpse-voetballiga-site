@@ -6,6 +6,7 @@
     </head>
     <body>
         {% include 'navbar.html' %}
+        {% if data.home_team %}
         <div class="container">
             <div class="row mt-5">
                 <div class="col-9">
@@ -65,5 +66,6 @@
                 </div>
             </div>
         </div>
+    {% endif %}
     </body>
 </html>

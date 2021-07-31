@@ -29,7 +29,7 @@ def create_app(script_info=None):
     # app.config['JWT_SESSION_COOKIE'] = True
     # expiration
     # 30 min
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(seconds=1800)
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
     # 20 dagen
     app.config['JWT_REFRESH_TOKEN_EXPIRES'] = datetime.timedelta(
         seconds=1728000)

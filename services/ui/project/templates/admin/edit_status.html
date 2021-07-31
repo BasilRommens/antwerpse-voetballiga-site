@@ -6,6 +6,7 @@
 </head>
 <body>
 {% include 'navbar.html' %}
+{% if data.ID %}
 <div class="container">
     <div class="row mt-5">
         <div class="col">
@@ -55,5 +56,6 @@
         </div>
     </div>
 </div>
+{% endif %}
 </body>
 </html>

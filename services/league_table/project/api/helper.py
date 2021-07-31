@@ -47,7 +47,7 @@ def get_club(stam_number: int) -> dict:
 def add_teams(league_table: dict, matches: list):
     league_table['teams'] = list()
     for match in matches:
-        for team_id_name in ["team_home_ID", "team_away_ID"]:
+        for team_id_name in ["team_home_id", "team_away_id"]:
             team = \
                 requests.get(
                     f'http://database:5000/db/team/{match[team_id_name]}').json()[
@@ -140,23 +140,23 @@ def add_matches_played(league_table: dict, matches: list):
         if is_null_goals(match):
             continue
         # update the games played score
-        for call_ids in ["team_home_ID", "team_away_ID"]:
+        for call_ids in ["team_home_id", "team_away_id"]:
             team_id = match[call_ids]
             league_table = increase_matches_played(league_table, team_id)
         # update the win/loss/draw scores
         if is_draw(match):
-            for call_ids in ["team_home_ID", "team_away_ID"]:
+            for call_ids in ["team_home_id", "team_away_id"]:
                 team_id = match[call_ids]
                 league_table = increase_draw(league_table, team_id)
         elif has_home_won(match):
-            home_team_id = match['team_home_ID']
+            home_team_id = match['team_home_id']
             league_table = increase_win(league_table, home_team_id)
-            away_team_id = match['team_away_ID']
+            away_team_id = match['team_away_id']
             league_table = increase_loss(league_table, away_team_id)
         else:
-            home_team_id = match['team_home_ID']
+            home_team_id = match['team_home_id']
             league_table = increase_loss(league_table, home_team_id)
-            away_team_id = match['team_away_ID']
+            away_team_id = match['team_away_id']
             league_table = increase_win(league_table, away_team_id)
     return league_table
 
@@ -166,14 +166,14 @@ def add_teams_points(league_table: dict, matches: list):
         if is_null_goals(match):
             continue
         if is_draw(match):
-            for call_ids in ["team_home_ID", "team_away_ID"]:
+            for call_ids in ["team_home_id", "team_away_id"]:
                 team_id = match[call_ids]
                 league_table = increase_points_draw(league_table, team_id)
         elif has_home_won(match):
-            home_team_id = match['team_home_ID']
+            home_team_id = match['team_home_id']
             league_table = increase_points_win(league_table, home_team_id)
         else:
-            away_team_id = match['team_away_ID']
+            away_team_id = match['team_away_id']
             league_table = increase_points_win(league_table, away_team_id)
     league_table = clean_up_points(league_table)
     return league_table
@@ -201,11 +201,11 @@ def add_matches_goals(league_table: dict, matches: list):
             continue
         goals_home = match['goals_home']
         goals_against = match['goals_away']
-        home_team_id = match['team_home_ID']
+        home_team_id = match['team_home_id']
         league_table = add_goals_for(league_table, home_team_id, goals_home)
         league_table = add_goals_against(league_table, home_team_id,
                                          goals_against)
-        away_team_id = match['team_away_ID']
+        away_team_id = match['team_away_id']
         league_table = add_goals_for(league_table, away_team_id, goals_against)
         league_table = add_goals_against(league_table, away_team_id, goals_home)
     league_table = clean_up_goals(league_table)

@@ -25,7 +25,8 @@ def get_default_fixture() -> dict:
             'text': '',
             'style': ''
         },
-        'result': ''
+        'result': '',
+        'include_stats': True
     }
 
 
@@ -51,7 +52,7 @@ def count_vs_matches(vs_matches: list) -> int:
 
 
 def is_home(match: dict, team_id: int):
-    return match['team_home_ID'] == team_id
+    return match['team_home_id'] == team_id
 
 
 def is_draw(match: dict):
@@ -133,7 +134,7 @@ def get_team_historical_scores(vs_matches: list, team_id: int) -> list:
     historical_score_list = list()
     for match in vs_matches:
         new_score = int(match['goals_home']) if team_id == match[
-            'team_home_ID'] else int(match['goals_away'])
+            'team_home_id'] else int(match['goals_away'])
         historical_score_list.append(new_score)
     return historical_score_list
 
@@ -196,7 +197,7 @@ def get_team_names(all_fixture_info: dict, fixture_info: dict) -> dict:
 
 
 def get_referee(all_fixture_info: dict, fixture_info: dict) -> dict:
-    ref_id = all_fixture_info['refID']
+    ref_id = all_fixture_info['ref_ID']
     if ref_id is None:
         return fixture_info
     ref_id = int(ref_id)
@@ -247,7 +248,7 @@ def get_status_text(all_fixture_info: dict) -> str:
     if all_fixture_info['match_status'] is not None:
         return all_fixture_info['match_status']
     elif all_fixture_info['match_status'] is None and convert_to_date(
-            all_fixture_info['mDate']) > date.today():
+            all_fixture_info['date']) > date.today():
         return 'Match to be played'
     elif not is_null_goals(all_fixture_info):
         return 'Match finished'
@@ -263,8 +264,8 @@ def get_status(all_fixture_info: dict, fixture_info: dict) -> dict:
 
 def get_result(all_fixture_info: dict, fixture_info: dict) -> dict:
     if is_null_goals(all_fixture_info):
-        return all_fixture_info
-    print(all_fixture_info)
+        fixture_info['include_stats'] = False
+        return fixture_info
     home_goals = all_fixture_info['goals_home']
     away_goals = all_fixture_info['goals_away']
     fixture_info['score'] = f'{home_goals} - {away_goals}'

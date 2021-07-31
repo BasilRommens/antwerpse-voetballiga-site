@@ -55,8 +55,8 @@ def filter_match_data(matches: list) -> list:
     for match in matches:
         match_dict = get_default_match()
 
-        home_team_name = get_team_name(match['team_home_ID'])
-        away_team_name = get_team_name(match['team_home_ID'])
+        home_team_name = get_team_name(match['team_home_id'])
+        away_team_name = get_team_name(match['team_home_id'])
         vs_name = f'{home_team_name} (H) - {away_team_name} (A)'
 
         match_dict['teams'] = vs_name
@@ -117,9 +117,9 @@ def get_team_name_for_info(team_info: dict, team_id: int) -> dict:
 
 
 def set_vs_team_name_match(match: dict):
-    home_team_id = int(match['team_home_ID'])
+    home_team_id = int(match['team_home_id'])
     home_team_name = get_team_name(home_team_id)
-    away_team_id = int(match['team_away_ID'])
+    away_team_id = int(match['team_away_id'])
     away_team_name = get_team_name(away_team_id)
     match['teams'] = f'{home_team_name} (H) - {away_team_name} (A)'
     return match
@@ -144,7 +144,7 @@ def get_teams(division: int, season: int):
     matches = get_matches(season, division)
     teams = list()
     for match in matches:
-        for team_id_name in ["team_home_ID", "team_away_ID"]:
+        for team_id_name in ["team_home_id", "team_away_id"]:
             team = \
                 requests.get(
                     f'http://database:5000/db/team/{match[team_id_name]}').json()[

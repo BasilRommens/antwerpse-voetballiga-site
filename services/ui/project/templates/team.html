@@ -7,65 +7,67 @@
 <body>
 {% include 'navbar.html' %}
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-9">
-            <h1>
-                <strong>{{ data.team_info.team_name }}</strong>
-            </h1>
-            <h2>Last 3 encounters</h2>
-            {% if data.team_info.last_three|length == 0 %}
-                <p>There are no past encounters found.</p>
-            {% else %}
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Home - Away</th>
-                        <th scope="col">Score</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for match in data.team_info.last_three %}
+    {% if data.team_info %}
+        <div class="row mt-5">
+            <div class="col-9">
+                <h1>
+                    <strong>{{ data.team_info.team_name }}</strong>
+                </h1>
+                <h2>Last 3 encounters</h2>
+                {% if data.team_info.last_three|length == 0 %}
+                    <p>There are no past encounters found.</p>
+                {% else %}
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
-                            <th scope="row">{{ match.ID }}</th>
-                            <td>{{ match.date }}</td>
-                            <td>{{ match.teams }}</td>
-                            <td>{{ match.score }}</td>
+                            <th scope="col">ID</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Home - Away</th>
+                            <th scope="col">Score</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
+                        </thead>
+                        <tbody>
+                        {% for match in data.team_info.last_three %}
+                            <tr>
+                                <th scope="row">{{ match.ID }}</th>
+                                <td>{{ match.date }}</td>
+                                <td>{{ match.teams }}</td>
+                                <td>{{ match.score }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-9">
-            <h2>Future encounters</h2>
-            {% if data.team_info.future_encounters|length == 0 %}
-                <p>There are no future encounters found.</p>
-            {% else %}
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Home - Away</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for match in data.team_info.future_encounters %}
+        <div class="row">
+            <div class="col-9">
+                <h2>Future encounters</h2>
+                {% if data.team_info.future_encounters|length == 0 %}
+                    <p>There are no future encounters found.</p>
+                {% else %}
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
-                            <th scope="row">{{ match.ID }}</th>
-                            <td>{{ match.date }}</td>
-                            <td>{{ match.teams }}</td>
+                            <th scope="col">ID</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Home - Away</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
+                        </thead>
+                        <tbody>
+                        {% for match in data.team_info.future_encounters %}
+                            <tr>
+                                <th scope="row">{{ match.ID }}</th>
+                                <td>{{ match.date }}</td>
+                                <td>{{ match.teams }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 </body>
 </html>

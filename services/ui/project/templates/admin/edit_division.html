@@ -6,6 +6,7 @@
 </head>
 <body>
 {% include 'navbar.html' %}
+{% if data.division %}
 <div class="container">
     <div class="row mt-5">
         <div class="col-9">
@@ -54,5 +55,6 @@
         </div>
     </div>
 </div>
+{% endif %}
 </body>
 </html>

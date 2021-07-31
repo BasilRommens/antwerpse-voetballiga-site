@@ -25,7 +25,7 @@ class Club(db.Model):
     zipCode = db.Column(db.Integer, nullable=False)
     city = db.Column(db.String(128), nullable=False)
     stamNumber = db.Column(db.Integer, primary_key=True, nullable=False)
-    website = db.Column(db.String(128), nullable=False)
+    website = db.Column(db.String(128), nullable=True)
     teams = db.relationship("Team", back_populates="club",
                             cascade='all, delete', passive_deletes=True)
 
@@ -199,8 +199,8 @@ class Match(db.Model):
             'date': str(self.mDate),
             'time': str(self.mTime),
             'week': str(self.week),
-            'team_home_ID': self.teamHomeID,
-            'team_away_ID': self.teamAwayID,
+            'team_home_id': self.teamHomeID,
+            'team_away_id': self.teamAwayID,
             'division_ID': self.divisionID,
             'season_ID': self.seasonID,
             'ref_ID': self.refID

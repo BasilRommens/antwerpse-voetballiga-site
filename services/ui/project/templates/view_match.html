@@ -1,111 +1,116 @@
 <!DOCTYPE html>
 <html>
-    {% include 'header.html' %}
-    <head>
-        <title>Match</title>
-        <link
+{% include 'header.html' %}
+<head>
+    <title>Match</title>
+    <link
             href="{{ url_for('static', filename='calendar.css') }}"
             rel="stylesheet"
             type="text/css"
-        />
-    </head>
-    <body>
-        {% include 'navbar.html' %}
-        <div class="container">
-            <div class="row mt-5">
-                <div class="col-1 mt-3">
-                    <time datetime="2014-09-20" class="icon">
-                        <strong>{{ data.match_info.day }}</strong>
-                        <span>{{ data.match_info.date }}</span>
-                        <em>{{ data.match_info.time }}</em>
-                    </time>
-                </div>
-                <div class="col-9 mt-1">
-                    <h1>
-                        <strong>{{ data.match_info.home_team_name }} (home) - {{ data.match_info.away_team_name }} (away)</strong>
-                    </h1>
-                    <div class="row">
-                        <div class="col text-start">
-                            {% if data.match_info.ref_name|length != 0 %}
+    />
+</head>
+<body>
+{% include 'navbar.html' %}
+{% if data.match_info %}
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-1 mt-3">
+                <time datetime="2014-09-20" class="icon">
+                    <strong>{{ data.match_info.day }}</strong>
+                    <span>{{ data.match_info.date }}</span>
+                    <em>{{ data.match_info.time }}</em>
+                </time>
+            </div>
+            <div class="col-9 mt-1">
+                <h1>
+                    <strong>{{ data.match_info.home_team_name }} (home) - {{ data.match_info.away_team_name }}
+                        (away)</strong>
+                </h1>
+                <div class="row">
+                    <div class="col text-start">
+                        {% if data.match_info.ref_name|length != 0 %}
                             <i class="fas fa-user"></i>&nbsp;&nbsp;{{ data.match_info.ref_name }}
-                            {% endif %}
-                        </div>
+                        {% endif %}
+                    </div>
+                    {% if data.match_info.status %}
                         <div
-                            class="col text-center"
-                            style="{{ data.match_info.status.style }}"
+                                class="col text-center"
+                                style="{{ data.match_info.status.style }}"
                         >
                             {{ data.match_info.status.text }}
                         </div>
-                        <div
+                    {% endif %}
+                    <div
                             class="col text-end"
                             style="font-family: Weather, Montserrat"
-                        >
-                            {{ data.match_info.weather }}
-                        </div>
+                    >
+                        {{ data.match_info.weather }}
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-1"></div>
-                <div class="col-9">
-                {% if data.match_info.score|length != 0 %}
+        </div>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-9">
+                {% if not data.match_info.include_stats %}
                     <h1 class="text-center mt-4"><strong>{{ data.match_info.score }}</strong></h1>
                 {% else %}
                     <h2><strong>Stats</strong></h2>
                     <h3><strong>Head-to-head</strong></h3>
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th scope="col">{{ data.match_info.home_team_name }}</th>
-                                <th scope="col">Draw</th>
-                                <th scope="col">{{ data.match_info.away_team_name }}</th>
-                                <th scope="col">Total</th>
-                            </tr>
+                        <tr>
+                            <th scope="col">{{ data.match_info.home_team_name }}</th>
+                            <th scope="col">Draw</th>
+                            <th scope="col">{{ data.match_info.away_team_name }}</th>
+                            <th scope="col">Total</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{{ data.match_info.head_to_head.W }}</td>
-                                <td>{{ data.match_info.head_to_head.D }}</td>
-                                <td>{{ data.match_info.head_to_head.GP - (data.match_info.head_to_head.D + data.match_info.head_to_head.W) }}</td>
-                                <td>{{ data.match_info.head_to_head.GP }}</td>
-                            </tr>
+                        <tr>
+                            <td>{{ data.match_info.head_to_head.W }}</td>
+                            <td>{{ data.match_info.head_to_head.D }}</td>
+                            <td>{{ data.match_info.head_to_head.GP - (data.match_info.head_to_head.D + data.match_info.head_to_head.W) }}</td>
+                            <td>{{ data.match_info.head_to_head.GP }}</td>
+                        </tr>
                         </tbody>
                     </table>
                     <h3><strong>Current form</strong></h3>
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th scope="col">{{ data.match_info.home_team_name }}</th>
-                                <th scope="col">{{ data.match_info.away_team_name }}</th>
-                            </tr>
+                        <tr>
+                            <th scope="col">{{ data.match_info.home_team_name }}</th>
+                            <th scope="col">{{ data.match_info.away_team_name }}</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{{ data.match_info.current_form_H }}</td>
-                                <td>{{ data.match_info.current_form_A }}</td>
-                            </tr>
+                        <tr>
+                            <td>{{ data.match_info.current_form_H }}</td>
+                            <td>{{ data.match_info.current_form_A }}</td>
+                        </tr>
                         </tbody>
                     </table>
                     <h3><strong>Last 3</strong></h3>
                     <table class="table table-striped">
                         <thead>
-                            <tr>
-                                <th scope="col">{{ data.match_info.home_team_name }}</th>
-                                <th scope="col">{{ data.match_info.away_team_name }}</th>
-                            </tr>
+                        <tr>
+                            <th scope="col">{{ data.match_info.home_team_name }}</th>
+                            <th scope="col">{{ data.match_info.away_team_name }}</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for match_idx in range(data.match_info.last_three.home_team|length) %}
+                        {% for match_idx in range(data.match_info.last_three.home_team|length) %}
                             <tr>
                                 <td>{{ data.match_info.last_three.home_team[match_idx] }}</td>
                                 <td>{{ data.match_info.last_three.away_team[match_idx] }}</td>
                             </tr>
-                            {% endfor %}
+                        {% endfor %}
                         </tbody>
                     </table>
                 {% endif %}
-                </div>
             </div>
         </div>
-    </body>
+    </div>
+{% endif %}
+</body>
 </html>

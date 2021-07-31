@@ -14,7 +14,7 @@ def add_club():
     zipCode = int(post_data.get('zipCode'))
     city = post_data.get('city')
     stamNumber = int(post_data.get('stamNumber'))
-    website = post_data.get('website')
+    website = post_data.get('website') if post_data.get('website') else ''
     if not len(website):
         website = None
     try:
