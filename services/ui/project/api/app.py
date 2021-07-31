@@ -313,7 +313,7 @@ def view_fixtures(team_id=0):
     return render_template('view_fixtures.html', data=data)
 
 
-# TODO
+# TODO fix correct output
 @ui_blueprint.route('/viewMatch/<match_id>')
 @ui_blueprint.route('/viewMatch')
 @jwt_optional
