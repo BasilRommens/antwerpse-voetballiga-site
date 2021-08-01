@@ -26,7 +26,7 @@ def get_default_fixture() -> dict:
             'style': ''
         },
         'result': '',
-        'include_stats': True
+        'include_stats': False
     }
 
 
@@ -204,7 +204,7 @@ def get_referee(all_fixture_info: dict, fixture_info: dict) -> dict:
     ref_info = \
         requests.get(f'http://database:5000/db/referee/{ref_id}').json()[
             'data']
-    fixture_info['ref_name'] = f'{ref_info["firstName"]} {ref_info["lastName"]}'
+    fixture_info['ref_name'] = f'{ref_info["first_name"]} {ref_info["last_name"]}'
     return fixture_info
 
 
@@ -244,11 +244,12 @@ def get_status_style(all_fixture_info: dict) -> str:
     return f'background-color: {bg_color}; color: {fg_color}; font-weight: bold;'
 
 
-def get_status_text(all_fixture_info: dict) -> str:
+def get_status_text(all_fixture_info: dict, fixture_info: dict) -> str:
     if all_fixture_info['match_status'] is not None:
         return all_fixture_info['match_status']
     elif all_fixture_info['match_status'] is None and convert_to_date(
             all_fixture_info['date']) > date.today():
+        fixture_info['include_stats'] = True
         return 'Match to be played'
     elif not is_null_goals(all_fixture_info):
         return 'Match finished'
@@ -257,14 +258,14 @@ def get_status_text(all_fixture_info: dict) -> str:
 
 
 def get_status(all_fixture_info: dict, fixture_info: dict) -> dict:
-    fixture_info['status']['text'] = get_status_text(all_fixture_info)
+    fixture_info['status']['text'] = get_status_text(all_fixture_info,
+                                                     fixture_info)
     fixture_info['status']['style'] = get_status_style(all_fixture_info)
     return fixture_info
 
 
 def get_result(all_fixture_info: dict, fixture_info: dict) -> dict:
     if is_null_goals(all_fixture_info):
-        fixture_info['include_stats'] = False
         return fixture_info
     home_goals = all_fixture_info['goals_home']
     away_goals = all_fixture_info['goals_away']

@@ -313,7 +313,6 @@ def view_fixtures(team_id=0):
     return render_template('view_fixtures.html', data=data)
 
 
-# TODO fix correct output
 @ui_blueprint.route('/viewMatch/<match_id>')
 @ui_blueprint.route('/viewMatch')
 @jwt_optional
@@ -399,7 +398,6 @@ def admin_edit_match(match_id):
     return render_template('admin/edit_match.html', data=data, admin=admin)
 
 
-# TODO possibly fix the goals not updating issue
 @ui_blueprint.route('/admin/editMatch/<match_id>', methods=['POST'])
 @jwt_required
 def post_admin_edit_match(match_id):
@@ -447,7 +445,6 @@ def admin_add_match():
     return render_template('admin/add_match.html', data=data, admin=admin)
 
 
-# TODO be able to fill in empty goals and referee
 @ui_blueprint.route('/admin/addMatch', methods=['POST'])
 @jwt_required
 def post_admin_add_match():

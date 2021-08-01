@@ -176,7 +176,7 @@
                             name="refID"
                             aria-label="Default select example"
                     >
-                        <option selected>Select Referee</option>
+                        <option value=none selected>Select Referee</option>
                         {% for referee in data.referees %}
                             <option value="{{ referee.ID }}">{{ referee.first_name }} {{ referee.last_name }}</option>
                         {% endfor %}

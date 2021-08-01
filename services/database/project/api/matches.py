@@ -1,5 +1,5 @@
 from project.api.config import *
-from sqlalchemy import and_
+from sqlalchemy import and_, null
 
 match_blueprint = Blueprint('matches', __name__)
 
@@ -10,8 +10,10 @@ def add_match():
     response_object = {'status': 'fail', 'message': 'Invalid payload.'}
     if not post_data:
         return jsonify(response_object), 400
-    goalsHome = int(post_data.get('goalsHome'))
-    goalsAway = int(post_data.get('goalsAway'))
+    goalsHome = null() if post_data.get('goalsHome') is '' else int(
+        post_data.get('goalsHome'))
+    goalsAway = null() if post_data.get('goalsAway') is '' else int(
+        post_data.get('goalsAway'))
     matchStatus = post_data.get('matchStatus')
     if matchStatus == 'None':
         matchStatus = None
@@ -21,7 +23,8 @@ def add_match():
     teamAwayID = int(post_data.get('teamAwayID'))
     divisionID = int(post_data.get('divisionID'))
     seasonID = int(post_data.get('seasonID'))
-    refID = int(post_data.get('refID'))
+    refID = null() if post_data.get('refID') == 'none' else int(
+        post_data.get('refID'))
     week = post_data.get('week')
     try:
         db.session.add(Match(goalsHome=goalsHome, goalsAway=goalsAway,
@@ -117,8 +120,10 @@ def update_match(match_id):
     if not post_data:
         return jsonify(response_object), 400
 
-    goalsHome = int(post_data.get('goalsHome'))
-    goalsAway = int(post_data.get('goalsAway'))
+    goalsHome = null() if post_data.get('goalsHome') is '' else int(
+        post_data.get('goalsHome'))
+    goalsAway = null() if post_data.get('goalsAway') is '' else int(
+        post_data.get('goalsAway'))
     matchStatus = post_data.get('status')
     mDate = post_data.get('date')
     mTime = post_data.get('time')
@@ -127,7 +132,8 @@ def update_match(match_id):
     teamAwayID = post_data.get('teamAwayID')
     divisionID = post_data.get('divisionID')
     seasonID = post_data.get('seasonID')
-    refID = post_data.get('refID')
+    refID = null() if post_data.get('refID') is None else int(
+        post_data.get('refID'))
     try:
         # Check for match existence
         match = Match.query.filter_by(ID=match_id).first()
