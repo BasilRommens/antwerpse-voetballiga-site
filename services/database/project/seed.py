@@ -74,7 +74,7 @@ def seed_referees(db):
             db.session.add(
                 Referee(firstName=row[0], lastName=row[1], address=row[2],
                         zipCode=int(row[3]), city=row[4],
-                        phoneNumber=int(row[5]),
+                        phoneNumber=row[5],
                         email=row[6], dateOfBirth=row[7]))
     db.session.commit()
 

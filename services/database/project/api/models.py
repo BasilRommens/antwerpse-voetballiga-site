@@ -113,7 +113,7 @@ class Referee(db.Model):
     address = db.Column(db.String(256), nullable=False)
     zipCode = db.Column(db.Integer, nullable=False)
     city = db.Column(db.String(128), nullable=False)
-    phoneNumber = db.Column(db.Integer, nullable=False)
+    phoneNumber = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
     dateOfBirth = db.Column(db.Date, nullable=False)
     matches = db.relationship("Match", back_populates="referee",
